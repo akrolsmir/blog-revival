@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Blog Revival Project
 
-## Getting Started
+Bounties for beloved dormant bloggers to write one more post. Quadratic
+funding with a $10k matching pool, by [Manifund](https://manifund.org).
+See [INITIAL-SPEC.md](INITIAL-SPEC.md) for the full spec.
 
-First, run the development server:
+One shared backend (InstantDB + Stripe), two demo frontends:
+
+- **`/graveyard`** — midnight cemetery: headstones, candles, epitaphs
+- **`/wordpress`** — a loving 2005 WordPress cosplay: bounties as blog posts
+
+## Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+bun install
+cp .env.example .env   # fill in values (ask Austin)
+bun run dev            # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Optional, to re-create the demo data:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+bun run scripts/reset.ts && bun run scripts/seed.ts
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Schema/permission changes live in `instant.schema.ts` / `instant.perms.ts`;
+push with `bunx instant-cli push`.
 
-## Learn More
+## How it fits together
 
-To learn more about Next.js, take a look at the following resources:
+- **InstantDB** holds `profiles`, `bloggers`, `pledges`, `comments`,
+  `settings`. Clients subscribe live via `lib/hooks.ts`; QF math
+  (`lib/qf.ts`) runs client-side off the raw pledges, and is recomputed
+  server-side before any money moves.
+- **Stripe Checkout** takes pledges (`/api/checkout` →
+  webhook or `/api/checkout/confirm` records the pledge server-side).
+- **Stripe Connect** pays bloggers out (`/api/connect/onboard`,
+  `/api/connect/payout`) once a claim is hand-verified
+  (`bloggers.claimVerified`) and a revival post is linked. Bloggers can
+  instead redirect their bounty to another blogger or donate it
+  (`/api/claim`).
+- Auth is InstantDB magic codes (email → six-digit code).
+- Personal bounties (Austin/Carol's pots, `pledges.source != "patron"`)
+  count toward the $1,000 threshold but are excluded from QF matching.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Test payments with card `4242 4242 4242 4242`, any future expiry, any CVC.

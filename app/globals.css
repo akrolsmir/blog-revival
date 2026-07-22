@@ -1,26 +1,223 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* Graveyard palette — midnight cemetery */
+  --color-night: #0b1120;
+  --color-abyss: #070d18;
+  --color-stone: #3d4a66;
+  --color-stone-dark: #2c374e;
+  --color-moon: #f2efe1;
+  --color-candle: #ffc45e;
+  --color-mist: #8b93a7;
+  --color-parchment: #ece9dc;
+
+  /* WordPress-2005 palette — Kubrick blues */
+  --color-wpblue: #2e5d8c;
+  --color-wpblue-deep: #1f4468;
+  --color-wplink: #0f5fa8;
+  --color-wpgreen: #16a34a;
+  --color-wpbg: #f5f5f3;
+  --color-wpborder: #d8d8d4;
+  --color-wpink: #333333;
+  --color-wpmeta: #777777;
+
+  --font-garamond: var(--font-eb-garamond), Georgia, serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ---------- Graveyard skin ---------- */
+
+.gy {
+  background: var(--color-night);
+  color: var(--color-moon);
+  font-family: var(--font-garamond);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.gy-caps {
+  font-variant: small-caps;
+  letter-spacing: 0.22em;
+  text-transform: lowercase;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.gy-label {
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  font-size: 0.65rem;
+}
+
+/* Arched headstone card */
+.gy-stone {
+  background: linear-gradient(180deg, #46536f 0%, var(--color-stone-dark) 55%, #232c42 100%);
+  border-radius: 46% 46% 10px 10px / 34% 34% 10px 10px;
+  box-shadow:
+    0 1px 0 rgba(242, 239, 225, 0.08) inset,
+    0 18px 40px -18px rgba(0, 0, 0, 0.8);
+}
+
+.gy-stone-live {
+  box-shadow:
+    0 1px 0 rgba(255, 196, 94, 0.25) inset,
+    0 0 45px -10px rgba(255, 196, 94, 0.28),
+    0 18px 40px -18px rgba(0, 0, 0, 0.8);
+}
+
+/* Candle + flame */
+.gy-candle {
+  position: relative;
+  width: 10px;
+  height: 26px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #efe6cf, #cfc2a2);
+  margin: 0 auto;
+}
+.gy-flame {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  width: 8px;
+  height: 12px;
+  transform: translateX(-50%);
+  border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%;
+  background: radial-gradient(circle at 50% 75%, #fff3c4 0%, var(--color-candle) 55%, rgba(255, 140, 40, 0.55) 100%);
+  box-shadow: 0 0 18px 6px rgba(255, 196, 94, 0.35);
+  animation: gy-flicker 2.4s ease-in-out infinite;
+  transform-origin: 50% 100%;
+}
+@keyframes gy-flicker {
+  0%, 100% { transform: translateX(-50%) scale(1) rotate(-1.5deg); opacity: 1; }
+  22% { transform: translateX(-52%) scale(0.94) rotate(2deg); opacity: 0.92; }
+  48% { transform: translateX(-48%) scale(1.05) rotate(-2.5deg); opacity: 1; }
+  74% { transform: translateX(-51%) scale(0.97) rotate(1.5deg); opacity: 0.95; }
+}
+
+.gy-moon {
+  background: radial-gradient(circle at 38% 34%, #fffdf4 0%, #f2ecd7 45%, #ddd6bd 100%);
+  box-shadow: 0 0 70px 18px rgba(242, 236, 215, 0.22);
+}
+
+.gy-ground {
+  background: linear-gradient(180deg, rgba(11, 17, 32, 0) 0%, #0a0f1d 55%, var(--color-abyss) 100%);
+}
+
+.gy-progress {
+  background: rgba(242, 239, 225, 0.14);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.gy-progress > div {
+  background: linear-gradient(90deg, #d9a94e, var(--color-candle));
+  border-radius: 99px;
+  height: 100%;
+  transition: width 600ms ease;
+}
+
+.gy a:focus-visible,
+.gy button:focus-visible,
+.gy input:focus-visible,
+.gy textarea:focus-visible {
+  outline: 2px solid var(--color-candle);
+  outline-offset: 3px;
+}
+
+.gy input[type="range"] {
+  accent-color: var(--color-candle);
+}
+
+@keyframes gy-rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.gy-rise {
+  animation: gy-rise 700ms ease both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .gy-rise { animation: none; }
+  .gy-flame { animation: none; }
+}
+
+/* ---------- WordPress 2005 skin ---------- */
+
+.wp {
+  background: var(--color-wpbg);
+  color: var(--color-wpink);
+  font-family: "Lucida Grande", "Segoe UI", Verdana, Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.wp h1, .wp h2, .wp h3, .wp .wp-serif {
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.wp a {
+  color: var(--color-wplink);
+  text-decoration: underline;
+}
+.wp a:hover {
+  color: var(--color-wpblue-deep);
+}
+
+.wp-header {
+  background: linear-gradient(180deg, #467298 0%, var(--color-wpblue) 70%, #29537d 100%);
+}
+
+.wp-widget-title {
+  font-family: "Lucida Grande", "Segoe UI", Verdana, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--color-wpink);
+}
+
+.wp-meta {
+  color: var(--color-wpmeta);
+  font-size: 11px;
+}
+
+.wp-dotted {
+  border-bottom: 1px dotted #bbb;
+}
+
+.wp input[type="text"],
+.wp input[type="email"],
+.wp input[type="url"],
+.wp input[type="number"],
+.wp textarea,
+.wp select {
+  background: #fff;
+  border: 1px solid #bfbfba;
+  border-radius: 3px;
+  padding: 4px 7px;
+  font: inherit;
+  color: inherit;
+}
+
+.wp button, .wp .wp-btn {
+  background: linear-gradient(180deg, #4c7aa5 0%, var(--color-wpblue) 100%);
+  color: #fff;
+  border: 1px solid var(--color-wpblue-deep);
+  border-radius: 4px;
+  padding: 5px 14px;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+}
+.wp button:hover, .wp .wp-btn:hover {
+  background: linear-gradient(180deg, #5586b3 0%, #35668f 100%);
+}
+.wp button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.wp a:focus-visible,
+.wp button:focus-visible,
+.wp input:focus-visible,
+.wp textarea:focus-visible {
+  outline: 2px solid var(--color-wpblue);
+  outline-offset: 2px;
+}
+
+.wp input[type="range"] {
+  accent-color: var(--color-wpblue);
 }
