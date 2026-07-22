@@ -18,7 +18,8 @@ they're JS-bundled single files).
 One shared backend, two parallel demo frontends with identical features:
 
 - `app/graveyard/**` + `components/graveyard/**` — dark cemetery skin
-  (EB Garamond, small-caps, candle-gold `#ffc45e` on navy `#0b1120`)
+  (Cormorant Garamond headings, Cormorant SC small-caps, Newsreader body;
+  UI gold `#e6b85c`, flame `#ffc45e`, on navy `#0b1120`)
 - `app/wordpress/**` + `components/wordpress/**` — 2005 WordPress pastiche
   (Georgia headings, Lucida body, Kubrick blue header, sidebar widgets)
 - Page routes per skin: `/` home, `b/[slug]` blogger, `p/[handle]` patron,

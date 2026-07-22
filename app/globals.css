@@ -3,13 +3,15 @@
 @theme {
   /* Graveyard palette — midnight cemetery */
   --color-night: #0b1120;
-  --color-abyss: #070d18;
+  --color-abyss: #060b15;
   --color-stone: #3d4a66;
   --color-stone-dark: #2c374e;
-  --color-moon: #f2efe1;
-  --color-candle: #ffc45e;
-  --color-mist: #8b93a7;
-  --color-parchment: #ece9dc;
+  --color-moon: #eef1f8;
+  /* candle = UI gold accent; the flame itself is a warmer #ffc45e in CSS */
+  --color-candle: #e6b85c;
+  --color-gold: #e6b85c;
+  --color-mist: #8b96ad;
+  --color-parchment: #ece7d8;
 
   /* WordPress-2005 palette — Kubrick blues */
   --color-wpblue: #2e5d8c;
@@ -21,90 +23,132 @@
   --color-wpink: #333333;
   --color-wpmeta: #777777;
 
-  --font-garamond: var(--font-eb-garamond), Georgia, serif;
+  --font-display: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --font-caps: var(--font-cormorant-sc), "Cormorant SC", Georgia, serif;
+  --font-body: var(--font-newsreader), "Newsreader", Georgia, serif;
 }
 
 /* ---------- Graveyard skin ---------- */
 
 .gy {
   background: var(--color-night);
-  color: var(--color-moon);
-  font-family: var(--font-garamond);
+  color: #dfe4ee;
+  font-family: var(--font-body);
 }
 
+.gy h1, .gy h2, .gy h3 {
+  font-family: var(--font-display);
+  font-weight: 500;
+}
+
+/* Cormorant SC is a true small-caps face; lowercase renders as small caps. */
 .gy-caps {
-  font-variant: small-caps;
-  letter-spacing: 0.22em;
+  font-family: var(--font-caps);
+  letter-spacing: 0.16em;
   text-transform: lowercase;
 }
 
 .gy-label {
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  font-size: 0.65rem;
+  font-family: var(--font-caps);
+  letter-spacing: 0.3em;
+  text-transform: lowercase;
+  font-size: 0.8125rem;
 }
 
 /* Arched headstone card */
 .gy-stone {
-  background: linear-gradient(180deg, #46536f 0%, var(--color-stone-dark) 55%, #232c42 100%);
-  border-radius: 46% 46% 10px 10px / 34% 34% 10px 10px;
+  background: linear-gradient(175deg, #333f57 0%, #232e45 100%);
+  border-radius: 110px 110px 6px 6px;
   box-shadow:
-    0 1px 0 rgba(242, 239, 225, 0.08) inset,
-    0 18px 40px -18px rgba(0, 0, 0, 0.8);
+    inset 0 2px 0 rgba(255, 255, 255, 0.05),
+    inset 0 -20px 30px rgba(5, 9, 18, 0.4),
+    0 5px 0 rgba(4, 7, 14, 0.55);
 }
 
 .gy-stone-live {
   box-shadow:
-    0 1px 0 rgba(255, 196, 94, 0.25) inset,
-    0 0 45px -10px rgba(255, 196, 94, 0.28),
-    0 18px 40px -18px rgba(0, 0, 0, 0.8);
+    inset 0 2px 0 rgba(255, 196, 94, 0.12),
+    inset 0 -20px 30px rgba(5, 9, 18, 0.4),
+    0 5px 0 rgba(4, 7, 14, 0.55),
+    0 0 45px -10px rgba(255, 196, 94, 0.3);
 }
 
 /* Candle + flame */
 .gy-candle {
   position: relative;
-  width: 10px;
+  width: 11px;
   height: 26px;
-  border-radius: 3px;
-  background: linear-gradient(180deg, #efe6cf, #cfc2a2);
+  border-radius: 3px 3px 2px 2px;
+  background: linear-gradient(90deg, #cfc7ae, #efe9d4 45%, #b9b096);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   margin: 0 auto;
 }
 .gy-flame {
   position: absolute;
   top: -12px;
   left: 50%;
-  width: 8px;
-  height: 12px;
-  transform: translateX(-50%);
-  border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%;
-  background: radial-gradient(circle at 50% 75%, #fff3c4 0%, var(--color-candle) 55%, rgba(255, 140, 40, 0.55) 100%);
-  box-shadow: 0 0 18px 6px rgba(255, 196, 94, 0.35);
-  animation: gy-flicker 2.4s ease-in-out infinite;
+  width: 9px;
+  height: 13px;
+  margin-left: -4.5px;
+  border-radius: 50% 50% 45% 45% / 62% 62% 38% 38%;
+  background: radial-gradient(circle at 50% 78%, #fff3cf 0%, #ffc45e 55%, #f08b2e 100%);
+  box-shadow: 0 0 14px 4px rgba(255, 196, 94, 0.55);
+  animation: gy-flicker 1.6s ease-in-out infinite;
   transform-origin: 50% 100%;
 }
 @keyframes gy-flicker {
-  0%, 100% { transform: translateX(-50%) scale(1) rotate(-1.5deg); opacity: 1; }
-  22% { transform: translateX(-52%) scale(0.94) rotate(2deg); opacity: 0.92; }
-  48% { transform: translateX(-48%) scale(1.05) rotate(-2.5deg); opacity: 1; }
-  74% { transform: translateX(-51%) scale(0.97) rotate(1.5deg); opacity: 0.95; }
+  0%, 100% { transform: scale(1) rotate(-1deg); }
+  25% { transform: scale(1.08, 0.94) rotate(2deg); }
+  50% { transform: scale(0.94, 1.06) rotate(-2deg); }
+  75% { transform: scale(1.04, 0.97) rotate(1deg); }
 }
 
 .gy-moon {
-  background: radial-gradient(circle at 38% 34%, #fffdf4 0%, #f2ecd7 45%, #ddd6bd 100%);
-  box-shadow: 0 0 70px 18px rgba(242, 236, 215, 0.22);
+  background: radial-gradient(circle at 38% 34%, #fffdf4 0%, #f2efe1 45%, #ddd6bd 100%);
+  box-shadow:
+    0 0 70px 22px rgba(240, 236, 214, 0.16),
+    0 0 160px 60px rgba(220, 224, 240, 0.08);
 }
 
 .gy-ground {
   background: linear-gradient(180deg, rgba(11, 17, 32, 0) 0%, #0a0f1d 55%, var(--color-abyss) 100%);
 }
 
+/* Hero scene: sky, drifting clouds, rolling hills */
+.gy-sky {
+  background: linear-gradient(180deg, #0a101e 0%, #0e1728 48%, #131e34 78%, #16223a 100%);
+}
+.gy-cloud {
+  position: absolute;
+  border-radius: 999px;
+  animation: gy-drift 90s ease-in-out infinite alternate;
+}
+@keyframes gy-drift {
+  from { transform: translateX(-50px); }
+  to { transform: translateX(70px); }
+}
+.gy-hill {
+  position: absolute;
+  border-radius: 100% 100% 0 0 / 100% 100% 0 0;
+}
+/* Static flame variant for the hero scene (flex-positioned, not absolute) */
+.gy-scene-flame {
+  width: 9px;
+  height: 13px;
+  border-radius: 50% 50% 45% 45% / 62% 62% 38% 38%;
+  background: radial-gradient(circle at 50% 78%, #fff3cf 0%, #ffc45e 55%, #f08b2e 100%);
+  box-shadow: 0 0 14px 4px rgba(255, 196, 94, 0.55);
+  animation: gy-flicker 1.6s ease-in-out infinite;
+  transform-origin: 50% 100%;
+}
+
 .gy-progress {
-  background: rgba(242, 239, 225, 0.14);
+  background: #1a2438;
   border-radius: 99px;
   overflow: hidden;
 }
 .gy-progress > div {
-  background: linear-gradient(90deg, #d9a94e, var(--color-candle));
+  background: linear-gradient(90deg, #c9bd98, var(--color-gold));
   border-radius: 99px;
   height: 100%;
   transition: width 600ms ease;
@@ -132,6 +176,8 @@
 @media (prefers-reduced-motion: reduce) {
   .gy-rise { animation: none; }
   .gy-flame { animation: none; }
+  .gy-scene-flame { animation: none; }
+  .gy-cloud { animation: none; }
 }
 
 /* ---------- WordPress 2005 skin ---------- */

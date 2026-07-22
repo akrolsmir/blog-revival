@@ -6,36 +6,36 @@ import { useMyProfile } from "@/lib/hooks";
 export function GyNav() {
   const { user, profile } = useMyProfile();
   return (
-    <header className="flex items-center justify-between gap-4 px-6 py-5 md:px-12">
-      <Link href="/graveyard" className="flex items-baseline gap-3">
-        <span className="gy-label text-base font-semibold tracking-[0.2em] text-moon">
+    <header className="relative z-20 flex items-center justify-between gap-4 px-6 py-6 md:px-12">
+      <Link href="/graveyard" className="flex items-baseline gap-3.5">
+        <span className="gy-caps text-[22px] font-semibold tracking-[0.14em] text-moon">
           revive.blog
         </span>
-        <span className="gy-caps hidden text-sm text-mist sm:inline">
+        <span className="gy-caps hidden text-xs tracking-[0.22em] text-mist sm:inline">
           the blog revival project
         </span>
       </Link>
-      <nav className="gy-caps flex items-center gap-5 text-sm md:gap-8">
-        <Link href="/graveyard#how" className="hidden text-moon/80 hover:text-moon sm:inline">
+      <nav className="gy-caps flex items-center gap-5 text-sm tracking-[0.18em] md:gap-8">
+        <Link href="/graveyard#how" className="hidden text-[#b9c2d4] hover:text-moon sm:inline">
           how it works
         </Link>
-        <Link href="/graveyard#blogroll" className="hidden text-moon/80 hover:text-moon sm:inline">
+        <Link href="/graveyard#blogroll" className="hidden text-[#b9c2d4] hover:text-moon sm:inline">
           the blogroll
         </Link>
-        <Link href="/graveyard/claim" className="text-moon/80 hover:text-moon">
+        <Link href="/graveyard/claim" className="text-[#b9c2d4] hover:text-moon">
           for bloggers
         </Link>
         {user && profile ? (
           <Link
             href="/graveyard/account"
-            className="rounded-sm border border-candle/50 px-4 py-1.5 text-candle hover:bg-candle/10"
+            className="rounded-[3px] border border-gold/50 px-4 py-2 text-gold hover:bg-gold/10"
           >
             {profile.handle}
           </Link>
         ) : (
           <Link
             href={user ? "/graveyard/account" : "/graveyard/signin"}
-            className="rounded-sm bg-candle px-4 py-1.5 font-medium text-night hover:bg-candle/90"
+            className="rounded-[3px] bg-gold px-5 py-2 text-[#171208] shadow-[0_0_24px_rgba(230,184,92,.28)] hover:bg-gold/90"
           >
             become a patron
           </Link>
@@ -47,19 +47,21 @@ export function GyNav() {
 
 export function GyFooter() {
   return (
-    <footer className="bg-abyss px-6 py-14 text-center">
-      <div className="gy-label mb-3 text-moon">revive.blog</div>
-      <p className="text-mist">
+    <footer className="border-t border-[#141d30] bg-abyss px-6 py-14 text-center">
+      <div className="gy-caps mb-2.5 text-[19px] tracking-[0.14em] text-moon">
+        revive.blog
+      </div>
+      <p className="text-[15px] text-[#7e8aa3]">
         A project of{" "}
         <a
           href="https://manifund.org"
-          className="underline decoration-mist/40 underline-offset-4 hover:text-moon"
+          className="text-[#e8c87a] hover:text-[#f6e0a8]"
         >
           Manifund
         </a>
         , a 501(c)(3) nonprofit. Pledges are tax-deductible per US law.
       </p>
-      <nav className="gy-caps mt-6 flex justify-center gap-8 text-sm text-moon/70">
+      <nav className="gy-caps mt-6 flex flex-wrap justify-center gap-x-8 gap-y-3 text-[13px] tracking-[0.18em] text-mist">
         <Link href="/graveyard#how" className="hover:text-moon">
           how it works
         </Link>
@@ -73,7 +75,7 @@ export function GyFooter() {
           the other demo
         </Link>
       </nav>
-      <p className="mt-8 text-sm italic text-mist/70">
+      <p className="mt-7 text-[13px] italic text-[#525e76]">
         Rest is temporary. Blogs are forever.
       </p>
     </footer>
