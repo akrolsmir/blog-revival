@@ -96,6 +96,44 @@ export function useBounties() {
   }, [data, isLoading, error]);
 }
 
+export type PatronRow = {
+  id: string;
+  handle: string;
+  displayName: string;
+  bio?: string;
+  pledgeCount: number;
+  totalCents: number;
+};
+
+/** All patron profiles, most-generous first. */
+export function usePatrons() {
+  const { data, isLoading, error } = db.useQuery({
+    profiles: { pledges: {} },
+  });
+  return useMemo(() => {
+    const patrons: PatronRow[] = (data?.profiles ?? []).map((p: any) => {
+      const pledges = p.pledges ?? [];
+      return {
+        id: p.id,
+        handle: p.handle,
+        displayName: p.displayName,
+        bio: p.bio,
+        pledgeCount: pledges.length,
+        totalCents: pledges.reduce(
+          (a: number, x: any) => a + x.amountCents,
+          0
+        ),
+      };
+    });
+    patrons.sort(
+      (a, b) =>
+        b.totalCents - a.totalCents ||
+        a.displayName.localeCompare(b.displayName)
+    );
+    return { isLoading, error, patrons };
+  }, [data, isLoading, error]);
+}
+
 /** The signed-in user's profile (or null). */
 export function useMyProfile() {
   const { user, isLoading: authLoading } = db.useAuth();

@@ -150,6 +150,9 @@ export function WpSidebar() {
             </>
           )}
           <li>
+            <Link href="/wordpress/patrons">Browse patrons</Link>
+          </li>
+          <li>
             <Link href="/wordpress/claim">Claim your blogger profile</Link>
           </li>
           <li>

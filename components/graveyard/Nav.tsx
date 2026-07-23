@@ -22,6 +22,9 @@ export function GyNav() {
         <Link href="/graveyard#blogroll" className="hidden text-[#b9c2d4] hover:text-moon sm:inline">
           the blogroll
         </Link>
+        <Link href="/graveyard/patrons" className="hidden text-[#b9c2d4] hover:text-moon sm:inline">
+          patrons
+        </Link>
         <Link href="/graveyard/claim" className="text-[#b9c2d4] hover:text-moon">
           for bloggers
         </Link>
@@ -67,6 +70,9 @@ export function GyFooter() {
         </Link>
         <Link href="/graveyard#blogroll" className="hover:text-moon">
           the blogroll
+        </Link>
+        <Link href="/graveyard/patrons" className="hover:text-moon">
+          patrons
         </Link>
         <Link href="/graveyard/claim" className="hover:text-moon">
           claim your grave
