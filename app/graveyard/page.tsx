@@ -29,22 +29,6 @@ export default function GraveyardHome() {
         liveThresholdCents={liveThresholdCents}
       />
 
-      {/* Ticker */}
-      <div className="flex flex-wrap justify-center gap-x-10 gap-y-3 border-y border-[#141d30] bg-abyss px-6 py-4">
-        <span className="gy-caps text-[13px] tracking-[0.2em] text-[#c8b078]">
-          {dollars(poolCents, { round: true })} matching pool
-        </span>
-        <span className="gy-caps text-[13px] tracking-[0.2em] text-[#7e8aa3]">
-          bounties go live at {dollars(liveThresholdCents, { round: true })}
-        </span>
-        <span className="gy-caps hidden text-[13px] tracking-[0.2em] text-[#7e8aa3] sm:inline">
-          austin &amp; carol each seeding $5,000
-        </span>
-        <span className="gy-caps hidden text-[13px] tracking-[0.2em] text-[#7e8aa3] sm:inline">
-          tax-deductible — manifund 501(c)(3)
-        </span>
-      </div>
-
       {/* Mechanism */}
       <section id="how" className="bg-parchment px-6 py-24 text-[#2a3040] md:px-12">
         <div className="mx-auto max-w-[1060px]">

@@ -6,15 +6,7 @@ import { useMyProfile } from "@/lib/hooks";
 export function GyNav() {
   const { user, profile } = useMyProfile();
   return (
-    <header className="relative z-20 flex items-center justify-between gap-4 px-6 py-6 md:px-12">
-      <Link href="/graveyard" className="flex items-baseline gap-3.5">
-        <span className="gy-caps text-[22px] font-semibold tracking-[0.14em] text-moon">
-          revive.blog
-        </span>
-        <span className="gy-caps hidden text-xs tracking-[0.22em] text-mist sm:inline">
-          the blog revival project
-        </span>
-      </Link>
+    <header className="relative z-20 flex items-center justify-end gap-4 px-6 py-6 md:px-12">
       <nav className="gy-caps flex items-center gap-5 text-sm tracking-[0.18em] md:gap-8">
         <Link href="/graveyard#how" className="hidden text-[#b9c2d4] hover:text-moon sm:inline">
           how it works

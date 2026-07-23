@@ -162,9 +162,7 @@ export function GraveyardHero({
             how it works
           </Link>
         </div>
-        <div className="mt-4 hidden text-sm italic text-[#6f7b93] md:block">
-          Hover a headstone. Go on.
-        </div>
+
       </div>
 
       {/* headstones — placed across the plot on desktop */}
