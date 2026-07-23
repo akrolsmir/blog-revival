@@ -8,7 +8,7 @@ import { useBounties, useMyProfile } from "@/lib/hooks";
 import { eyebrowFor } from "@/components/graveyard/Headstone";
 import { PledgeBox } from "@/components/graveyard/PledgeBox";
 import { daysSilent } from "@/lib/qf";
-import { bloggerIcon, dollars, daysAgoWords } from "@/lib/format";
+import { bloggerIcon, dollars } from "@/lib/format";
 
 export default function GraveyardBloggerPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
@@ -141,17 +141,11 @@ export default function GraveyardBloggerPage({ params }: { params: Promise<{ slu
             <div className="gy-progress mt-4 h-2 w-full">
               <div style={{ width: `${pct}%` }} />
             </div>
-            <dl className="mt-5 grid grid-cols-2 gap-4 text-[15px] sm:grid-cols-4">
+            <dl className="mt-5 grid grid-cols-2 gap-4 text-[15px] sm:grid-cols-3">
               <div>
                 <dt className="gy-label text-mist/70">direct</dt>
                 <dd className="mt-1 font-semibold text-moon">
                   {dollars(math.patronCents, { round: true })}
-                </dd>
-              </div>
-              <div>
-                <dt className="gy-label text-mist/70">personal bounty</dt>
-                <dd className="mt-1 font-semibold text-moon">
-                  {dollars(math.personalCents, { round: true })}
                 </dd>
               </div>
               <div>
@@ -279,23 +273,11 @@ export default function GraveyardBloggerPage({ params }: { params: Promise<{ slu
                 .map((p: any) => (
                   <li key={p.id} className="text-sm">
                     <div className="flex justify-between">
-                      <span className="text-moon/85">
-                        {p.patron?.displayName ?? "Anonymous"}
-                        {p.source !== "patron" && (
-                          <span className="gy-label ml-2 text-candle/90">
-                            {p.source === "redirect" ? "redirected bounty" : "personal bounty"}
-                          </span>
-                        )}
-                      </span>
+                      <span className="text-moon/85">{p.patron?.displayName ?? "Anonymous"}</span>
                       <span className="font-semibold text-moon">
                         {dollars(p.amountCents, { round: true })}
                       </span>
                     </div>
-                    {p.note && (
-                      <p className="mt-1 text-[13px] italic leading-snug text-mist">
-                        &ldquo;{p.note}&rdquo; · {daysAgoWords(daysSilent(p.createdAt))}
-                      </p>
-                    )}
                   </li>
                 ))}
               {(blogger.pledges ?? []).length === 0 && (

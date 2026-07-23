@@ -24,7 +24,7 @@ export function WpShell({ children }: { children: React.ReactNode }) {
         <footer className="wp-meta px-4 py-6 text-center">
           <p>
             Blog Revival Project is a project of <a href="https://manifund.org">Manifund</a>, a
-            501(c)(3) nonprofit. Contributions are tax-deductible per US law.
+            501(c)(3) nonprofit. Contributions are tax-deductible.
           </p>
         </footer>
       </div>

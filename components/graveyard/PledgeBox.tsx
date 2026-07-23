@@ -31,7 +31,6 @@ export function PledgeBox({
   const searchParams = useSearchParams();
   const [amountCents, setAmountCents] = useState(2500);
   const [custom, setCustom] = useState("");
-  const [note, setNote] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [confirmed, setConfirmed] = useState(false);
@@ -76,7 +75,6 @@ export function PledgeBox({
       bloggerSlug,
       profileId: profile.id,
       amountCents: effective,
-      note,
     });
     if (res.url) {
       window.location.href = res.url;
@@ -91,7 +89,7 @@ export function PledgeBox({
       <h3 className="gy-caps text-xl text-moon">light a candle</h3>
       {confirmed && (
         <p className="mt-3 rounded-sm border border-candle/40 bg-candle/10 px-4 py-3 text-sm text-candle">
-          Your candle is lit. {bloggerName} will see your pledge — and your note, if you left one.
+          Your candle is lit. {bloggerName} will see your pledge.
         </p>
       )}
       <div className="mt-4 flex flex-wrap gap-2">
@@ -124,18 +122,6 @@ export function PledgeBox({
           />
         </label>
       </div>
-      <label className="mt-4 block">
-        <span className="gy-label text-mist">
-          why do you want them back? (they&rsquo;ll read it)
-        </span>
-        <textarea
-          value={note}
-          onChange={(e) => setNote(e.target.value)}
-          rows={2}
-          className="mt-2 w-full rounded-sm border border-moon/25 bg-transparent px-3 py-2 text-[15px] text-moon placeholder:text-mist/60"
-          placeholder="Your posts changed how I think about…"
-        />
-      </label>
       {valid && (
         <p className="mt-3 text-sm text-mist">
           {dollars(effective, { round: true })} direct{" "}

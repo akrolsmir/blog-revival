@@ -44,7 +44,7 @@ export function WpSidebar() {
             </li>
           ))}
         </ul>
-        <p className="wp-meta mt-2 italic">total pledged so far, incl. match</p>
+        <p className="wp-meta mt-2 italic">total pledged so far, including match</p>
       </section>
 
       {sliderTarget && (

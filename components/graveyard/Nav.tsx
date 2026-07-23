@@ -55,7 +55,7 @@ export function GyFooter() {
         <a href="https://manifund.org" className="text-[#e8c87a] hover:text-[#f6e0a8]">
           Manifund
         </a>
-        , a 501(c)(3) nonprofit. Pledges are tax-deductible per US law.
+        , a 501(c)(3) nonprofit. Pledges are tax-deductible.
       </p>
       <nav className="gy-caps mt-6 flex flex-wrap justify-center gap-x-8 gap-y-3 text-[13px] tracking-[0.18em] text-mist">
         <Link href="/#how" className="hover:text-moon">
@@ -71,9 +71,6 @@ export function GyFooter() {
           claim your grave
         </Link>
       </nav>
-      <p className="mt-7 text-[13px] italic text-[#525e76]">
-        Rest is temporary. Blogs are forever.
-      </p>
     </footer>
   );
 }

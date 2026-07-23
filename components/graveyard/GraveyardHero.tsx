@@ -218,7 +218,7 @@ export function GraveyardHero({
         </h1>
         <p className="mx-auto mb-8 max-w-[520px] text-[19px] leading-[1.55] text-[#a9b3c8] text-pretty">
           Many of our favorite blogs have gone silent. <br />
-          We're offering each $1k+, as a bounty to post again.
+          We're offering each $1000+, as a bounty to post again.
         </p>
         <div className="flex justify-center gap-4">
           <Link
