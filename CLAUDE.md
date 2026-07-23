@@ -49,6 +49,7 @@ never import admin in client code). All pages are client components using
 live queries via `lib/hooks.ts` (`useBounties`, `useMyProfile`).
 
 Money flow (all writes server-side; clients never create pledges):
+
 - Pledge: `lib/actions.ts` → POST /api/checkout → Stripe Checkout →
   webhook `/api/stripe/webhook` OR success-redirect `/api/checkout/confirm`
   (both call `lib/record-pledge.ts`, idempotent on stripeSessionId)

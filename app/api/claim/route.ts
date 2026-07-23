@@ -7,8 +7,7 @@ import { computeQf, type PledgeLike } from "@/lib/qf";
 // - redirect: send a live bounty's value to revive another blogger
 // - charity:  donate a live bounty's value (stays with Manifund for regranting)
 export async function POST(req: NextRequest) {
-  const { action, bloggerId, refreshToken, targetBloggerId, charityName } =
-    await req.json();
+  const { action, bloggerId, refreshToken, targetBloggerId, charityName } = await req.json();
   if (!action || !bloggerId || !refreshToken) {
     return NextResponse.json({ error: "Missing fields" }, { status: 400 });
   }
@@ -36,15 +35,10 @@ export async function POST(req: NextRequest) {
 
   if (action === "claim") {
     if (blogger.claimedBy) {
-      return NextResponse.json(
-        { error: "This profile has already been claimed" },
-        { status: 409 }
-      );
+      return NextResponse.json({ error: "This profile has already been claimed" }, { status: 409 });
     }
     await db.transact([
-      db.tx.bloggers[bloggerId]
-        .update({ claimVerified: false })
-        .link({ claimedBy: profile.id }),
+      db.tx.bloggers[bloggerId].update({ claimVerified: false }).link({ claimedBy: profile.id }),
     ]);
     return NextResponse.json({ ok: true });
   }
@@ -56,7 +50,7 @@ export async function POST(req: NextRequest) {
   if (!blogger.claimVerified || blogger.status !== "revived") {
     return NextResponse.json(
       { error: "Bounty must be verified and the revival post published first" },
-      { status: 403 }
+      { status: 403 },
     );
   }
 
@@ -81,7 +75,7 @@ export async function POST(req: NextRequest) {
   const math = computeQf(
     byBlogger,
     config.matchingPoolCents,
-    config.liveThresholdCents
+    config.liveThresholdCents,
   ).perBlogger.get(bloggerId);
   if (!math?.isLive) {
     return NextResponse.json({ error: "Bounty is not live" }, { status: 403 });
@@ -110,10 +104,7 @@ export async function POST(req: NextRequest) {
         })
         .link({ blogger: targetBloggerId, patron: profile.id }),
       db.tx.settings[config.id].update({
-        matchingPoolCents: Math.max(
-          0,
-          config.matchingPoolCents - math.matchCents
-        ),
+        matchingPoolCents: Math.max(0, config.matchingPoolCents - math.matchCents),
       }),
     ]);
     return NextResponse.json({ ok: true, movedCents: math.totalCents });
@@ -127,10 +118,7 @@ export async function POST(req: NextRequest) {
         bountyDirectionDetail: (charityName ?? "charity").slice(0, 200),
       }),
       db.tx.settings[config.id].update({
-        matchingPoolCents: Math.max(
-          0,
-          config.matchingPoolCents - math.matchCents
-        ),
+        matchingPoolCents: Math.max(0, config.matchingPoolCents - math.matchCents),
       }),
     ]);
     return NextResponse.json({ ok: true });

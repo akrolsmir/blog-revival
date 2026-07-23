@@ -5,11 +5,7 @@ import Link from "next/link";
 import { db } from "@/lib/db";
 import { dollars } from "@/lib/format";
 
-export default function GraveyardPatronPage({
-  params,
-}: {
-  params: Promise<{ handle: string }>;
-}) {
+export default function GraveyardPatronPage({ params }: { params: Promise<{ handle: string }> }) {
   const { handle } = use(params);
   const { data, isLoading } = db.useQuery({
     profiles: {
@@ -79,9 +75,7 @@ export default function GraveyardPatronPage({
                   )}
                 </li>
               ))}
-              {alive.length === 0 && (
-                <li className="italic text-mist">None listed yet.</li>
-              )}
+              {alive.length === 0 && <li className="italic text-mist">None listed yet.</li>}
             </ul>
           </div>
           <div className="rounded-md border border-moon/15 p-6">
@@ -103,9 +97,7 @@ export default function GraveyardPatronPage({
                   )}
                 </li>
               ))}
-              {dead.length === 0 && (
-                <li className="italic text-mist">None listed yet.</li>
-              )}
+              {dead.length === 0 && <li className="italic text-mist">None listed yet.</li>}
             </ul>
           </div>
         </section>
@@ -114,9 +106,7 @@ export default function GraveyardPatronPage({
       <section className="mt-8 rounded-md border border-moon/15 p-6">
         <div className="flex items-baseline justify-between">
           <h2 className="gy-caps text-xl text-moon">candles lit</h2>
-          <span className="gy-label text-mist">
-            {dollars(totalCents, { round: true })} pledged
-          </span>
+          <span className="gy-label text-mist">{dollars(totalCents, { round: true })} pledged</span>
         </div>
         <ul className="mt-4 space-y-2">
           {pledges.map((p: any) => (
@@ -141,9 +131,7 @@ export default function GraveyardPatronPage({
               </span>
             </li>
           ))}
-          {pledges.length === 0 && (
-            <li className="italic text-mist">No candles yet.</li>
-          )}
+          {pledges.length === 0 && <li className="italic text-mist">No candles yet.</li>}
         </ul>
       </section>
     </main>

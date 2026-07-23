@@ -19,15 +19,13 @@ export default function WpPatronsPage() {
             </Link>{" "}
             <span className="wp-meta text-[12.5px]">@{p.handle}</span>
             <p className="wp-meta text-[12.5px]">
-              {dollars(p.totalCents, { round: true })} across {p.pledgeCount}{" "}
-              bount{p.pledgeCount === 1 ? "y" : "ies"}
+              {dollars(p.totalCents, { round: true })} across {p.pledgeCount} bount
+              {p.pledgeCount === 1 ? "y" : "ies"}
             </p>
           </li>
         ))}
       </ul>
-      {!isLoading && patrons.length === 0 && (
-        <p className="wp-meta mt-4 italic">No patrons yet.</p>
-      )}
+      {!isLoading && patrons.length === 0 && <p className="wp-meta mt-4 italic">No patrons yet.</p>}
     </div>
   );
 }

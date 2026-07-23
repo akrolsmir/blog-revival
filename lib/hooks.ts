@@ -2,12 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { db } from "@/lib/db";
-import {
-  computeQf,
-  emptyMath,
-  type BountyMath,
-  type PledgeLike,
-} from "@/lib/qf";
+import { computeQf, emptyMath, type BountyMath, type PledgeLike } from "@/lib/qf";
 
 export const DEFAULT_POOL_CENTS = 10_000_00;
 export const DEFAULT_LIVE_THRESHOLD_CENTS = 1_000_00;
@@ -53,8 +48,7 @@ export function useBounties() {
   return useMemo(() => {
     const config = data?.settings?.find((s: any) => s.key === "main");
     const poolCents = config?.matchingPoolCents ?? DEFAULT_POOL_CENTS;
-    const liveThresholdCents =
-      config?.liveThresholdCents ?? DEFAULT_LIVE_THRESHOLD_CENTS;
+    const liveThresholdCents = config?.liveThresholdCents ?? DEFAULT_LIVE_THRESHOLD_CENTS;
 
     const pledgesByBlogger = new Map<string, PledgeLike[]>();
     for (const b of data?.bloggers ?? []) {
@@ -65,7 +59,7 @@ export function useBounties() {
           source: p.source,
           status: p.status,
           patronId: p.patron?.id,
-        }))
+        })),
       );
     }
     const qf = computeQf(pledgesByBlogger, poolCents, liveThresholdCents);
@@ -73,9 +67,7 @@ export function useBounties() {
     const bloggers: BloggerRow[] = (data?.bloggers ?? []).map((b: any) => ({
       ...b,
       math: qf.perBlogger.get(b.id) ?? emptyMath(liveThresholdCents),
-      supporterCount: new Set(
-        (b.pledges ?? []).map((p: any) => p.patron?.id ?? p.id)
-      ).size,
+      supporterCount: new Set((b.pledges ?? []).map((p: any) => p.patron?.id ?? p.id)).size,
     }));
 
     // Top bounties first: live before funding, then by total committed.
@@ -119,16 +111,11 @@ export function usePatrons() {
         displayName: p.displayName,
         bio: p.bio,
         pledgeCount: pledges.length,
-        totalCents: pledges.reduce(
-          (a: number, x: any) => a + x.amountCents,
-          0
-        ),
+        totalCents: pledges.reduce((a: number, x: any) => a + x.amountCents, 0),
       };
     });
     patrons.sort(
-      (a, b) =>
-        b.totalCents - a.totalCents ||
-        a.displayName.localeCompare(b.displayName)
+      (a, b) => b.totalCents - a.totalCents || a.displayName.localeCompare(b.displayName),
     );
     return { isLoading, error, patrons };
   }, [data, isLoading, error]);
@@ -147,7 +134,7 @@ export function useGoogleAuthUrl() {
       db.auth.createAuthorizationURL({
         clientName: "google-web",
         redirectURL: window.location.href,
-      })
+      }),
     );
   }, []);
   return url;
@@ -165,7 +152,7 @@ export function useMyProfile() {
             claimedBloggers: {},
           },
         }
-      : null
+      : null,
   );
   return {
     user: user ?? null,

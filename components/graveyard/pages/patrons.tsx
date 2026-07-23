@@ -25,15 +25,13 @@ export default function GraveyardPatronsPage() {
               {p.displayName}
             </Link>
             <span className="gy-label whitespace-nowrap text-mist">
-              {dollars(p.totalCents, { round: true })} · {p.pledgeCount}{" "}
-              bount{p.pledgeCount === 1 ? "y" : "ies"}
+              {dollars(p.totalCents, { round: true })} · {p.pledgeCount} bount
+              {p.pledgeCount === 1 ? "y" : "ies"}
             </span>
           </li>
         ))}
       </ul>
-      {patrons.length === 0 && (
-        <p className="gy-label mt-10 text-mist">No patrons yet.</p>
-      )}
+      {patrons.length === 0 && <p className="gy-label mt-10 text-mist">No patrons yet.</p>}
     </main>
   );
 }

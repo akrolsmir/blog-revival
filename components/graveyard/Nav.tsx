@@ -43,15 +43,10 @@ export function GyNav() {
 export function GyFooter() {
   return (
     <footer className="border-t border-[#141d30] bg-abyss px-6 py-14 text-center">
-      <div className="gy-caps mb-2.5 text-[19px] tracking-[0.14em] text-moon">
-        revive.blog
-      </div>
+      <div className="gy-caps mb-2.5 text-[19px] tracking-[0.14em] text-moon">revive.blog</div>
       <p className="text-[15px] text-[#7e8aa3]">
         A project of{" "}
-        <a
-          href="https://manifund.org"
-          className="text-[#e8c87a] hover:text-[#f6e0a8]"
-        >
+        <a href="https://manifund.org" className="text-[#e8c87a] hover:text-[#f6e0a8]">
           Manifund
         </a>
         , a 501(c)(3) nonprofit. Pledges are tax-deductible per US law.

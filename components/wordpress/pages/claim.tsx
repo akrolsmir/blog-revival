@@ -44,42 +44,32 @@ export default function WpClaimPage() {
       <h2 className="text-[22px] font-bold">For bloggers: claim your bounty</h2>
       <div className="mt-3 space-y-3 text-[13.5px] leading-relaxed">
         <p>
-          If you&rsquo;re on our blogroll, readers have pledged real money for
-          one more post. The deal: publish{" "}
-          <strong>one substantive post (~1,000 words)</strong> anywhere you
-          like, link it here, and the bounty is yours.
+          If you&rsquo;re on our blogroll, readers have pledged real money for one more post. The
+          deal: publish <strong>one substantive post (~1,000 words)</strong> anywhere you like, link
+          it here, and the bounty is yours.
         </p>
         <p>
-          You can withdraw it via Stripe, redirect it to revive another
-          blogger, or donate it to charity. We verify every claim by hand
-          before paying out — pseudonymous bloggers welcome.
+          You can withdraw it via Stripe, redirect it to revive another blogger, or donate it to
+          charity. We verify every claim by hand before paying out — pseudonymous bloggers welcome.
         </p>
       </div>
 
       {!user && (
         <p className="mt-4">
-          <Link href="/signin?next=/claim">
-            Sign in to get started →
-          </Link>
+          <Link href="/signin?next=/claim">Sign in to get started →</Link>
         </p>
       )}
       {user && !profile && !isLoading && (
         <p className="mt-4">
-          First,{" "}
-          <Link href="/account?next=/claim">
-            create your profile
-          </Link>
-          . (Patrons and bloggers share accounts — you can be both.)
+          First, <Link href="/account?next=/claim">create your profile</Link>. (Patrons and bloggers
+          share accounts — you can be both.)
         </p>
       )}
 
       {mine.map((b) => {
         const revived = b.status === "revived" || b.status === "paid";
         return (
-          <section
-            key={b.id}
-            className="mt-6 rounded border border-wpblue/40 bg-[#f4f8fc] p-5"
-          >
+          <section key={b.id} className="mt-6 rounded border border-wpblue/40 bg-[#f4f8fc] p-5">
             <div className="flex items-baseline justify-between">
               <h3 className="text-[17px] font-bold">{b.name}</h3>
               <span className="wp-meta">
@@ -108,16 +98,10 @@ export default function WpClaimPage() {
             ) : (
               <>
                 <div className="mt-4">
-                  <h4 className="text-[13px] font-bold">
-                    Step 1 — link your new post
-                  </h4>
+                  <h4 className="text-[13px] font-bold">Step 1 — link your new post</h4>
                   {revived ? (
                     <p className="mt-1 text-[13px]">
-                      <a
-                        href={b.revivalPostUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
+                      <a href={b.revivalPostUrl} target="_blank" rel="noopener noreferrer">
                         {b.revivalPostTitle ?? b.revivalPostUrl}
                       </a>{" "}
                       ✓
@@ -146,7 +130,7 @@ export default function WpClaimPage() {
                                 revivalPostUrl: postUrl.trim(),
                                 revivalPostTitle: postTitle.trim() || undefined,
                                 status: "revived",
-                              })
+                              }),
                             );
                             return {};
                           }, "Post linked!")
@@ -159,24 +143,16 @@ export default function WpClaimPage() {
                 </div>
 
                 <div className="mt-4">
-                  <h4 className="text-[13px] font-bold">
-                    Step 2 — direct the bounty
-                  </h4>
-                  <p className="wp-meta">
-                    Requires a verified claim and a linked post.
-                  </p>
+                  <h4 className="text-[13px] font-bold">Step 2 — direct the bounty</h4>
+                  <p className="wp-meta">Requires a verified claim and a linked post.</p>
                   <div className="mt-2 space-y-3">
                     <div className="flex flex-wrap items-center gap-2">
                       <button
                         type="button"
                         disabled={busy}
-                        onClick={() =>
-                          run(() => startConnectOnboarding(b.id))
-                        }
+                        onClick={() => run(() => startConnectOnboarding(b.id))}
                       >
-                        {b.stripeAccountId
-                          ? "Update Stripe details"
-                          : "Set up Stripe payout"}
+                        {b.stripeAccountId ? "Update Stripe details" : "Set up Stripe payout"}
                       </button>
                       <button
                         type="button"
@@ -184,7 +160,7 @@ export default function WpClaimPage() {
                         onClick={() =>
                           run(
                             () => withdrawBounty(b.id),
-                            "Transfer sent — check your Stripe dashboard."
+                            "Transfer sent — check your Stripe dashboard.",
                           )
                         }
                       >
@@ -196,9 +172,7 @@ export default function WpClaimPage() {
                         value={redirectTarget}
                         onChange={(e) => setRedirectTarget(e.target.value)}
                       >
-                        <option value="">
-                          or: revive another blogger with it…
-                        </option>
+                        <option value="">or: revive another blogger with it…</option>
                         {bloggers
                           .filter((o) => o.id !== b.id && o.status === "funding")
                           .map((o) => (
@@ -213,7 +187,7 @@ export default function WpClaimPage() {
                         onClick={() =>
                           run(
                             () => redirectBounty(b.id, redirectTarget),
-                            "Redirected — two revivals for the price of one."
+                            "Redirected — two revivals for the price of one.",
                           )
                         }
                       >
@@ -232,7 +206,7 @@ export default function WpClaimPage() {
                         onClick={() =>
                           run(
                             () => donateBounty(b.id, charity.trim()),
-                            "Donated — Manifund will regrant it."
+                            "Donated — Manifund will regrant it.",
                           )
                         }
                       >
@@ -263,10 +237,7 @@ export default function WpClaimPage() {
               type="button"
               disabled={busy || !selected}
               onClick={() =>
-                run(
-                  () => claimBlogger(selected),
-                  "Claimed! We'll verify and email you shortly."
-                )
+                run(() => claimBlogger(selected), "Claimed! We'll verify and email you shortly.")
               }
             >
               Claim profile

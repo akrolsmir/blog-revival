@@ -9,19 +9,9 @@ import { WpPledgeForm } from "@/components/wordpress/WpPledgeForm";
 import { daysSilent } from "@/lib/qf";
 import { dollars, bloggerIcon } from "@/lib/format";
 
-export default function WpBloggerPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+export default function WpBloggerPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
-  const {
-    isLoading,
-    bloggers,
-    pledgesByBlogger,
-    poolCents,
-    liveThresholdCents,
-  } = useBounties();
+  const { isLoading, bloggers, pledgesByBlogger, poolCents, liveThresholdCents } = useBounties();
   const { data: commentData } = db.useQuery({
     comments: { $: { where: { "blogger.slug": slug } }, author: {} },
   });
@@ -44,7 +34,7 @@ export default function WpBloggerPage({
   const silent = daysSilent(blogger.lastPostAt);
   const revived = blogger.status === "revived" || blogger.status === "paid";
   const comments = (commentData?.comments ?? []).sort(
-    (a: any, b: any) => a.createdAt - b.createdAt
+    (a: any, b: any) => a.createdAt - b.createdAt,
   );
   const pledges = (blogger.pledges ?? [])
     .slice()
@@ -55,7 +45,7 @@ export default function WpBloggerPage({
     await db.transact(
       db.tx.comments[id()]
         .update({ text: commentText.trim(), createdAt: Date.now() })
-        .link({ author: profile.id, blogger: blogger.id })
+        .link({ author: profile.id, blogger: blogger.id }),
     );
     setCommentText("");
   }
@@ -96,26 +86,19 @@ export default function WpBloggerPage({
         <a href={blogger.blogUrl} target="_blank" rel="noopener noreferrer">
           {blogger.blogUrl.replace(/^https?:\/\/(www\.)?/, "")}
         </a>{" "}
-        · last post <em>{silent.toLocaleString()}</em> days ago ·{" "}
-        {blogger.supporterCount} patron
+        · last post <em>{silent.toLocaleString()}</em> days ago · {blogger.supporterCount} patron
         {blogger.supporterCount === 1 ? "" : "s"} ·{" "}
         <a href="#comments">{comments.length} comments</a>
       </p>
 
-
       {revived && (
         <div className="mt-4 rounded border border-wpgreen/50 bg-green-50 px-4 py-3">
           <p className="text-[13px]">
-            <strong className="text-wpgreen">Update:</strong>{" "}
-            {blogger.name} posted again
+            <strong className="text-wpgreen">Update:</strong> {blogger.name} posted again
             {blogger.revivalPostUrl ? (
               <>
                 {" — "}
-                <a
-                  href={blogger.revivalPostUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <a href={blogger.revivalPostUrl} target="_blank" rel="noopener noreferrer">
                   {blogger.revivalPostTitle ?? "read the new post"}
                 </a>
               </>
@@ -154,8 +137,7 @@ export default function WpBloggerPage({
           />
         </Suspense>
         <p className="wp-meta mt-2">
-          Are you {blogger.name}?{" "}
-          <Link href="/claim">Claim this profile</Link> to direct the
+          Are you {blogger.name}? <Link href="/claim">Claim this profile</Link> to direct the
           bounty.
         </p>
       </section>
@@ -169,9 +151,7 @@ export default function WpBloggerPage({
               <tr key={p.id} className="border-b border-dotted border-wpborder">
                 <td className="py-1.5 pr-2">
                   {p.patron ? (
-                    <Link href={`/p/${p.patron.handle}`}>
-                      {p.patron.displayName}
-                    </Link>
+                    <Link href={`/p/${p.patron.handle}`}>{p.patron.displayName}</Link>
                   ) : (
                     "Anonymous"
                   )}
@@ -183,9 +163,7 @@ export default function WpBloggerPage({
             ))}
             {pledges.length === 0 && (
               <tr>
-                <td className="wp-meta py-1.5 italic">
-                  No pledges yet. Start the ledger.
-                </td>
+                <td className="wp-meta py-1.5 italic">No pledges yet. Start the ledger.</td>
               </tr>
             )}
           </tbody>
@@ -208,9 +186,7 @@ export default function WpBloggerPage({
             >
               <p className="text-[12px] font-bold">
                 {c.author ? (
-                  <Link href={`/p/${c.author.handle}`}>
-                    {c.author.displayName}
-                  </Link>
+                  <Link href={`/p/${c.author.handle}`}>{c.author.displayName}</Link>
                 ) : (
                   "Anonymous"
                 )}{" "}
@@ -223,9 +199,7 @@ export default function WpBloggerPage({
         {profile ? (
           <div className="mt-5">
             <h4 className="text-[13px] font-bold">Leave a Reply</h4>
-            <p className="wp-meta mt-1">
-              Why did you love this blog? The blogger reads these.
-            </p>
+            <p className="wp-meta mt-1">Why did you love this blog? The blogger reads these.</p>
             <textarea
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
@@ -243,10 +217,7 @@ export default function WpBloggerPage({
           </div>
         ) : (
           <p className="mt-5 text-[12.5px]">
-            <Link href={`/signin?next=/b/${blogger.slug}`}>
-              Sign in
-            </Link>{" "}
-            to leave a comment.
+            <Link href={`/signin?next=/b/${blogger.slug}`}>Sign in</Link> to leave a comment.
           </p>
         )}
       </section>

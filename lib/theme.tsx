@@ -10,10 +10,7 @@ export type Skin = "gy" | "wp";
 // system preference until the user explicitly picks a side.
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   return (
-    <NextThemesProvider
-      attribute="class"
-      value={{ dark: "skin-gy", light: "skin-wp" }}
-    >
+    <NextThemesProvider attribute="class" value={{ dark: "skin-gy", light: "skin-wp" }}>
       {children}
     </NextThemesProvider>
   );

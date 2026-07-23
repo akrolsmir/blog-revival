@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
   if (!stripeConfigured()) {
     return NextResponse.json(
       { error: "Stripe isn't configured yet. Add STRIPE_SECRET_KEY to .env." },
-      { status: 503 }
+      { status: 503 },
     );
   }
   const { bloggerId, refreshToken } = await req.json();
@@ -43,20 +43,17 @@ export async function POST(req: NextRequest) {
   if (!blogger.claimVerified) {
     return NextResponse.json(
       { error: "Claim not verified yet — Manifund reviews each claim by hand." },
-      { status: 403 }
+      { status: 403 },
     );
   }
   if (blogger.status !== "revived") {
     return NextResponse.json(
       { error: "Link your published revival post before withdrawing." },
-      { status: 403 }
+      { status: 403 },
     );
   }
   if (!blogger.stripeAccountId) {
-    return NextResponse.json(
-      { error: "Complete Stripe onboarding first." },
-      { status: 403 }
-    );
+    return NextResponse.json({ error: "Complete Stripe onboarding first." }, { status: 403 });
   }
 
   // Recompute the bounty server-side; matching locks in at claim time.
@@ -76,7 +73,7 @@ export async function POST(req: NextRequest) {
   const math = computeQf(
     byBlogger,
     config.matchingPoolCents,
-    config.liveThresholdCents
+    config.liveThresholdCents,
   ).perBlogger.get(bloggerId);
   if (!math || !math.isLive) {
     return NextResponse.json({ error: "Bounty is not live" }, { status: 403 });

@@ -5,11 +5,7 @@ import Link from "next/link";
 import { db } from "@/lib/db";
 import { dollars } from "@/lib/format";
 
-export default function WpPatronPage({
-  params,
-}: {
-  params: Promise<{ handle: string }>;
-}) {
+export default function WpPatronPage({ params }: { params: Promise<{ handle: string }> }) {
   const { handle } = use(params);
   const { data, isLoading } = db.useQuery({
     profiles: {
@@ -46,17 +42,15 @@ export default function WpPatronPage({
     <div>
       <h2 className="text-[26px] font-bold">{profile.displayName}</h2>
       <p className="wp-meta mt-1">
-        @{profile.handle} · patron · {dollars(totalCents, { round: true })}{" "}
-        pledged across {pledges.length} bounties
+        @{profile.handle} · patron · {dollars(totalCents, { round: true })} pledged across{" "}
+        {pledges.length} bounties
       </p>
       {profile.bio && <p className="mt-3 text-[13.5px]">{profile.bio}</p>}
 
       {profile.postsILike && (
         <section className="mt-6">
           <h3 className="text-[15px] font-bold">What I want to read</h3>
-          <p className="mt-2 text-[13.5px] leading-relaxed">
-            {profile.postsILike}
-          </p>
+          <p className="mt-2 text-[13.5px] leading-relaxed">{profile.postsILike}</p>
         </section>
       )}
 
@@ -75,9 +69,7 @@ export default function WpPatronPage({
                 )}
               </li>
             ))}
-            {alive.length === 0 && (
-              <li className="wp-meta italic">None listed.</li>
-            )}
+            {alive.length === 0 && <li className="wp-meta italic">None listed.</li>}
           </ul>
         </section>
         <section>
@@ -94,9 +86,7 @@ export default function WpPatronPage({
                 )}
               </li>
             ))}
-            {dead.length === 0 && (
-              <li className="wp-meta italic">None listed.</li>
-            )}
+            {dead.length === 0 && <li className="wp-meta italic">None listed.</li>}
           </ul>
         </section>
       </div>
@@ -108,13 +98,7 @@ export default function WpPatronPage({
             {pledges.map((p: any) => (
               <tr key={p.id} className="border-b border-dotted border-wpborder">
                 <td className="py-1.5">
-                  {p.blogger ? (
-                    <Link href={`/b/${p.blogger.slug}`}>
-                      {p.blogger.name}
-                    </Link>
-                  ) : (
-                    "—"
-                  )}
+                  {p.blogger ? <Link href={`/b/${p.blogger.slug}`}>{p.blogger.name}</Link> : "—"}
                 </td>
                 <td className="py-1.5 text-right font-bold">
                   {dollars(p.amountCents, { round: true })}
@@ -136,15 +120,8 @@ export default function WpPatronPage({
           <ul className="mt-2 space-y-2 text-[13px]">
             {comments.slice(0, 5).map((c: any) => (
               <li key={c.id}>
-                on{" "}
-                {c.blogger ? (
-                  <Link href={`/b/${c.blogger.slug}`}>
-                    {c.blogger.name}
-                  </Link>
-                ) : (
-                  "—"
-                )}
-                : <em>&ldquo;{c.text}&rdquo;</em>
+                on {c.blogger ? <Link href={`/b/${c.blogger.slug}`}>{c.blogger.name}</Link> : "—"}:{" "}
+                <em>&ldquo;{c.text}&rdquo;</em>
               </li>
             ))}
           </ul>

@@ -524,7 +524,7 @@ async function main() {
       key: "main",
       matchingPoolCents: 10_000_00,
       liveThresholdCents: 1_000_00,
-    })
+    }),
   );
 
   // Patrons
@@ -541,7 +541,7 @@ async function main() {
         favoriteAliveBlogs: p.favoriteAliveBlogs,
         favoriteDeadBlogs: p.favoriteDeadBlogs,
         createdAt: now,
-      })
+      }),
     );
   }
 
@@ -562,13 +562,11 @@ async function main() {
         recentPosts: b.recentPosts,
         status: "funding",
         createdAt: now,
-      })
+      }),
     );
     for (const [amountCents, patronHandle, note] of b.pledges) {
       const source =
-        patronHandle === "austin" || patronHandle === "carol"
-          ? patronHandle
-          : "patron";
+        patronHandle === "austin" || patronHandle === "carol" ? patronHandle : "patron";
       txs.push(
         db.tx.pledges[id()]
           .update({
@@ -578,7 +576,7 @@ async function main() {
             status: "paid",
             createdAt: now - Math.floor(Math.random() * 20) * DAY,
           })
-          .link({ patron: patronIds.get(patronHandle)!, blogger: bid })
+          .link({ patron: patronIds.get(patronHandle)!, blogger: bid }),
       );
     }
   }
@@ -591,14 +589,12 @@ async function main() {
         .link({
           author: patronIds.get(c.patron)!,
           blogger: bloggerIds.get(c.blogger)!,
-        })
+        }),
     );
   }
 
   await db.transact(txs);
-  console.log(
-    `Seeded ${bloggers.length} bloggers, ${patrons.length} patrons, pledges + comments.`
-  );
+  console.log(`Seeded ${bloggers.length} bloggers, ${patrons.length} patrons, pledges + comments.`);
 }
 
 main().catch((e) => {

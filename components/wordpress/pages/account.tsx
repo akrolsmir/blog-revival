@@ -22,9 +22,7 @@ function parseFavs(text: string): FavBlog[] {
 }
 
 function favsToText(favs?: FavBlog[]): string {
-  return (favs ?? [])
-    .map((f) => (f.url ? `${f.name} | ${f.url}` : f.name))
-    .join("\n");
+  return (favs ?? []).map((f) => (f.url ? `${f.name} | ${f.url}` : f.name)).join("\n");
 }
 
 function AccountInner() {
@@ -61,9 +59,7 @@ function AccountInner() {
       <div>
         <h2 className="text-[22px] font-bold">Your profile</h2>
         <p className="mt-2">
-          <Link href="/signin?next=/account">
-            Sign in first →
-          </Link>
+          <Link href="/signin?next=/account">Sign in first →</Link>
         </p>
       </div>
     );
@@ -72,7 +68,10 @@ function AccountInner() {
   async function save() {
     setError(null);
     setSaved(false);
-    const cleanHandle = handle.trim().toLowerCase().replace(/[^a-z0-9-_]/g, "");
+    const cleanHandle = handle
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9-_]/g, "");
     if (!cleanHandle || !displayName.trim()) {
       setError("Username and display name are required.");
       return;
@@ -90,7 +89,7 @@ function AccountInner() {
             favoriteDeadBlogs: parseFavs(dead),
             createdAt: profile?.createdAt ?? Date.now(),
           })
-          .link({ user: user!.id })
+          .link({ user: user!.id }),
       );
       setSaved(true);
       if (next) router.push(next);
@@ -105,9 +104,7 @@ function AccountInner() {
 
   return (
     <div>
-      <h2 className="text-[22px] font-bold">
-        {profile ? "Edit your profile" : "Become a patron"}
-      </h2>
+      <h2 className="text-[22px] font-bold">{profile ? "Edit your profile" : "Become a patron"}</h2>
 
       <div className="mt-5 space-y-4">
         <div className="grid gap-4 sm:grid-cols-2">
@@ -138,9 +135,7 @@ function AccountInner() {
           />
         </label>
         <label className="block">
-          <span className="text-[12px] font-bold">
-            What kind of posts do you like?
-          </span>
+          <span className="text-[12px] font-bold">What kind of posts do you like?</span>
           <textarea
             value={postsILike}
             onChange={(e) => setPostsILike(e.target.value)}
@@ -172,9 +167,7 @@ function AccountInner() {
           <button type="button" onClick={save}>
             Update Profile »
           </button>
-          {profile && (
-            <Link href={`/p/${profile.handle}`}>view public page</Link>
-          )}
+          {profile && <Link href={`/p/${profile.handle}`}>view public page</Link>}
           <button
             type="button"
             onClick={() => db.auth.signOut()}
@@ -195,13 +188,7 @@ function AccountInner() {
               {myPledges.map((p: any) => (
                 <tr key={p.id} className="border-b border-dotted border-wpborder">
                   <td className="py-1.5">
-                    {p.blogger ? (
-                      <Link href={`/b/${p.blogger.slug}`}>
-                        {p.blogger.name}
-                      </Link>
-                    ) : (
-                      "—"
-                    )}
+                    {p.blogger ? <Link href={`/b/${p.blogger.slug}`}>{p.blogger.name}</Link> : "—"}
                   </td>
                   <td className="py-1.5 text-right font-bold">
                     {dollars(p.amountCents, { round: true })}

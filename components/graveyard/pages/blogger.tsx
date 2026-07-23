@@ -10,19 +10,9 @@ import { PledgeBox } from "@/components/graveyard/PledgeBox";
 import { daysSilent } from "@/lib/qf";
 import { bloggerIcon, dollars, daysAgoWords } from "@/lib/format";
 
-export default function GraveyardBloggerPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+export default function GraveyardBloggerPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
-  const {
-    isLoading,
-    bloggers,
-    pledgesByBlogger,
-    poolCents,
-    liveThresholdCents,
-  } = useBounties();
+  const { isLoading, bloggers, pledgesByBlogger, poolCents, liveThresholdCents } = useBounties();
   const { data: commentData } = db.useQuery({
     comments: {
       $: { where: { "blogger.slug": slug } },
@@ -34,9 +24,7 @@ export default function GraveyardBloggerPage({
 
   const blogger = bloggers.find((b) => b.slug === slug);
   if (isLoading) {
-    return (
-      <p className="gy-label py-32 text-center text-mist">raising the dead…</p>
-    );
+    return <p className="gy-label py-32 text-center text-mist">raising the dead…</p>;
   }
   if (!blogger) {
     return (
@@ -57,7 +45,7 @@ export default function GraveyardBloggerPage({
   const silent = daysSilent(blogger.lastPostAt);
   const pct = Math.min(100, Math.round((math.totalCents / liveThresholdCents) * 100));
   const comments = (commentData?.comments ?? []).sort(
-    (a: any, b: any) => b.createdAt - a.createdAt
+    (a: any, b: any) => b.createdAt - a.createdAt,
   );
   const revived = blogger.status === "revived" || blogger.status === "paid";
 
@@ -66,7 +54,7 @@ export default function GraveyardBloggerPage({
     await db.transact(
       db.tx.comments[id()]
         .update({ text: commentText.trim(), createdAt: Date.now() })
-        .link({ author: profile.id, blogger: blogger.id })
+        .link({ author: profile.id, blogger: blogger.id }),
     );
     setCommentText("");
   }
@@ -89,19 +77,13 @@ export default function GraveyardBloggerPage({
             />
           </div>
           <p className="gy-label text-mist/80">{eyebrowFor(blogger.slug)}</p>
-          <h1 className="gy-caps mt-3 text-4xl text-moon md:text-5xl">
-            {blogger.name}
-          </h1>
+          <h1 className="gy-caps mt-3 text-4xl text-moon md:text-5xl">{blogger.name}</h1>
           {blogger.blogName && blogger.blogName !== blogger.name && (
             <p className="mt-2 italic text-moon/70">of {blogger.blogName}</p>
           )}
-          <p className="gy-label mt-3 text-mist/70">
-            silent {silent.toLocaleString()} days
-          </p>
+          <p className="gy-label mt-3 text-mist/70">silent {silent.toLocaleString()} days</p>
           {blogger.epitaph && (
-            <p className="mt-5 italic leading-relaxed text-moon/80">
-              {blogger.epitaph}
-            </p>
+            <p className="mt-5 italic leading-relaxed text-moon/80">{blogger.epitaph}</p>
           )}
           <div className="mt-6 flex items-center justify-center gap-6">
             <a
@@ -180,16 +162,13 @@ export default function GraveyardBloggerPage({
               </div>
               <div>
                 <dt className="gy-label text-mist/70">patrons</dt>
-                <dd className="mt-1 font-semibold text-moon">
-                  {blogger.supporterCount}
-                </dd>
+                <dd className="mt-1 font-semibold text-moon">{blogger.supporterCount}</dd>
               </div>
             </dl>
             <p className="mt-4 text-sm text-mist">
               {dollars(math.totalCents, { round: true })} of{" "}
-              {dollars(liveThresholdCents, { round: true })} to go live. Direct
-              pledges are fixed; the match can drift with the pool until the
-              bounty is claimed.
+              {dollars(liveThresholdCents, { round: true })} to go live. Direct pledges are fixed;
+              the match can drift with the pool until the bounty is claimed.
             </p>
           </div>
 
@@ -208,9 +187,7 @@ export default function GraveyardBloggerPage({
                     >
                       {post.title}
                     </a>
-                    <span className="gy-label shrink-0 text-mist/60">
-                      {post.date}
-                    </span>
+                    <span className="gy-label shrink-0 text-mist/60">{post.date}</span>
                   </li>
                 ))}
               </ul>
@@ -219,24 +196,15 @@ export default function GraveyardBloggerPage({
 
           {/* Mourners' register */}
           <div className="mt-8 rounded-md border border-moon/15 p-6">
-            <h2 className="gy-caps text-xl text-moon">
-              mourners&rsquo; register
-            </h2>
-            <p className="mt-1 text-sm text-mist">
-              Why we miss this blog — signed by the patrons.
-            </p>
+            <h2 className="gy-caps text-xl text-moon">mourners&rsquo; register</h2>
+            <p className="mt-1 text-sm text-mist">Why we miss this blog — signed by the patrons.</p>
             <ul className="mt-5 space-y-5">
               {comments.map((c: any) => (
                 <li key={c.id} className="border-l-2 border-moon/20 pl-4">
-                  <p className="text-[15px] leading-relaxed text-moon/90">
-                    {c.text}
-                  </p>
+                  <p className="text-[15px] leading-relaxed text-moon/90">{c.text}</p>
                   <p className="gy-label mt-2 text-mist/70">
                     {c.author ? (
-                      <Link
-                        href={`/p/${c.author.handle}`}
-                        className="hover:text-moon"
-                      >
+                      <Link href={`/p/${c.author.handle}`} className="hover:text-moon">
                         — {c.author.displayName}
                       </Link>
                     ) : (
@@ -296,10 +264,7 @@ export default function GraveyardBloggerPage({
           </Suspense>
           <p className="mt-6 text-center text-sm text-mist">
             Are you {blogger.name}?{" "}
-            <Link
-              href="/claim"
-              className="text-candle underline underline-offset-4"
-            >
+            <Link href="/claim" className="text-candle underline underline-offset-4">
               Claim your grave
             </Link>
           </p>
@@ -318,9 +283,7 @@ export default function GraveyardBloggerPage({
                         {p.patron?.displayName ?? "Anonymous"}
                         {p.source !== "patron" && (
                           <span className="gy-label ml-2 text-candle/90">
-                            {p.source === "redirect"
-                              ? "redirected bounty"
-                              : "personal bounty"}
+                            {p.source === "redirect" ? "redirected bounty" : "personal bounty"}
                           </span>
                         )}
                       </span>
@@ -330,16 +293,13 @@ export default function GraveyardBloggerPage({
                     </div>
                     {p.note && (
                       <p className="mt-1 text-[13px] italic leading-snug text-mist">
-                        &ldquo;{p.note}&rdquo; ·{" "}
-                        {daysAgoWords(daysSilent(p.createdAt))}
+                        &ldquo;{p.note}&rdquo; · {daysAgoWords(daysSilent(p.createdAt))}
                       </p>
                     )}
                   </li>
                 ))}
               {(blogger.pledges ?? []).length === 0 && (
-                <li className="text-sm italic text-mist">
-                  No candles yet. The grave is dark.
-                </li>
+                <li className="text-sm italic text-mist">No candles yet. The grave is dark.</li>
               )}
             </ul>
           </div>

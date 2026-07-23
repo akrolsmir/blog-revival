@@ -60,7 +60,7 @@ function sumSqrtByPatron(pledges: PledgeLike[]): {
 export function computeQf(
   pledgesByBlogger: Map<string, PledgeLike[]>,
   poolCents: number,
-  liveThresholdCents: number
+  liveThresholdCents: number,
 ): QfResult {
   type Partial = {
     directCents: number;
@@ -77,10 +77,7 @@ export function computeQf(
     const patronPledges = counted.filter((p) => p.source === "patron");
     const personalPledges = counted.filter((p) => p.source !== "patron");
     const { sumSqrt, sum, patronCount } = sumSqrtByPatron(patronPledges);
-    const personalCents = personalPledges.reduce(
-      (a, p) => a + p.amountCents,
-      0
-    );
+    const personalCents = personalPledges.reduce((a, p) => a + p.amountCents, 0);
     const rawMatchCents = Math.max(0, sumSqrt * sumSqrt - sum);
     totalRawMatch += rawMatchCents;
     partials.set(bloggerId, {
@@ -118,12 +115,11 @@ export function marginalMatch(
   poolCents: number,
   liveThresholdCents: number,
   bloggerId: string,
-  amountCents: number
+  amountCents: number,
 ): { before: BountyMath; after: BountyMath; addedMatchCents: number } {
   const before =
-    computeQf(pledgesByBlogger, poolCents, liveThresholdCents).perBlogger.get(
-      bloggerId
-    ) ?? emptyMath(liveThresholdCents);
+    computeQf(pledgesByBlogger, poolCents, liveThresholdCents).perBlogger.get(bloggerId) ??
+    emptyMath(liveThresholdCents);
 
   const hypothetical = new Map(pledgesByBlogger);
   const existing = hypothetical.get(bloggerId) ?? [];
@@ -137,9 +133,8 @@ export function marginalMatch(
     },
   ]);
   const after =
-    computeQf(hypothetical, poolCents, liveThresholdCents).perBlogger.get(
-      bloggerId
-    ) ?? emptyMath(liveThresholdCents);
+    computeQf(hypothetical, poolCents, liveThresholdCents).perBlogger.get(bloggerId) ??
+    emptyMath(liveThresholdCents);
 
   return {
     before,

@@ -22,10 +22,7 @@ const rules = {
       update: "isClaimant",
       delete: "false",
     },
-    bind: [
-      "isClaimant",
-      "auth.id != null && auth.id in data.ref('claimedBy.user.id')",
-    ],
+    bind: ["isClaimant", "auth.id != null && auth.id in data.ref('claimedBy.user.id')"],
   },
   pledges: {
     allow: {

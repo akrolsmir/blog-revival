@@ -12,8 +12,7 @@ export default function Home() {
         <div className="gy-label text-mist">demo one</div>
         <h1 className="text-center text-4xl md:text-5xl">The Graveyard</h1>
         <p className="max-w-xs text-center italic text-mist">
-          Here lie the best blogs on the internet. Leave a pledge; we&rsquo;ll
-          light a candle.
+          Here lie the best blogs on the internet. Leave a pledge; we&rsquo;ll light a candle.
         </p>
         <span className="gy-caps mt-2 border border-candle/60 px-6 py-2 text-candle transition group-hover:bg-candle/10">
           enter the graveyard
@@ -25,16 +24,10 @@ export default function Home() {
         href="/wordpress"
         className="wp group relative flex flex-1 flex-col items-center justify-center gap-6 p-12 transition-all duration-300 md:hover:flex-[1.15]"
       >
-        <div className="text-[11px] uppercase tracking-widest text-wpmeta">
-          demo two
-        </div>
+        <div className="text-[11px] uppercase tracking-widest text-wpmeta">demo two</div>
         <div className="wp-header rounded-md px-10 py-6 text-center shadow">
-          <h1 className="text-3xl font-bold text-white md:text-4xl">
-            Blog Revival Project
-          </h1>
-          <p className="mt-1 text-sm text-blue-100">
-            bounties for the bloggers we miss
-          </p>
+          <h1 className="text-3xl font-bold text-white md:text-4xl">Blog Revival Project</h1>
+          <p className="mt-1 text-sm text-blue-100">bounties for the bloggers we miss</p>
         </div>
         <span className="wp-btn">Enter the blog →</span>
       </Link>

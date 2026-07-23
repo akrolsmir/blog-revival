@@ -54,9 +54,7 @@ function SignInInner() {
       <p className="gy-label text-mist">the veil is thin</p>
       <h1 className="mt-3 text-4xl">Sign in</h1>
       {stage === "code" && (
-        <p className="mt-4 text-moon/80">
-          We sent a code to {email}. Enter it below.
-        </p>
+        <p className="mt-4 text-moon/80">We sent a code to {email}. Enter it below.</p>
       )}
       {stage === "email" && (
         <>
@@ -111,9 +109,7 @@ function SignInInner() {
           {busy ? "…" : stage === "email" ? "send the code" : "cross over"}
         </button>
       </form>
-      {(error ?? oauthError) && (
-        <p className="mt-4 text-sm text-red-300">{error ?? oauthError}</p>
-      )}
+      {(error ?? oauthError) && <p className="mt-4 text-sm text-red-300">{error ?? oauthError}</p>}
       {stage === "code" && (
         <button
           type="button"

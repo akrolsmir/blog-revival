@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
   if (!stripeConfigured()) {
     return NextResponse.json(
       { error: "Stripe isn't configured yet. Add STRIPE_SECRET_KEY to .env." },
-      { status: 503 }
+      { status: 503 },
     );
   }
   const { bloggerId, refreshToken } = await req.json();
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
   if (blogger.claimedBy?.user?.id !== user.id) {
     return NextResponse.json(
       { error: "Only the claimant can start payout onboarding" },
-      { status: 403 }
+      { status: 403 },
     );
   }
 
@@ -47,9 +47,7 @@ export async function POST(req: NextRequest) {
       metadata: { bloggerId },
     });
     accountId = account.id;
-    await db.transact([
-      db.tx.bloggers[bloggerId].update({ stripeAccountId: accountId }),
-    ]);
+    await db.transact([db.tx.bloggers[bloggerId].update({ stripeAccountId: accountId })]);
   }
 
   const origin = req.headers.get("origin") ?? "http://localhost:3000";

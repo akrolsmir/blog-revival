@@ -9,12 +9,84 @@ import { dollars } from "@/lib/format";
 // Fixed scene slots from prototypes/design-graveyard.html, ordered by visual
 // prominence so the top-sorted bounty lands on the biggest stone.
 const SLOTS = [
-  { x: 17.5, y: 40, w: 210, h: 250, z: 5, c1: "#3d4a66", c2: "#2a3550", r: "105px 105px 5px 5px", name: 26, epi: 12, gap: 10 },
-  { x: 52, y: 36, w: 205, h: 246, z: 5, c1: "#3a4763", c2: "#28334d", r: "50% 50% 5px 5px / 42% 42% 5px 5px", name: 27, epi: 12, gap: 10 },
-  { x: 81.5, y: 56, w: 160, h: 200, z: 4, c1: "#33405a", c2: "#242f47", r: "80px 80px 4px 4px", name: 18, epi: 10, gap: 7 },
-  { x: 5, y: 118, w: 155, h: 190, z: 3, c1: "#2c374e", c2: "#202a3f", r: "78px 78px 4px 4px", name: 17, epi: 10, gap: 6 },
-  { x: 40.5, y: 138, w: 118, h: 142, z: 2, c1: "#2a3449", c2: "#1e2739", r: "59px 59px 4px 4px", name: 14, epi: 9, gap: 4 },
-  { x: 70, y: 128, w: 112, h: 134, z: 2, c1: "#2a3449", c2: "#1e2739", r: "56px 56px 4px 4px", name: 14, epi: 9, gap: 4 },
+  {
+    x: 17.5,
+    y: 40,
+    w: 210,
+    h: 250,
+    z: 5,
+    c1: "#3d4a66",
+    c2: "#2a3550",
+    r: "105px 105px 5px 5px",
+    name: 26,
+    epi: 12,
+    gap: 10,
+  },
+  {
+    x: 52,
+    y: 36,
+    w: 205,
+    h: 246,
+    z: 5,
+    c1: "#3a4763",
+    c2: "#28334d",
+    r: "50% 50% 5px 5px / 42% 42% 5px 5px",
+    name: 27,
+    epi: 12,
+    gap: 10,
+  },
+  {
+    x: 81.5,
+    y: 56,
+    w: 160,
+    h: 200,
+    z: 4,
+    c1: "#33405a",
+    c2: "#242f47",
+    r: "80px 80px 4px 4px",
+    name: 18,
+    epi: 10,
+    gap: 7,
+  },
+  {
+    x: 5,
+    y: 118,
+    w: 155,
+    h: 190,
+    z: 3,
+    c1: "#2c374e",
+    c2: "#202a3f",
+    r: "78px 78px 4px 4px",
+    name: 17,
+    epi: 10,
+    gap: 6,
+  },
+  {
+    x: 40.5,
+    y: 138,
+    w: 118,
+    h: 142,
+    z: 2,
+    c1: "#2a3449",
+    c2: "#1e2739",
+    r: "59px 59px 4px 4px",
+    name: 14,
+    epi: 9,
+    gap: 4,
+  },
+  {
+    x: 70,
+    y: 128,
+    w: 112,
+    h: 134,
+    z: 2,
+    c1: "#2a3449",
+    c2: "#1e2739",
+    r: "56px 56px 4px 4px",
+    name: 14,
+    epi: 9,
+    gap: 4,
+  },
 ];
 
 // Deterministic star field (hash-based so SSR and client render identically).
@@ -48,8 +120,7 @@ function Candle({ pct, className = "" }: { pct: number; className?: string }) {
         style={{
           width: glowSize,
           height: glowSize,
-          background:
-            "radial-gradient(circle, rgba(255,196,94,.5) 0%, rgba(255,196,94,0) 68%)",
+          background: "radial-gradient(circle, rgba(255,196,94,.5) 0%, rgba(255,196,94,0) 68%)",
           ["--glow" as string]: glowOp,
         }}
       />
@@ -146,7 +217,8 @@ export function GraveyardHero({
           The Blog Revival Project
         </h1>
         <p className="mx-auto mb-8 max-w-[520px] text-[19px] leading-[1.55] text-[#a9b3c8] text-pretty">
-          Many of our favorite blogs have gone silent. <br />We're offering each $1k+, as a bounty to post again.
+          Many of our favorite blogs have gone silent. <br />
+          We're offering each $1k+, as a bounty to post again.
         </p>
         <div className="flex justify-center gap-4">
           <Link
@@ -162,7 +234,6 @@ export function GraveyardHero({
             how it works
           </Link>
         </div>
-
       </div>
 
       {/* headstones — placed across the plot on desktop */}
@@ -216,10 +287,7 @@ export function GraveyardHero({
             </Link>
             {/* grave mound */}
             <div className="absolute -bottom-3 left-[-12%] right-[-12%] h-[22px] rounded-[50%] bg-abyss" />
-            <Candle
-              pct={pct}
-              className="absolute -bottom-2 left-1/2 z-[6] -translate-x-1/2"
-            />
+            <Candle pct={pct} className="absolute -bottom-2 left-1/2 z-[6] -translate-x-1/2" />
           </div>
         );
       })}
@@ -227,9 +295,7 @@ export function GraveyardHero({
       {/* mobile: compact plot, same stones */}
       <div className="relative z-[5] mx-auto mt-12 grid max-w-md grid-cols-2 items-end gap-x-4 gap-y-10 px-6 pb-16 md:hidden">
         {stones.map((b) => {
-          const pct = Math.round(
-            (b.math.totalCents / liveThresholdCents) * 100
-          );
+          const pct = Math.round((b.math.totalCents / liveThresholdCents) * 100);
           return (
             <div key={b.id} className="group relative">
               <Link
@@ -244,7 +310,10 @@ export function GraveyardHero({
                 <div className="gy-caps text-[9px] tracking-[0.3em] text-[#8e9ab2]" style={carve}>
                   {eyebrowFor(b.slug)}
                 </div>
-                <div className="gy-caps text-[15px] font-semibold leading-[1.12] tracking-[0.08em] text-[#d3dae8]" style={carve}>
+                <div
+                  className="gy-caps text-[15px] font-semibold leading-[1.12] tracking-[0.08em] text-[#d3dae8]"
+                  style={carve}
+                >
                   {b.name}
                 </div>
                 <div className="gy-caps text-[9px] tracking-[0.24em] text-[#7e8aa3]" style={carve}>
@@ -252,10 +321,7 @@ export function GraveyardHero({
                 </div>
               </Link>
               <div className="absolute -bottom-3 left-[-8%] right-[-8%] h-[18px] rounded-[50%] bg-abyss" />
-              <Candle
-                pct={pct}
-                className="absolute -bottom-2 left-1/2 z-[6] -translate-x-1/2"
-              />
+              <Candle pct={pct} className="absolute -bottom-2 left-1/2 z-[6] -translate-x-1/2" />
             </div>
           );
         })}

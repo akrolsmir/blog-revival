@@ -52,9 +52,7 @@ function SignInInner() {
   return (
     <div className="mx-auto max-w-sm">
       <h2 className="text-[22px] font-bold">Sign in</h2>
-      {stage === "code" && (
-        <p className="wp-meta mt-1">Code sent to {email}.</p>
-      )}
+      {stage === "code" && <p className="wp-meta mt-1">Code sent to {email}.</p>}
       {stage === "email" && (
         <>
           <a

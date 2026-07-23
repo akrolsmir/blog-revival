@@ -73,7 +73,10 @@ function AccountInner() {
   async function save() {
     setError(null);
     setSaved(false);
-    const cleanHandle = handle.trim().toLowerCase().replace(/[^a-z0-9-_]/g, "");
+    const cleanHandle = handle
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9-_]/g, "");
     if (!cleanHandle || !displayName.trim()) {
       setError("Handle and display name are required.");
       return;
@@ -91,7 +94,7 @@ function AccountInner() {
             favoriteDeadBlogs: parseFavs(dead),
             createdAt: profile?.createdAt ?? Date.now(),
           })
-          .link({ user: user!.id })
+          .link({ user: user!.id }),
       );
       setSaved(true);
       if (next) router.push(next);
@@ -99,7 +102,7 @@ function AccountInner() {
       setError(
         e?.message?.includes("unique")
           ? "That handle is taken — pick another."
-          : "Couldn't save. Try a different handle?"
+          : "Couldn't save. Try a different handle?",
       );
     }
   }
@@ -111,12 +114,10 @@ function AccountInner() {
   return (
     <main className="mx-auto max-w-2xl px-6 py-16">
       <p className="gy-label text-mist">your plot in the yard</p>
-      <h1 className="mt-3 text-4xl">
-        {profile ? "Your patron profile" : "Become a patron"}
-      </h1>
+      <h1 className="mt-3 text-4xl">{profile ? "Your patron profile" : "Become a patron"}</h1>
       <p className="mt-3 text-moon/80">
-        Patrons keep the graveyard lit. Tell the bloggers who you are and what
-        you&rsquo;re hoping they&rsquo;ll write.
+        Patrons keep the graveyard lit. Tell the bloggers who you are and what you&rsquo;re hoping
+        they&rsquo;ll write.
       </p>
 
       <div className="mt-10 space-y-6">
@@ -150,9 +151,7 @@ function AccountInner() {
           />
         </label>
         <label className="block">
-          <span className="gy-label text-mist">
-            what kind of posts do you like?
-          </span>
+          <span className="gy-label text-mist">what kind of posts do you like?</span>
           <textarea
             value={postsILike}
             onChange={(e) => setPostsILike(e.target.value)}
