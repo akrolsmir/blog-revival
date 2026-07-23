@@ -4,13 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { db } from "@/lib/db";
 import { useBounties, useMyProfile } from "@/lib/hooks";
-import {
-  claimBlogger,
-  redirectBounty,
-  donateBounty,
-  startConnectOnboarding,
-  withdrawBounty,
-} from "@/lib/actions";
+import { claimBlogger } from "@/lib/actions";
 import posthog from "posthog-js";
 import { dollars } from "@/lib/format";
 
@@ -20,8 +14,6 @@ export default function GraveyardClaimPage() {
   const [selected, setSelected] = useState("");
   const [postUrl, setPostUrl] = useState("");
   const [postTitle, setPostTitle] = useState("");
-  const [redirectTarget, setRedirectTarget] = useState("");
-  const [charity, setCharity] = useState("");
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -45,10 +37,9 @@ export default function GraveyardClaimPage() {
       <p className="gy-label text-mist">for the resting</p>
       <h1 className="mt-3 text-5xl">Claim your grave</h1>
       <p className="mt-5 max-w-xl leading-relaxed text-moon/85">
-        If your name is on a headstone here: readers miss you enough to pay for one more post. Claim
-        your profile, publish roughly a thousand substantive words anywhere you like, link the post,
-        and the bounty is yours — via Stripe, redirected to revive a fellow blogger, or given to
-        charity.
+        If you&rsquo;re one of the bloggers listed here, you can sign in to claim your profile.
+        Publish a 1000-word post and link it here to receive the bounty. You can withdraw it to your
+        bank account, redirect it to revive another blogger, or give it to charity via Manifund.
       </p>
 
       {!user && (
@@ -117,7 +108,7 @@ export default function GraveyardClaimPage() {
                 {/* Step 1: link the post */}
                 <div className="mt-5">
                   <h3 className="gy-caps text-lg text-moon">
-                    {revived ? "your revival post" : "1 · link your revival post"}
+                    {revived ? "your revival post" : "link your revival post"}
                   </h3>
                   {revived ? (
                     <p className="mt-2 text-sm text-moon/80">
@@ -172,103 +163,11 @@ export default function GraveyardClaimPage() {
                   )}
                 </div>
 
-                {/* Step 2: direct the bounty */}
-                <div className="mt-6">
-                  <h3 className="gy-caps text-lg text-moon">2 · direct the bounty</h3>
-                  <p className="mt-1 text-xs text-mist">
-                    Requires a verified claim and a linked post.
-                  </p>
-                  <div className="mt-4 space-y-4">
-                    <div className="flex flex-wrap items-center gap-3">
-                      <button
-                        type="button"
-                        disabled={busy}
-                        onClick={() => run(() => startConnectOnboarding(b.id))}
-                        className="gy-caps rounded-sm bg-candle px-5 py-2.5 text-sm font-medium text-night hover:bg-candle/90 disabled:opacity-40"
-                      >
-                        {b.stripeAccountId ? "update stripe details" : "set up stripe payout"}
-                      </button>
-                      <button
-                        type="button"
-                        disabled={busy || !b.stripeAccountId}
-                        onClick={() =>
-                          run(async () => {
-                            posthog.capture("bounty_withdrawn", {
-                              blogger_id: b.id,
-                              blogger_name: b.name,
-                              amount_cents: b.math.totalCents,
-                              skin: "graveyard",
-                            });
-                            return withdrawBounty(b.id);
-                          }, "Transfer sent. Check your Stripe dashboard.")
-                        }
-                        className="gy-caps rounded-sm border border-candle/60 px-5 py-2.5 text-sm text-candle hover:bg-candle/10 disabled:opacity-40"
-                      >
-                        withdraw {dollars(b.math.totalCents, { round: true })}
-                      </button>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-3">
-                      <select
-                        value={redirectTarget}
-                        onChange={(e) => setRedirectTarget(e.target.value)}
-                        className="rounded-sm border border-moon/25 bg-night px-3 py-2 text-sm text-moon"
-                      >
-                        <option value="">or: revive another blogger with it…</option>
-                        {bloggers
-                          .filter((o) => o.id !== b.id && o.status === "funding")
-                          .map((o) => (
-                            <option key={o.id} value={o.id}>
-                              {o.name}
-                            </option>
-                          ))}
-                      </select>
-                      <button
-                        type="button"
-                        disabled={busy || !redirectTarget}
-                        onClick={() =>
-                          run(async () => {
-                            posthog.capture("bounty_redirected", {
-                              blogger_id: b.id,
-                              blogger_name: b.name,
-                              target_blogger_id: redirectTarget,
-                              skin: "graveyard",
-                            });
-                            return redirectBounty(b.id, redirectTarget);
-                          }, "Redirected. Two revivals for the price of one.")
-                        }
-                        className="gy-caps rounded-sm border border-moon/30 px-4 py-2 text-sm text-moon/85 hover:border-moon/60 disabled:opacity-40"
-                      >
-                        redirect
-                      </button>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-3">
-                      <input
-                        value={charity}
-                        onChange={(e) => setCharity(e.target.value)}
-                        placeholder="or: name a charity…"
-                        className="rounded-sm border border-moon/25 bg-transparent px-3 py-2 text-sm text-moon"
-                      />
-                      <button
-                        type="button"
-                        disabled={busy || !charity.trim()}
-                        onClick={() =>
-                          run(async () => {
-                            posthog.capture("bounty_donated", {
-                              blogger_id: b.id,
-                              blogger_name: b.name,
-                              charity_name: charity.trim(),
-                              skin: "graveyard",
-                            });
-                            return donateBounty(b.id, charity.trim());
-                          }, "Donated. Manifund will regrant it.")
-                        }
-                        className="gy-caps rounded-sm border border-moon/30 px-4 py-2 text-sm text-moon/85 hover:border-moon/60 disabled:opacity-40"
-                      >
-                        donate
-                      </button>
-                    </div>
-                  </div>
-                </div>
+                <p className="mt-5 text-sm leading-relaxed text-moon/70">
+                  Once your post is linked and your claim verified, we&rsquo;ll email you to arrange
+                  the payout — bank transfer, redirect to another blogger, or a charity via
+                  Manifund.
+                </p>
               </>
             )}
           </section>
@@ -309,15 +208,6 @@ export default function GraveyardClaimPage() {
               claim it
             </button>
           </div>
-          <p className="mt-3 text-xs text-mist">
-            Not on the list?{" "}
-            <a
-              href="mailto:austin@manifund.org?subject=Add me to the graveyard"
-              className="text-candle underline underline-offset-4"
-            >
-              Ask for a headstone.
-            </a>
-          </p>
         </section>
       )}
 

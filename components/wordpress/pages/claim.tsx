@@ -4,13 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { db } from "@/lib/db";
 import { useBounties, useMyProfile } from "@/lib/hooks";
-import {
-  claimBlogger,
-  redirectBounty,
-  donateBounty,
-  startConnectOnboarding,
-  withdrawBounty,
-} from "@/lib/actions";
+import { claimBlogger } from "@/lib/actions";
 import posthog from "posthog-js";
 import { dollars } from "@/lib/format";
 
@@ -20,8 +14,6 @@ export default function WpClaimPage() {
   const [selected, setSelected] = useState("");
   const [postUrl, setPostUrl] = useState("");
   const [postTitle, setPostTitle] = useState("");
-  const [redirectTarget, setRedirectTarget] = useState("");
-  const [charity, setCharity] = useState("");
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -45,13 +37,10 @@ export default function WpClaimPage() {
       <h2 className="text-[22px] font-bold">For bloggers: claim your bounty</h2>
       <div className="mt-3 space-y-3 text-[13.5px] leading-relaxed">
         <p>
-          If you&rsquo;re on our blogroll, readers have pledged real money for one more post. The
-          deal: publish <strong>one substantive post (~1,000 words)</strong> anywhere you like, link
-          it here, and the bounty is yours.
-        </p>
-        <p>
-          You can withdraw it via Stripe, redirect it to revive another blogger, or donate it to
-          charity. We verify every claim by hand before paying out — pseudonymous bloggers welcome.
+          If you&rsquo;re one of the bloggers listed here, you can sign in to claim your profile.
+          Publish a 1000-word post and link it here to receive the bounty. You can withdraw it to
+          your bank account, redirect it to revive another blogger, or give it to charity via
+          Manifund.
         </p>
       </div>
 
@@ -99,7 +88,7 @@ export default function WpClaimPage() {
             ) : (
               <>
                 <div className="mt-4">
-                  <h4 className="text-[13px] font-bold">Step 1 — link your new post</h4>
+                  <h4 className="text-[13px] font-bold">Link your revival post</h4>
                   {revived ? (
                     <p className="mt-1 text-[13px]">
                       <a href={b.revivalPostUrl} target="_blank" rel="noopener noreferrer">
@@ -146,95 +135,11 @@ export default function WpClaimPage() {
                       </button>
                     </div>
                   )}
-                </div>
-
-                <div className="mt-4">
-                  <h4 className="text-[13px] font-bold">Step 2 — direct the bounty</h4>
-                  <p className="wp-meta">Requires a verified claim and a linked post.</p>
-                  <div className="mt-2 space-y-3">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <button
-                        type="button"
-                        disabled={busy}
-                        onClick={() => run(() => startConnectOnboarding(b.id))}
-                      >
-                        {b.stripeAccountId ? "Update Stripe details" : "Set up Stripe payout"}
-                      </button>
-                      <button
-                        type="button"
-                        disabled={busy || !b.stripeAccountId}
-                        onClick={() =>
-                          run(async () => {
-                            posthog.capture("bounty_withdrawn", {
-                              blogger_id: b.id,
-                              blogger_name: b.name,
-                              amount_cents: b.math.totalCents,
-                              skin: "wordpress",
-                            });
-                            return withdrawBounty(b.id);
-                          }, "Transfer sent — check your Stripe dashboard.")
-                        }
-                      >
-                        Withdraw {dollars(b.math.totalCents, { round: true })}
-                      </button>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-2">
-                      <select
-                        value={redirectTarget}
-                        onChange={(e) => setRedirectTarget(e.target.value)}
-                      >
-                        <option value="">or: revive another blogger with it…</option>
-                        {bloggers
-                          .filter((o) => o.id !== b.id && o.status === "funding")
-                          .map((o) => (
-                            <option key={o.id} value={o.id}>
-                              {o.name}
-                            </option>
-                          ))}
-                      </select>
-                      <button
-                        type="button"
-                        disabled={busy || !redirectTarget}
-                        onClick={() =>
-                          run(async () => {
-                            posthog.capture("bounty_redirected", {
-                              blogger_id: b.id,
-                              blogger_name: b.name,
-                              target_blogger_id: redirectTarget,
-                              skin: "wordpress",
-                            });
-                            return redirectBounty(b.id, redirectTarget);
-                          }, "Redirected — two revivals for the price of one.")
-                        }
-                      >
-                        Redirect
-                      </button>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-2">
-                      <input
-                        value={charity}
-                        onChange={(e) => setCharity(e.target.value)}
-                        placeholder="or: name a charity…"
-                      />
-                      <button
-                        type="button"
-                        disabled={busy || !charity.trim()}
-                        onClick={() =>
-                          run(async () => {
-                            posthog.capture("bounty_donated", {
-                              blogger_id: b.id,
-                              blogger_name: b.name,
-                              charity_name: charity.trim(),
-                              skin: "wordpress",
-                            });
-                            return donateBounty(b.id, charity.trim());
-                          }, "Donated — Manifund will regrant it.")
-                        }
-                      >
-                        Donate
-                      </button>
-                    </div>
-                  </div>
+                  <p className="wp-meta mt-2">
+                    Once your post is linked and your claim verified, we&rsquo;ll email you to
+                    arrange the payout — bank transfer, redirect to another blogger, or a charity
+                    via Manifund.
+                  </p>
                 </div>
               </>
             )}
@@ -270,12 +175,6 @@ export default function WpClaimPage() {
               Claim profile
             </button>
           </div>
-          <p className="wp-meta mt-2">
-            Not listed?{" "}
-            <a href="mailto:austin@manifund.org?subject=Add me to the blogroll">
-              Email us to get added.
-            </a>
-          </p>
         </section>
       )}
 
