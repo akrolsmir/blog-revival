@@ -108,10 +108,6 @@ function AccountInner() {
       <h2 className="text-[22px] font-bold">
         {profile ? "Edit your profile" : "Become a patron"}
       </h2>
-      <p className="wp-meta mt-1">
-        Patrons pledge toward bloggers and get a public profile page — favorite
-        blogs, dead and alive, and what you&rsquo;re hoping to read.
-      </p>
 
       <div className="mt-5 space-y-4">
         <div className="grid gap-4 sm:grid-cols-2">
@@ -149,18 +145,12 @@ function AccountInner() {
             value={postsILike}
             onChange={(e) => setPostsILike(e.target.value)}
             rows={3}
-            placeholder="Deep dives with real numbers. Sincere retrospectives. Anything that changes what I do next week."
             className="mt-1 w-full"
           />
         </label>
         <div className="grid gap-4 sm:grid-cols-2">
           <label className="block">
-            <span className="text-[12px] font-bold">
-              Favorite living blogs{" "}
-              <span className="wp-meta font-normal">
-                (one per line, &ldquo;name | url&rdquo;)
-              </span>
-            </span>
+            <span className="text-[12px] font-bold">Favorite living blogs</span>
             <textarea
               value={alive}
               onChange={(e) => setAlive(e.target.value)}
