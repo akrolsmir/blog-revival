@@ -40,7 +40,16 @@ export default function WpPatronPage({ params }: { params: Promise<{ handle: str
 
   return (
     <div>
-      <h2 className="text-[26px] font-bold">{profile.displayName}</h2>
+      <div className="flex items-center gap-3">
+        {profile.photoUrl && (
+          <img
+            src={profile.photoUrl}
+            alt=""
+            className="h-12 w-12 flex-none rounded-full border border-wpborder object-cover"
+          />
+        )}
+        <h2 className="text-[26px] font-bold">{profile.displayName}</h2>
+      </div>
       <p className="wp-meta mt-1">
         @{profile.handle} · patron · {dollars(totalCents, { round: true })} pledged across{" "}
         {pledges.length} bounties

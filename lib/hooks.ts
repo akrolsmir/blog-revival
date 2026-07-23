@@ -146,6 +146,10 @@ export function useGoogleAuthUrl() {
   return url;
 }
 
+// Profiles whose photo we've already backfilled this session, so the many
+// components calling useMyProfile don't each fire a duplicate write.
+const syncedPhotos = new Set<string>();
+
 /** The signed-in user's profile (or null). */
 export function useMyProfile() {
   const { user, isLoading: authLoading } = db.useAuth();
@@ -160,15 +164,59 @@ export function useMyProfile() {
         }
       : null,
   );
+  const profile = data?.profiles?.[0] ?? null;
+
+  // Google sign-in gives InstantDB the account's imageURL; copy it onto the
+  // profile once (if they haven't set their own photo) so patrons get avatars.
+  useEffect(() => {
+    const img = user?.imageURL;
+    if (img && profile && !profile.photoUrl && !syncedPhotos.has(profile.id)) {
+      syncedPhotos.add(profile.id);
+      db.transact(db.tx.profiles[profile.id].update({ photoUrl: img }));
+    }
+  }, [user, profile]);
+
   return {
     user: user ?? null,
-    profile: data?.profiles?.[0] ?? null,
+    profile,
     // A skipped (null) query reports isLoading:true forever in this SDK, so only
     // report loading while auth resolves or while a real profile query is in
     // flight. Otherwise a signed-out visitor hangs on "Loading…" and never
     // reaches the sign-in prompt.
     isLoading: authLoading || (user ? queryLoading : false),
   };
+}
+
+export type TopPatron = {
+  id: string;
+  handle: string;
+  displayName: string;
+  photoUrl?: string;
+  totalCents: number;
+};
+
+/**
+ * The patrons who've given a blogger the most, biggest first. Only counts
+ * community "patron" pledges — Austin/Carol's personal bounties and redirects
+ * aren't patrons in this sense and would otherwise top every blog.
+ */
+export function topPatrons(blogger: BloggerRow, limit = 3): TopPatron[] {
+  const byPatron = new Map<string, TopPatron>();
+  for (const p of blogger.pledges ?? []) {
+    const patron = p.patron;
+    if (!patron || p.source !== "patron") continue;
+    const existing = byPatron.get(patron.id);
+    if (existing) existing.totalCents += p.amountCents;
+    else
+      byPatron.set(patron.id, {
+        id: patron.id,
+        handle: patron.handle,
+        displayName: patron.displayName,
+        photoUrl: patron.photoUrl,
+        totalCents: p.amountCents,
+      });
+  }
+  return [...byPatron.values()].sort((a, b) => b.totalCents - a.totalCents).slice(0, limit);
 }
 
 /** True when the signed-in user is a nomination admin. */
