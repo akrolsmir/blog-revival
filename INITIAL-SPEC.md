@@ -23,26 +23,6 @@ Build a shared backend and two demo frontends, one under /graveyard, one under /
 
 straw proposal: $1000 for 1000 words for a list of bloggers we like; extension: kickstarter-like crowdfunding, with quadratic funding matching pool
 
-### prompt for Claude Code
-
-*(probably, first prompt Claude for some design/style directions)*
-
-Create the website for "Blog Revival Project", a new platform which coordinates bounties for great bloggers to post a new article.
-
-Motivation: bloggers like Holden Karnofsky, Sam Altman, and Paul Christiano have greatly informed our own thinking; but many have stopped writing.
-
-Mechanism: we're using quadratic funding, initially with a $10k matching pool. Austin and Carol (Manifund employees) are also each distributing $5k in personal bounties. By default, bounties are live once they've hit $1k in total commitments (across direct commitments + matching pool)
-
-- Homepage should explain the concept and list the top live bounties
-- Blogger profiles should be a straightforward page with their name (possibly pseudonymous), link to blog, link to recent (substantive) posts, and time since last post. A photo if we have it.
-- Patrons can sign up, deposit funding via credit card, comment on specific blogs/why they liked them. They should also have a profile, where they can list their favorite favorite alive and favorite dead blogs, and also write a section on "what kind of posts they like"
-- There should be a live demo slider to help people understand quadratic funding math by showing how much a donation will be matched.
-- Bloggers can sign up to claim their profile, post a link to the published blog, and (upon verification) withdraw their bounty via Stripe Connect
-    - Or: direct their bounty to revive another blogger; or donate it to a charity
-- A user can be both patron & blogger
-- Tech stack: NextJS/Tailwind frontend, InstantDB backend, Stripe Connect for payments & payouts
-- This is a project of Manifund 501c3, so patron bounties are tax-deductible per US law
-
 ### Theses
 
 1. Much important context is locked in the brains of people “too busy to write”
