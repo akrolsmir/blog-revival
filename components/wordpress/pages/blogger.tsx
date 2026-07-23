@@ -4,7 +4,7 @@ import { use, useState, Suspense } from "react";
 import Link from "next/link";
 import { db } from "@/lib/db";
 import { id } from "@instantdb/react";
-import { useBounties, useMyProfile, topPatrons } from "@/lib/hooks";
+import { useBounties, useMyProfile } from "@/lib/hooks";
 import { WpPledgeForm } from "@/components/wordpress/WpPledgeForm";
 import { daysSilent } from "@/lib/qf";
 import { dollars, bloggerIcon } from "@/lib/format";
@@ -39,7 +39,6 @@ export default function WpBloggerPage({ params }: { params: Promise<{ slug: stri
   const pledges = (blogger.pledges ?? [])
     .slice()
     .sort((a: any, b: any) => b.createdAt - a.createdAt);
-  const top = topPatrons(blogger);
 
   async function addComment() {
     if (!profile || !commentText.trim() || !blogger) return;
@@ -91,19 +90,6 @@ export default function WpBloggerPage({ params }: { params: Promise<{ slug: stri
         {blogger.supporterCount === 1 ? "" : "s"} ·{" "}
         <a href="#comments">{comments.length} comments</a>
       </p>
-      {top.length > 0 && (
-        <p className="wp-meta mt-1 flex flex-wrap items-center gap-x-2 gap-y-1">
-          <span>top patrons:</span>
-          {top.map((t) => (
-            <Link key={t.id} href={`/p/${t.handle}`} className="inline-flex items-center gap-1">
-              {t.photoUrl && (
-                <img src={t.photoUrl} alt="" className="h-4 w-4 rounded-full object-cover" />
-              )}
-              {t.displayName}
-            </Link>
-          ))}
-        </p>
-      )}
 
       {revived && (
         <div className="mt-4 rounded border border-wpgreen/50 bg-green-50 px-4 py-3">

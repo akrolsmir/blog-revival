@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import type { BloggerRow } from "@/lib/hooks";
+import { topPatrons, type BloggerRow } from "@/lib/hooks";
 import { daysSilent } from "@/lib/qf";
 import { bloggerIcon, dollars } from "@/lib/format";
 
@@ -26,6 +26,7 @@ export function Headstone({ blogger, index = 0 }: { blogger: BloggerRow; index?:
   const isLive = math.isLive;
   const pct = Math.min(100, Math.round((math.totalCents / 1000_00) * 100));
   const revived = blogger.status === "revived" || blogger.status === "paid";
+  const top = topPatrons(blogger);
 
   return (
     <Link
@@ -59,6 +60,11 @@ export function Headstone({ blogger, index = 0 }: { blogger: BloggerRow; index?:
       <p className="mt-3.5 min-h-[42px] flex-1 text-[14.5px] italic leading-[1.45] text-[#98a3b9] [text-wrap:pretty]">
         {blogger.epitaph}
       </p>
+      {top.length > 0 && (
+        <p className="mt-2 text-[11.5px] leading-snug text-[#7e8aa3] [text-wrap:pretty]">
+          patrons: {top.map((t) => t.displayName).join(", ")}
+        </p>
+      )}
       {revived ? (
         <div className="gy-caps mt-4 text-xs tracking-[0.14em] text-gold">
           revived — the candle did its work

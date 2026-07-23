@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useBounties } from "@/lib/hooks";
+import { useBounties, topPatrons } from "@/lib/hooks";
 import { daysSilent } from "@/lib/qf";
 import { dollars, bloggerIcon } from "@/lib/format";
 
@@ -91,6 +91,7 @@ export default function WordpressHome() {
         {bloggers.map((b) => {
           const silent = daysSilent(b.lastPostAt);
           const revived = b.status === "revived" || b.status === "paid";
+          const top = topPatrons(b);
           return (
             <article key={b.id}>
               <h2 className="flex items-center gap-2.5 text-[22px] font-bold">
@@ -129,6 +130,11 @@ export default function WordpressHome() {
                 · last post <em>{silent.toLocaleString()}</em> days ago · {b.supporterCount} patron
                 {b.supporterCount === 1 ? "" : "s"}
               </p>
+              {top.length > 0 && (
+                <p className="wp-meta mt-0.5">
+                  top patrons: {top.map((t) => t.displayName).join(", ")}
+                </p>
+              )}
               <p className="mt-2">
                 <Link href={`/b/${b.slug}`} className="font-bold">
                   Fund this bounty →

@@ -4,7 +4,7 @@ import { use, useState, Suspense } from "react";
 import Link from "next/link";
 import { db } from "@/lib/db";
 import { id } from "@instantdb/react";
-import { useBounties, useMyProfile, topPatrons } from "@/lib/hooks";
+import { useBounties, useMyProfile } from "@/lib/hooks";
 import { eyebrowFor } from "@/components/graveyard/Headstone";
 import { PledgeBox } from "@/components/graveyard/PledgeBox";
 import { daysSilent } from "@/lib/qf";
@@ -42,7 +42,6 @@ export default function GraveyardBloggerPage({ params }: { params: Promise<{ slu
   }
 
   const { math } = blogger;
-  const top = topPatrons(blogger);
   const silent = daysSilent(blogger.lastPostAt);
   const pct = Math.min(100, Math.round((math.totalCents / liveThresholdCents) * 100));
   const comments = (commentData?.comments ?? []).sort(
@@ -165,23 +164,6 @@ export default function GraveyardBloggerPage({ params }: { params: Promise<{ slu
               {dollars(liveThresholdCents, { round: true })} to go live. Direct pledges are fixed;
               the match can drift with the pool until the bounty is claimed.
             </p>
-            {top.length > 0 && (
-              <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-moon/10 pt-4">
-                <span className="gy-label text-mist">top patrons</span>
-                {top.map((t) => (
-                  <Link
-                    key={t.id}
-                    href={`/p/${t.handle}`}
-                    className="inline-flex items-center gap-1.5 text-sm text-moon/80 hover:text-moon"
-                  >
-                    {t.photoUrl && (
-                      <img src={t.photoUrl} alt="" className="h-5 w-5 rounded-full object-cover" />
-                    )}
-                    {t.displayName}
-                  </Link>
-                ))}
-              </div>
-            )}
           </div>
 
           {/* Last words */}
