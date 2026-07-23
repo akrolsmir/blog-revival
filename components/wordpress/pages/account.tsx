@@ -7,6 +7,7 @@ import { db } from "@/lib/db";
 import { id } from "@instantdb/react";
 import { useMyProfile } from "@/lib/hooks";
 import { dollars } from "@/lib/format";
+import posthog from "posthog-js";
 
 type FavBlog = { name: string; url: string };
 
@@ -42,6 +43,9 @@ function AccountInner() {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
+    if (user && !loaded) {
+      posthog.identify(user.id, {});
+    }
     if (profile && !loaded) {
       setHandle(profile.handle);
       setDisplayName(profile.displayName);
@@ -51,7 +55,7 @@ function AccountInner() {
       setDead(favsToText(profile.favoriteDeadBlogs as FavBlog[]));
       setLoaded(true);
     }
-  }, [profile, loaded]);
+  }, [profile, loaded, user]);
 
   if (isLoading) return <p className="wp-meta italic">Loading…</p>;
   if (!user) {
@@ -91,6 +95,10 @@ function AccountInner() {
           })
           .link({ user: user!.id }),
       );
+      posthog.capture("profile_saved", {
+        is_new_profile: !profile,
+        skin: "wordpress",
+      });
       setSaved(true);
       if (next) router.push(next);
     } catch {
@@ -170,7 +178,11 @@ function AccountInner() {
           {profile && <Link href={`/p/${profile.handle}`}>view public page</Link>}
           <button
             type="button"
-            onClick={() => db.auth.signOut()}
+            onClick={() => {
+              posthog.capture("signed_out", { skin: "wordpress" });
+              posthog.reset();
+              db.auth.signOut();
+            }}
             className="!ml-auto !border-0 !bg-none !bg-transparent !p-0 !font-normal !text-wplink underline"
           >
             Log out

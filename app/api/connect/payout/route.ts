@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { stripeClient, stripeConfigured } from "@/lib/stripe";
 import { adminDb } from "@/lib/admin";
 import { computeQf, type PledgeLike } from "@/lib/qf";
+import { getPostHogClient } from "@/lib/posthog-server";
 
 // Pay out a revived blogger's bounty via Stripe Connect transfer. Requires:
 // the requester claimed the profile, the claim is verified (manual review),
@@ -97,6 +98,19 @@ export async function POST(req: NextRequest) {
       matchingPoolCents: Math.max(0, config.matchingPoolCents - math.matchCents),
     }),
   ]);
+
+  const posthog = getPostHogClient();
+  posthog.capture({
+    distinctId: user.id,
+    event: "payout_completed",
+    properties: {
+      blogger_id: bloggerId,
+      amount_cents: math.totalCents,
+      match_cents: math.matchCents,
+      transfer_id: transfer.id,
+    },
+  });
+  await posthog.flush();
 
   return NextResponse.json({ transferId: transfer.id, amountCents: math.totalCents });
 }

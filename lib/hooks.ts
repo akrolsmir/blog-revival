@@ -125,15 +125,19 @@ export function usePatrons() {
  * Authorization URL for the Google OAuth redirect flow ("" until mounted —
  * createAuthorizationURL needs window). The current URL is used as the
  * redirect target, so ?next= survives the round trip; Instant signs the
- * user in automatically when they land back.
+ * user in automatically when they land back. An oauth=google marker is
+ * added to the redirect target so the signin page can tell a fresh OAuth
+ * sign-in apart from an already-signed-in visit (for analytics).
  */
 export function useGoogleAuthUrl() {
   const [url, setUrl] = useState("");
   useEffect(() => {
+    const redirect = new URL(window.location.href);
+    redirect.searchParams.set("oauth", "google");
     setUrl(
       db.auth.createAuthorizationURL({
         clientName: "google-web",
-        redirectURL: window.location.href,
+        redirectURL: redirect.toString(),
       }),
     );
   }, []);

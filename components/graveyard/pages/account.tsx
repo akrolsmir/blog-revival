@@ -7,6 +7,7 @@ import { db } from "@/lib/db";
 import { id } from "@instantdb/react";
 import { useMyProfile } from "@/lib/hooks";
 import { dollars } from "@/lib/format";
+import posthog from "posthog-js";
 
 type FavBlog = { name: string; url: string };
 
@@ -42,6 +43,9 @@ function AccountInner() {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
+    if (user && !loaded) {
+      posthog.identify(user.id, {});
+    }
     if (profile && !loaded) {
       setHandle(profile.handle);
       setDisplayName(profile.displayName);
@@ -51,7 +55,7 @@ function AccountInner() {
       setDead(favsToText(profile.favoriteDeadBlogs as FavBlog[]));
       setLoaded(true);
     }
-  }, [profile, loaded]);
+  }, [profile, loaded, user]);
 
   if (isLoading) {
     return <p className="gy-label py-32 text-center text-mist">summoning…</p>;
@@ -96,6 +100,10 @@ function AccountInner() {
           })
           .link({ user: user!.id }),
       );
+      posthog.capture("profile_saved", {
+        is_new_profile: !profile,
+        skin: "graveyard",
+      });
       setSaved(true);
       if (next) router.push(next);
     } catch (e: any) {
@@ -202,7 +210,11 @@ function AccountInner() {
           )}
           <button
             type="button"
-            onClick={() => db.auth.signOut()}
+            onClick={() => {
+              posthog.capture("signed_out", { skin: "graveyard" });
+              posthog.reset();
+              db.auth.signOut();
+            }}
             className="gy-caps ml-auto text-sm text-mist underline underline-offset-4 hover:text-moon"
           >
             sign out

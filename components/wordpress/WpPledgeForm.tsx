@@ -7,6 +7,7 @@ import { useMyProfile } from "@/lib/hooks";
 import { startCheckout, confirmCheckoutSession } from "@/lib/actions";
 import { marginalMatch, type PledgeLike } from "@/lib/qf";
 import { dollars } from "@/lib/format";
+import posthog from "posthog-js";
 
 export function WpPledgeForm({
   bloggerId,
@@ -37,6 +38,11 @@ export function WpPledgeForm({
     if (!sessionId || confirmedRef.current) return;
     confirmedRef.current = true;
     confirmCheckoutSession(sessionId).then(() => {
+      posthog.capture("pledge_confirmed", {
+        blogger_id: bloggerId,
+        blogger_name: bloggerName,
+        skin: "wordpress",
+      });
       setConfirmed(true);
       router.replace(`/b/${bloggerSlug}`, { scroll: false });
     });
@@ -52,6 +58,13 @@ export function WpPledgeForm({
     if (!profile || !valid) return;
     setBusy(true);
     setError(null);
+    posthog.capture("pledge_initiated", {
+      blogger_id: bloggerId,
+      blogger_name: bloggerName,
+      amount_cents: cents,
+      estimated_match_cents: addedMatchCents,
+      skin: "wordpress",
+    });
     const res = await startCheckout({
       bloggerId,
       bloggerName,

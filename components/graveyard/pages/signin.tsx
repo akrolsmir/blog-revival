@@ -1,9 +1,10 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { db } from "@/lib/db";
 import { useGoogleAuthUrl } from "@/lib/hooks";
+import posthog from "posthog-js";
 
 function SignInInner() {
   const router = useRouter();
@@ -18,18 +19,29 @@ function SignInInner() {
   const [stage, setStage] = useState<"email" | "code">("email");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // ?oauth=google marks the return leg of a fresh OAuth sign-in
+  // (set on the redirectURL by useGoogleAuthUrl).
+  const oauthMethod = searchParams.get("oauth");
+  const trackedOauth = useRef(false);
 
   // Covers the return leg of the OAuth redirect (Instant signs the user in
   // automatically) and anyone visiting /signin while already signed in.
   useEffect(() => {
-    if (user) router.replace(next);
-  }, [user, next, router]);
+    if (!user) return;
+    if (oauthMethod === "google" && !trackedOauth.current) {
+      trackedOauth.current = true;
+      posthog.identify(user.id, {});
+      posthog.capture("signed_in", { method: "google", skin: "graveyard" });
+    }
+    router.replace(next);
+  }, [user, next, router, oauthMethod]);
 
   async function sendCode() {
     setBusy(true);
     setError(null);
     try {
       await db.auth.sendMagicCode({ email });
+      posthog.capture("magic_code_requested", { method: "email", skin: "graveyard" });
       setStage("code");
     } catch (e: any) {
       setError(e?.body?.message ?? "Couldn't send the code. Check the email.");
@@ -41,7 +53,9 @@ function SignInInner() {
     setBusy(true);
     setError(null);
     try {
-      await db.auth.signInWithMagicCode({ email, code });
+      const result = await db.auth.signInWithMagicCode({ email, code });
+      posthog.identify(result.user.id, {});
+      posthog.capture("signed_in", { method: "magic_code", skin: "graveyard" });
       router.push(next);
     } catch (e: any) {
       setError(e?.body?.message ?? "That code didn't match. Try again.");

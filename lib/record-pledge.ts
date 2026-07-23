@@ -1,6 +1,7 @@
 import { id } from "@instantdb/admin";
 import type Stripe from "stripe";
 import { adminDb } from "@/lib/admin";
+import { getPostHogClient } from "@/lib/posthog-server";
 
 // Idempotently record a paid Checkout session as a pledge. Called from both
 // the webhook and the success-redirect confirm endpoint, so double-delivery
@@ -31,5 +32,19 @@ export async function recordPaidSession(session: Stripe.Checkout.Session) {
       })
       .link({ patron: profileId, blogger: bloggerId }),
   ]);
+
+  const posthog = getPostHogClient();
+  posthog.capture({
+    distinctId: profileId,
+    event: "pledge_recorded",
+    properties: {
+      blogger_id: bloggerId,
+      amount_cents: session.amount_total ?? 0,
+      stripe_session_id: session.id,
+      pledge_id: pledgeId,
+    },
+  });
+  await posthog.flush();
+
   return { recorded: true, pledgeId };
 }
