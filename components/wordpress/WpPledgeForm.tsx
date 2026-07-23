@@ -27,7 +27,6 @@ export function WpPledgeForm({
   const router = useRouter();
   const searchParams = useSearchParams();
   const [amount, setAmount] = useState("25");
-  const [note, setNote] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [confirmed, setConfirmed] = useState(false);
@@ -65,7 +64,6 @@ export function WpPledgeForm({
       bloggerSlug,
       profileId: profile.id,
       amountCents: cents,
-      note,
       skin: "wordpress",
     });
     if (res.url) window.location.href = res.url;
@@ -104,13 +102,6 @@ export function WpPledgeForm({
           </span>
         )}
       </div>
-      <textarea
-        value={note}
-        onChange={(e) => setNote(e.target.value)}
-        rows={2}
-        placeholder={`Why do you want ${bloggerName} back? (they'll read it)`}
-        className="mt-3 w-full"
-      />
       {profile ? (
         <button
           type="button"
@@ -138,6 +129,15 @@ export function WpPledgeForm({
         </p>
       )}
       {error && <p className="mt-2 text-[12.5px] text-red-700">{error}</p>}
+      {/* TODO: copy below describes a 1-month lock + patron reclaim that the
+          backend does NOT implement yet (no time logic; redirect/donate is a
+          blogger action on an already-revived bounty). Decide: build it, or
+          rewrite this to match reality. */}
+      <p className="mt-3 text-[12px] leading-relaxed wp-meta">
+        Your funds are locked for one month. If {bloggerName}{" "}
+        hasn&rsquo;t published a post by then, you&rsquo;re free to redirect your
+        pledge to anyone else on Manifund.
+      </p>
       <p className="wp-meta mt-2">
         tax-deductible · Manifund 501(c)(3) · card payments via Stripe
       </p>

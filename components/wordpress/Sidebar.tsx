@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { useBounties, useMyProfile } from "@/lib/hooks";
 import { MatchSlider } from "@/components/graveyard/MatchSlider";
@@ -15,9 +16,21 @@ export function WpSidebar() {
   } = useBounties();
   const { user, profile } = useMyProfile();
 
-  const sliderTarget =
+  // Which blogger's math the slider shows. Defaults to the first still-funding
+  // bounty; the dropdown lets you switch. Falls back if the id disappears.
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const defaultTarget =
     bloggers.find((b) => !b.math.isLive && b.status === "funding") ??
     bloggers[0];
+  const sliderTarget =
+    bloggers.find((b) => b.id === selectedId) ?? defaultTarget;
+
+  // How the matching pool is currently allocated across bloggers, plus the
+  // unspent remainder. poolUsedCents is exactly the sum of every match.
+  const allocated = bloggers
+    .filter((b) => b.math.matchCents > 0)
+    .sort((a, b) => b.math.matchCents - a.math.matchCents);
+  const leftoverCents = Math.max(0, poolCents - poolUsedCents);
 
   return (
     <aside className="space-y-8">
@@ -47,6 +60,20 @@ export function WpSidebar() {
       {sliderTarget && (
         <section>
           <h2 className="wp-widget-title">Try the Match Math</h2>
+          <label className="mt-2 block text-[12.5px] wp-meta">
+            Blogger:{" "}
+            <select
+              value={sliderTarget.id}
+              onChange={(e) => setSelectedId(e.target.value)}
+              className="mt-1 w-full rounded border border-wpborder bg-white px-2 py-1 text-[12.5px] text-wpink"
+            >
+              {bloggers.map((b) => (
+                <option key={b.id} value={b.id}>
+                  {b.blogName ?? b.name}
+                </option>
+              ))}
+            </select>
+          </label>
           <div className="mt-2 rounded border border-wpborder bg-[#fafafa]">
             <MatchSlider
               pledgesByBlogger={pledgesByBlogger}
@@ -58,10 +85,40 @@ export function WpSidebar() {
               dark={false}
             />
           </div>
-          <p className="wp-meta mt-2">
-            matching pool: {dollars(poolUsedCents, { round: true })} committed
-            of {dollars(poolCents, { round: true })}
+          <p className="wp-meta mt-3 font-bold uppercase tracking-wide">
+            Where the pool goes
           </p>
+          <table className="mt-1 w-full text-[12.5px]">
+            <tbody>
+              {allocated.map((b) => (
+                <tr
+                  key={b.id}
+                  className="border-b border-dotted border-wpborder"
+                >
+                  <td className="py-1 pr-2">
+                    <Link href={`/wordpress/b/${b.slug}`}>
+                      {b.blogName ?? b.name}
+                    </Link>
+                  </td>
+                  <td className="py-1 text-right font-bold text-wpgreen">
+                    {dollars(b.math.matchCents, { round: true })}
+                  </td>
+                </tr>
+              ))}
+              <tr className="border-b border-dotted border-wpborder">
+                <td className="py-1 pr-2 italic wp-meta">Leftover (unspent)</td>
+                <td className="py-1 text-right font-bold wp-meta">
+                  {dollars(leftoverCents, { round: true })}
+                </td>
+              </tr>
+              <tr>
+                <td className="py-1 pr-2 font-bold">Total pool</td>
+                <td className="py-1 text-right font-bold">
+                  {dollars(poolCents, { round: true })}
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </section>
       )}
 

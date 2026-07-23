@@ -36,10 +36,6 @@ export default function Home() {
             bounties for the bloggers we miss
           </p>
         </div>
-        <p className="max-w-xs text-center text-wpmeta">
-          A weblog about paying great bloggers to post again. Est. 2026,
-          spiritually 2005.
-        </p>
         <span className="wp-btn">Enter the blog →</span>
       </Link>
     </main>

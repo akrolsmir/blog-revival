@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useBounties } from "@/lib/hooks";
 import { daysSilent } from "@/lib/qf";
-import { dollars } from "@/lib/format";
+import { dollars, bloggerIcon } from "@/lib/format";
 
 function fmtDate(d: Date): string {
   return d.toLocaleDateString("en-US", {
@@ -21,28 +21,42 @@ export default function WordpressHome() {
       {/* Intro post */}
       <article>
         <h2 className="text-[26px] font-bold leading-snug">
-          The blogs went quiet. Let&rsquo;s pay them to come back.
+          A lot of great bloggers have stopped blogging. Let&rsquo;s offer them bounties to start again!
         </h2>
-        <p className="wp-meta mt-1">
-          {fmtDate(new Date())} · Filed under:{" "}
-          <a href="#math">Meta</a> · <Link href="/wordpress#bounties">the bounties</Link>
-        </p>
+        <p className="wp-meta mt-1">{fmtDate(new Date())}</p>
         <div className="mt-4 space-y-4 text-[13.5px] leading-relaxed">
           <p>
-            Some of the writing that most shaped our thinking — Holden
-            Karnofsky, Paul Christiano, Sam Altman, and a long blogroll of
-            others — has simply stopped. The Blog Revival Project coordinates{" "}
-            <strong>bounties</strong>: patrons pledge toward a specific
-            blogger, and when commitments cross $1,000, the bounty goes{" "}
-            <strong className="text-wpgreen">LIVE</strong>: publish one
-            substantive new post, claim the pot.
+            Some of the bloggers that most shaped our thinking — Holden
+            Karnofsky, Paul Christiano, Sam Altman, and many others — aren't
+            blogging anymore. Many blogs are victims of their own success, and
+            over time more important context ends up stuck in the heads of
+            people who are too busy to blog.
+          </p>
+          <p>
+            Substack is great, but the platform economics reward frequent
+            posting to build an audience. The marginal post from someone who
+            rarely blogs is worth a lot more than the marginal post from even a
+            good substacker.
+          </p>
+          <p>
+            The Blog Revival Project coordinates bounties. Patrons pledge toward
+            a specific blogger and the blogger can write one new post of at
+            least 1000 words to claim the funds.
           </p>
           <p>
             Pledges are matched from a{" "}
-            <strong>{dollars(poolCents, { round: true })} quadratic funding pool</strong>,
-            so many small pledges beat one big one. Austin and Carol are each
-            distributing $5k in personal bounties on top. The math is public,
-            always:
+            <strong>
+              {dollars(poolCents, { round: true })}{" "}
+              <a
+                href="https://vitalik.eth.limo/general/2019/12/07/quadratic.html"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                quadratic funding
+              </a>{" "}
+              pool
+            </strong>,
+            so many small pledges beat one big one.
           </p>
         </div>
         <div
@@ -82,7 +96,17 @@ export default function WordpressHome() {
           const revived = b.status === "revived" || b.status === "paid";
           return (
             <article key={b.id}>
-              <h2 className="text-[22px] font-bold">
+              <h2 className="flex items-center gap-2.5 text-[22px] font-bold">
+                <img
+                  src={bloggerIcon(b.blogUrl, b.photoUrl)}
+                  alt=""
+                  width={28}
+                  height={28}
+                  onError={(e) => {
+                    e.currentTarget.style.display = "none";
+                  }}
+                  className="h-7 w-7 flex-none rounded border border-wpborder bg-white object-contain"
+                />
                 <Link href={`/wordpress/b/${b.slug}`} className="!text-wpink !no-underline hover:!underline">
                   {b.blogName ?? b.name}
                 </Link>
@@ -109,9 +133,6 @@ export default function WordpressHome() {
                 · last post <em>{silent.toLocaleString()}</em> days ago ·{" "}
                 {b.supporterCount} patron{b.supporterCount === 1 ? "" : "s"}
               </p>
-              {b.epitaph && (
-                <p className="mt-2 text-[13.5px] leading-relaxed">{b.epitaph}</p>
-              )}
               <p className="mt-2">
                 <Link href={`/wordpress/b/${b.slug}`} className="font-bold">
                   Fund this bounty →

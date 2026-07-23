@@ -7,7 +7,7 @@ import { id } from "@instantdb/react";
 import { useBounties, useMyProfile } from "@/lib/hooks";
 import { WpPledgeForm } from "@/components/wordpress/WpPledgeForm";
 import { daysSilent } from "@/lib/qf";
-import { dollars } from "@/lib/format";
+import { dollars, bloggerIcon } from "@/lib/format";
 
 export default function WpBloggerPage({
   params,
@@ -62,7 +62,17 @@ export default function WpBloggerPage({
 
   return (
     <article>
-      <h2 className="text-[26px] font-bold leading-snug">
+      <h2 className="flex items-center gap-3 text-[26px] font-bold leading-snug">
+        <img
+          src={bloggerIcon(blogger.blogUrl, blogger.photoUrl)}
+          alt=""
+          width={36}
+          height={36}
+          onError={(e) => {
+            e.currentTarget.style.display = "none";
+          }}
+          className="h-9 w-9 flex-none rounded border border-wpborder bg-white object-contain"
+        />
         {blogger.blogName ?? blogger.name}
       </h2>
       <p className="mt-1 text-[13px]">
@@ -92,9 +102,6 @@ export default function WpBloggerPage({
         <a href="#comments">{comments.length} comments</a>
       </p>
 
-      {blogger.epitaph && (
-        <p className="mt-4 text-[13.5px] leading-relaxed">{blogger.epitaph}</p>
-      )}
 
       {revived && (
         <div className="mt-4 rounded border border-wpgreen/50 bg-green-50 px-4 py-3">
@@ -121,9 +128,7 @@ export default function WpBloggerPage({
 
       {blogger.recentPosts && blogger.recentPosts.length > 0 && (
         <section className="mt-6">
-          <h3 className="text-[15px] font-bold">
-            Greatest hits (what we&rsquo;re missing)
-          </h3>
+          <h3 className="text-[15px] font-bold">Notable posts</h3>
           <ul className="mt-2 list-inside list-disc space-y-1 text-[13px]">
             {blogger.recentPosts.map((post) => (
               <li key={post.url}>
@@ -170,13 +175,6 @@ export default function WpBloggerPage({
                   ) : (
                     "Anonymous"
                   )}
-                  {p.source !== "patron" && (
-                    <span className="wp-meta">
-                      {" "}
-                      ({p.source === "redirect" ? "redirected bounty" : "personal bounty"})
-                    </span>
-                  )}
-                  {p.note && <em className="wp-meta"> — “{p.note}”</em>}
                 </td>
                 <td className="py-1.5 text-right font-bold">
                   {dollars(p.amountCents, { round: true })}
@@ -248,7 +246,7 @@ export default function WpBloggerPage({
             <Link href={`/wordpress/signin?next=/wordpress/b/${blogger.slug}`}>
               Sign in
             </Link>{" "}
-            to leave a comment. (You must be logged in to post — classic.)
+            to leave a comment.
           </p>
         )}
       </section>

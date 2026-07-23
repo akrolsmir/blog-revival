@@ -115,7 +115,6 @@ export default function WpPatronPage({
                   ) : (
                     "—"
                   )}
-                  {p.note && <em className="wp-meta"> — “{p.note}”</em>}
                 </td>
                 <td className="py-1.5 text-right font-bold">
                   {dollars(p.amountCents, { round: true })}

@@ -40,10 +40,6 @@ export default function WordpressLayout({
             <a href="https://manifund.org">Manifund</a>, a 501(c)(3) nonprofit.
             Contributions are tax-deductible per US law.
           </p>
-          <p className="mt-1">
-            proudly powered by quadratic funding · stripe connect payouts ·{" "}
-            <Link href="/wordpress#math">how the math works</Link>
-          </p>
         </footer>
       </div>
     </div>
