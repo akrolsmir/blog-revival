@@ -98,8 +98,8 @@ export function useBounties() {
 
 /** The signed-in user's profile (or null). */
 export function useMyProfile() {
-  const { user } = db.useAuth();
-  const { data, isLoading } = db.useQuery(
+  const { user, isLoading: authLoading } = db.useAuth();
+  const { data, isLoading: queryLoading } = db.useQuery(
     user
       ? {
           profiles: {
@@ -113,6 +113,10 @@ export function useMyProfile() {
   return {
     user: user ?? null,
     profile: data?.profiles?.[0] ?? null,
-    isLoading,
+    // A skipped (null) query reports isLoading:true forever in this SDK, so only
+    // report loading while auth resolves or while a real profile query is in
+    // flight. Otherwise a signed-out visitor hangs on "Loading…" and never
+    // reaches the sign-in prompt.
+    isLoading: authLoading || (user ? queryLoading : false),
   };
 }

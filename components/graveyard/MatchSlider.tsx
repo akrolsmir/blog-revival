@@ -26,7 +26,7 @@ export function MatchSlider({
   const [stop, setStop] = useState(3); // $50
 
   const amountCents = STOPS[stop];
-  const { addedMatchCents, after } = marginalMatch(
+  const { addedMatchCents } = marginalMatch(
     pledgesByBlogger,
     poolCents,
     liveThresholdCents,
@@ -69,19 +69,15 @@ export function MatchSlider({
             +{dollars(addedMatchCents, { round: true })}
           </dd>
         </div>
-        <div className="flex justify-between">
+        <div className="flex justify-between gap-4">
           <dt className={dim}>effect</dt>
-          <dd className={accent}>
-            {multiple.toFixed(1)}× your dollars
-            {after.isLive ? " — takes it live" : ""}
+          <dd className={`${accent} text-right`}>
+            <span className="whitespace-nowrap">
+              {multiple.toFixed(1)}× your dollars
+            </span>
           </dd>
         </div>
       </dl>
-      <p className={`mt-4 text-xs leading-relaxed ${dim}`}>
-        Matching rewards breadth: many small pledges pull more from the pool
-        than one large one. The pool never overspends — every match scales to
-        fit inside it.
-      </p>
     </div>
   );
 }
