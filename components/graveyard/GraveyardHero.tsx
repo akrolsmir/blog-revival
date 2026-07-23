@@ -261,15 +261,6 @@ export function GraveyardHero({
               {pct}% funded · {dollars(b.math.totalCents, { round: true })} of{" "}
               {dollars(liveThresholdCents, { round: true })}
             </div>
-            {/* base plinth the stone rests on */}
-            <div
-              className="absolute -bottom-2.5 left-[-13%] right-[-13%] h-[18px] rounded-[3px]"
-              style={{
-                background: "linear-gradient(180deg,#2b3448 0%,#171e30 100%)",
-                boxShadow:
-                  "inset 0 1px 0 rgba(255,255,255,.06), inset 0 -2px 3px rgba(4,7,14,.5), 0 8px 14px rgba(4,7,14,.55)",
-              }}
-            />
             <Link href={`/b/${b.slug}`} className="relative block">
               <div
                 className="relative flex flex-col items-center justify-center px-3.5 text-center"
@@ -279,7 +270,7 @@ export function GraveyardHero({
                   background: `linear-gradient(175deg, ${s.c1} 0%, ${s.c2} 100%)`,
                   borderRadius: s.r,
                   boxShadow:
-                    "inset 0 3px 0 rgba(255,255,255,.08), inset 0 -26px 40px rgba(5,9,18,.55), 0 7px 0 rgba(4,7,14,.6), 0 22px 34px -14px rgba(0,0,0,.6)",
+                    "inset 0 3px 0 rgba(255,255,255,.08), inset 0 -26px 40px rgba(5,9,18,.55), 0 6px 0 rgba(4,7,14,.6)",
                 }}
               >
                 {/* carved engraved frame */}
@@ -312,6 +303,8 @@ export function GraveyardHero({
                 </div>
               </div>
             </Link>
+            {/* grave mound */}
+            <div className="absolute -bottom-3 left-[-12%] right-[-12%] h-[22px] rounded-[50%] bg-abyss" />
             <Candle pct={pct} className="absolute -bottom-2 left-1/2 z-[6] -translate-x-1/2" />
           </div>
         );
@@ -323,13 +316,6 @@ export function GraveyardHero({
           const pct = Math.round((b.math.totalCents / liveThresholdCents) * 100);
           return (
             <div key={b.id} className="group relative">
-              <div
-                className="absolute -bottom-2 left-[-10%] right-[-10%] h-[14px] rounded-[3px]"
-                style={{
-                  background: "linear-gradient(180deg,#2b3448 0%,#171e30 100%)",
-                  boxShadow: "inset 0 1px 0 rgba(255,255,255,.06), 0 6px 10px rgba(4,7,14,.55)",
-                }}
-              />
               <Link
                 href={`/b/${b.slug}`}
                 className="relative flex min-h-36 flex-col items-center justify-center gap-1.5 rounded-[70px_70px_4px_4px] px-3 py-6 text-center"
@@ -366,6 +352,7 @@ export function GraveyardHero({
                   silent {daysSilent(b.lastPostAt).toLocaleString()} days
                 </div>
               </Link>
+              <div className="absolute -bottom-3 left-[-8%] right-[-8%] h-[18px] rounded-[50%] bg-abyss" />
               <Candle pct={pct} className="absolute -bottom-2 left-1/2 z-[6] -translate-x-1/2" />
             </div>
           );

@@ -70,12 +70,26 @@ html.skin-wp {
 
 /* Arched headstone card */
 .gy-stone {
+  position: relative;
   background: linear-gradient(175deg, #333f57 0%, #232e45 100%);
   border-radius: 110px 110px 6px 6px;
   box-shadow:
-    inset 0 2px 0 rgba(255, 255, 255, 0.05),
-    inset 0 -20px 30px rgba(5, 9, 18, 0.4),
-    0 5px 0 rgba(4, 7, 14, 0.55);
+    inset 0 3px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -24px 38px rgba(5, 9, 18, 0.5),
+    0 6px 0 rgba(4, 7, 14, 0.6);
+}
+
+/* Carved engraved frame, matching the hero headstones. */
+.gy-stone::before {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  border-radius: 96px 96px 4px 4px;
+  border: 1px solid rgba(8, 12, 22, 0.5);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.05),
+    inset 0 1px 2px rgba(4, 8, 16, 0.4);
+  pointer-events: none;
 }
 
 .gy-stone-live {
@@ -147,8 +161,9 @@ html.skin-wp {
 .gy-moon {
   background: radial-gradient(circle at 38% 34%, #fffdf4 0%, #f2efe1 45%, #ddd6bd 100%);
   box-shadow:
-    0 0 70px 22px rgba(240, 236, 214, 0.16),
-    0 0 160px 60px rgba(220, 224, 240, 0.08);
+    0 0 60px 16px rgba(255, 250, 224, 0.38),
+    0 0 130px 48px rgba(240, 236, 214, 0.24),
+    0 0 260px 120px rgba(220, 224, 240, 0.13);
 }
 
 .gy-ground {
