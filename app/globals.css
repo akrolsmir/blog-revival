@@ -220,7 +220,8 @@
 }
 
 .wp-widget-title {
-  font-family: "Lucida Grande", "Segoe UI", Verdana, sans-serif;
+  /* font-family intentionally omitted: these are h2/h3 elements, so the
+     .wp h1,h2,h3 Georgia rule applies (serif widget titles, matching headings). */
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.02em;

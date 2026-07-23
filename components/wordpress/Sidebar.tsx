@@ -84,9 +84,7 @@ export function WpSidebar() {
               dark={false}
             />
           </div>
-          <p className="wp-meta mt-3 font-bold uppercase tracking-wide">
-            Where the pool goes
-          </p>
+          <h3 className="wp-widget-title mt-3">Where the pool goes</h3>
           <table className="mt-1 w-full text-[12.5px]">
             <tbody>
               {allocated.map((b) => (
