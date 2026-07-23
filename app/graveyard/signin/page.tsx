@@ -42,11 +42,11 @@ function SignInInner() {
     <main className="mx-auto max-w-md px-6 py-20 text-center">
       <p className="gy-label text-mist">the veil is thin</p>
       <h1 className="mt-3 text-4xl">Sign in</h1>
-      <p className="mt-4 text-moon/80">
-        {stage === "email"
-          ? "We'll email you a six-digit code. No passwords in the afterlife."
-          : `We sent a code to ${email}. Enter it below.`}
-      </p>
+      {stage === "code" && (
+        <p className="mt-4 text-moon/80">
+          We sent a code to {email}. Enter it below.
+        </p>
+      )}
       <form
         className="mt-8 space-y-4"
         onSubmit={(e) => {

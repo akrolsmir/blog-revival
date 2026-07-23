@@ -41,11 +41,9 @@ function SignInInner() {
   return (
     <div className="mx-auto max-w-sm">
       <h2 className="text-[22px] font-bold">Sign in</h2>
-      <p className="wp-meta mt-1">
-        {stage === "email"
-          ? "We'll email you a six-digit login code. No passwords, it's not 2005 everywhere."
-          : `Code sent to ${email}.`}
-      </p>
+      {stage === "code" && (
+        <p className="wp-meta mt-1">Code sent to {email}.</p>
+      )}
       <form
         className="mt-4 space-y-3"
         onSubmit={(e) => {
