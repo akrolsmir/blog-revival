@@ -1,18 +1,29 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { db } from "@/lib/db";
+import { useGoogleAuthUrl } from "@/lib/hooks";
 
 function SignInInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const next = searchParams.get("next") ?? "/graveyard/account";
+  // Instant appends ?error= when the OAuth redirect fails.
+  const oauthError = searchParams.get("error");
+  const googleUrl = useGoogleAuthUrl();
+  const { user } = db.useAuth();
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
   const [stage, setStage] = useState<"email" | "code">("email");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Covers the return leg of the OAuth redirect (Instant signs the user in
+  // automatically) and anyone visiting /signin while already signed in.
+  useEffect(() => {
+    if (user) router.replace(next);
+  }, [user, next, router]);
 
   async function sendCode() {
     setBusy(true);
@@ -47,8 +58,24 @@ function SignInInner() {
           We sent a code to {email}. Enter it below.
         </p>
       )}
+      {stage === "email" && (
+        <>
+          <a
+            href={googleUrl || undefined}
+            aria-disabled={!googleUrl}
+            className="gy-caps mt-8 block w-full rounded-sm border border-candle/60 px-6 py-3 font-medium text-candle hover:bg-candle/10 aria-disabled:pointer-events-none aria-disabled:opacity-50"
+          >
+            continue with google
+          </a>
+          <div className="mt-6 flex items-center gap-3">
+            <span className="h-px flex-1 bg-moon/15" />
+            <span className="gy-label text-mist">or by email</span>
+            <span className="h-px flex-1 bg-moon/15" />
+          </div>
+        </>
+      )}
       <form
-        className="mt-8 space-y-4"
+        className="mt-6 space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
           stage === "email" ? sendCode() : verify();
@@ -84,7 +111,9 @@ function SignInInner() {
           {busy ? "…" : stage === "email" ? "send the code" : "cross over"}
         </button>
       </form>
-      {error && <p className="mt-4 text-sm text-red-300">{error}</p>}
+      {(error ?? oauthError) && (
+        <p className="mt-4 text-sm text-red-300">{error ?? oauthError}</p>
+      )}
       {stage === "code" && (
         <button
           type="button"

@@ -1,18 +1,29 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { db } from "@/lib/db";
+import { useGoogleAuthUrl } from "@/lib/hooks";
 
 function SignInInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const next = searchParams.get("next") ?? "/wordpress/account";
+  // Instant appends ?error= when the OAuth redirect fails.
+  const oauthError = searchParams.get("error");
+  const googleUrl = useGoogleAuthUrl();
+  const { user } = db.useAuth();
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
   const [stage, setStage] = useState<"email" | "code">("email");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Covers the return leg of the OAuth redirect (Instant signs the user in
+  // automatically) and anyone visiting /signin while already signed in.
+  useEffect(() => {
+    if (user) router.replace(next);
+  }, [user, next, router]);
 
   async function sendCode() {
     setBusy(true);
@@ -44,8 +55,20 @@ function SignInInner() {
       {stage === "code" && (
         <p className="wp-meta mt-1">Code sent to {email}.</p>
       )}
+      {stage === "email" && (
+        <>
+          <a
+            href={googleUrl || undefined}
+            aria-disabled={!googleUrl}
+            className="wp-btn mt-4 block w-full text-center aria-disabled:pointer-events-none aria-disabled:opacity-50"
+          >
+            Log in with Google
+          </a>
+          <p className="wp-meta mt-3 text-center">— or use your email —</p>
+        </>
+      )}
       <form
-        className="mt-4 space-y-3"
+        className="mt-3 space-y-3"
         onSubmit={(e) => {
           e.preventDefault();
           stage === "email" ? sendCode() : verify();
@@ -77,7 +100,9 @@ function SignInInner() {
           {busy ? "…" : stage === "email" ? "Send login code" : "Log in →"}
         </button>
       </form>
-      {error && <p className="mt-3 text-[12.5px] text-red-700">{error}</p>}
+      {(error ?? oauthError) && (
+        <p className="mt-3 text-[12.5px] text-red-700">{error ?? oauthError}</p>
+      )}
       {stage === "code" && (
         <button
           type="button"

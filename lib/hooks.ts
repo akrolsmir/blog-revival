@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { db } from "@/lib/db";
 import {
   computeQf,
@@ -132,6 +132,25 @@ export function usePatrons() {
     );
     return { isLoading, error, patrons };
   }, [data, isLoading, error]);
+}
+
+/**
+ * Authorization URL for the Google OAuth redirect flow ("" until mounted —
+ * createAuthorizationURL needs window). The current URL is used as the
+ * redirect target, so ?next= survives the round trip; Instant signs the
+ * user in automatically when they land back.
+ */
+export function useGoogleAuthUrl() {
+  const [url, setUrl] = useState("");
+  useEffect(() => {
+    setUrl(
+      db.auth.createAuthorizationURL({
+        clientName: "google-web",
+        redirectURL: window.location.href,
+      })
+    );
+  }, []);
+  return url;
 }
 
 /** The signed-in user's profile (or null). */
