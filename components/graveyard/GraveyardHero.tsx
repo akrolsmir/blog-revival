@@ -165,9 +165,9 @@ export function GraveyardHero({
     >
       {/* moon + craters — outside the clipped backdrop and above the clouds
           (z-1) so nothing cuts a straight edge across the glow */}
-      <div className="gy-moon absolute right-[13%] top-[13%] z-[1] h-[92px] w-[92px] rounded-full" />
-      <div className="absolute right-[16.5%] top-[20%] z-[1] h-3.5 w-3.5 rounded-full bg-[#e2ded0] opacity-50" />
-      <div className="absolute right-[14.8%] top-[16%] z-[1] h-[9px] w-[9px] rounded-full bg-[#e2ded0] opacity-40" />
+      <div className="gy-moon absolute right-4 top-2 z-[1] h-12 w-12 rounded-full md:right-[13%] md:top-[13%] md:h-[92px] md:w-[92px]" />
+      <div className="absolute right-[16.5%] top-[20%] z-[1] hidden h-3.5 w-3.5 rounded-full bg-[#e2ded0] opacity-50 md:block" />
+      <div className="absolute right-[14.8%] top-[16%] z-[1] hidden h-[9px] w-[9px] rounded-full bg-[#e2ded0] opacity-40 md:block" />
 
       {/* clipped backdrop: stars, clouds, hills, trees all overflow the
           viewport and must be contained */}

@@ -7,7 +7,13 @@ export function GyNav() {
   const { user, profile } = useMyProfile();
   const isAdmin = useIsAdmin();
   return (
-    <header className="relative z-20 flex items-center justify-end gap-4 px-6 py-6 md:px-12">
+    <header className="relative z-20 flex items-center justify-between gap-4 px-6 py-6 md:px-12">
+      <Link
+        href="/"
+        className="gy-caps text-[20px] font-semibold tracking-[0.14em] text-moon hover:text-moon"
+      >
+        revive.blog
+      </Link>
       <nav className="gy-caps flex items-center gap-5 text-sm tracking-[0.18em] md:gap-8">
         <Link href="/#how" className="hidden text-[#b9c2d4] hover:text-moon sm:inline">
           how it works
@@ -17,6 +23,9 @@ export function GyNav() {
         </Link>
         <Link href="/patrons" className="hidden text-[#b9c2d4] hover:text-moon sm:inline">
           patrons
+        </Link>
+        <Link href="/nominate" className="hidden text-[#b9c2d4] hover:text-moon sm:inline">
+          nominate
         </Link>
         <Link href="/claim" className="text-[#b9c2d4] hover:text-moon">
           for bloggers
@@ -66,6 +75,9 @@ export function GyFooter() {
         </Link>
         <Link href="/patrons" className="hover:text-moon">
           patrons
+        </Link>
+        <Link href="/nominate" className="hover:text-moon">
+          nominate
         </Link>
         <Link href="/claim" className="hover:text-moon">
           claim your grave

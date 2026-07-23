@@ -31,7 +31,7 @@ export function WpSidebar() {
       <section>
         <h2 className="wp-widget-title">Blogroll</h2>
         <ul className="mt-2 space-y-1.5">
-          {bloggers.slice(0, 8).map((b) => (
+          {bloggers.map((b) => (
             <li key={b.id} className="flex items-baseline justify-between gap-2">
               <Link href={`/b/${b.slug}`}>{b.blogName ?? b.name}</Link>
               <span
