@@ -111,12 +111,9 @@ export default function GraveyardHome() {
           <h2 className="mt-3 text-4xl md:text-[46px]">The blogroll</h2>
           <p className="mx-auto mt-4 max-w-[520px] text-lg text-[#a9b3c8] [text-wrap:pretty]">
             Every grave we&rsquo;re tending. Pledge to the ones you miss — or{" "}
-            <a
-              href="mailto:austin@manifund.org?subject=Nominate a dormant blog"
-              className="text-[#e8c87a] hover:text-[#f6e0a8]"
-            >
+            <Link href="/nominate" className="text-[#e8c87a] hover:text-[#f6e0a8]">
               nominate a blogger
-            </a>{" "}
+            </Link>{" "}
             we&rsquo;ve overlooked.
           </p>
         </div>

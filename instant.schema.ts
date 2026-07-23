@@ -73,6 +73,19 @@ const _schema = i.schema({
       matchingPoolCents: i.number(),
       liveThresholdCents: i.number(),
     }),
+
+    // A reader's suggestion of a dormant blog to revive. Written server-side
+    // by a signed-in submitter; stays pending until an admin approves it,
+    // which spins up a bloggers row (a live bounty).
+    nominations: i.entity({
+      blogName: i.string(),
+      authorName: i.string(), // the blogger's name or pseudonym
+      blogUrl: i.string(),
+      lastPostAt: i.number(), // ms epoch of their last post
+      topPosts: i.json().optional(), // [{ title, url }]
+      status: i.string().indexed(), // pending | approved | rejected
+      createdAt: i.number().indexed(),
+    }),
   },
 
   links: {
@@ -104,6 +117,10 @@ const _schema = i.schema({
     bountyRedirect: {
       forward: { on: "bloggers", has: "one", label: "redirectTo" },
       reverse: { on: "bloggers", has: "many", label: "redirectsReceived" },
+    },
+    nominationSubmitter: {
+      forward: { on: "nominations", has: "one", label: "submitter" },
+      reverse: { on: "profiles", has: "many", label: "nominations" },
     },
   },
 });

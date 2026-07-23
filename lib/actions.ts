@@ -105,3 +105,42 @@ export async function withdrawBounty(bloggerId: string) {
   });
   return res.json();
 }
+
+export async function submitNomination(data: {
+  blogName: string;
+  authorName: string;
+  blogUrl: string;
+  lastPostAt: number;
+  topPosts: { title: string; url: string }[];
+}) {
+  const token = await refreshToken();
+  if (!token) return { error: "Sign in to nominate a blog" };
+  const res = await fetch("/api/nominations", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ...data, refreshToken: token }),
+  });
+  return res.json();
+}
+
+export async function listPendingNominations() {
+  const token = await refreshToken();
+  if (!token) return { error: "Sign in first" };
+  const res = await fetch("/api/nominations/pending", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ refreshToken: token }),
+  });
+  return res.json();
+}
+
+export async function reviewNomination(nominationId: string, action: "approve" | "reject") {
+  const token = await refreshToken();
+  if (!token) return { error: "Sign in first" };
+  const res = await fetch("/api/nominations/review", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ nominationId, action, refreshToken: token }),
+  });
+  return res.json();
+}

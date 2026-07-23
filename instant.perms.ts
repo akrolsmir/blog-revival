@@ -50,6 +50,16 @@ const rules = {
       delete: "false",
     },
   },
+  nominations: {
+    // Entirely server-mediated: submitted via /api/nominations (signed-in) and
+    // read/approved by admins via /api/nominations/*. No client access.
+    allow: {
+      view: "false",
+      create: "false",
+      update: "false",
+      delete: "false",
+    },
+  },
 } satisfies InstantRules;
 
 export default rules;

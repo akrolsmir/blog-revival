@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { db } from "@/lib/db";
 import { computeQf, emptyMath, type BountyMath, type PledgeLike } from "@/lib/qf";
+import { isAdminEmail } from "@/lib/admins";
+import { submitNomination } from "@/lib/actions";
 
 export const DEFAULT_POOL_CENTS = 10_000_00;
 export const DEFAULT_LIVE_THRESHOLD_CENTS = 1_000_00;
@@ -166,5 +168,80 @@ export function useMyProfile() {
     // flight. Otherwise a signed-out visitor hangs on "Loading…" and never
     // reaches the sign-in prompt.
     isLoading: authLoading || (user ? queryLoading : false),
+  };
+}
+
+/** True when the signed-in user is a nomination admin. */
+export function useIsAdmin(): boolean {
+  const { user } = db.useAuth();
+  return isAdminEmail(user?.email);
+}
+
+export type TopPostInput = { title: string; url: string };
+
+/** Shared state + submit for the blog nomination form (both skins). */
+export function useNominationForm() {
+  const [blogName, setBlogName] = useState("");
+  const [authorName, setAuthorName] = useState("");
+  const [blogUrl, setBlogUrl] = useState("");
+  const [lastPost, setLastPost] = useState(""); // yyyy-mm-dd from a date input
+  const [topPosts, setTopPosts] = useState<TopPostInput[]>([{ title: "", url: "" }]);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [done, setDone] = useState(false);
+
+  function setPost(i: number, patch: Partial<TopPostInput>) {
+    setTopPosts((ps) => ps.map((p, j) => (j === i ? { ...p, ...patch } : p)));
+  }
+  function addPost() {
+    setTopPosts((ps) => (ps.length >= 5 ? ps : [...ps, { title: "", url: "" }]));
+  }
+  function removePost(i: number) {
+    setTopPosts((ps) => (ps.length <= 1 ? ps : ps.filter((_, j) => j !== i)));
+  }
+
+  async function submit() {
+    setError(null);
+    if (!blogName.trim() || !authorName.trim() || !blogUrl.trim() || !lastPost) {
+      setError("Please fill in the blog name, name, blog link, and last post date.");
+      return;
+    }
+    const lastPostAt = new Date(lastPost).getTime();
+    if (!Number.isFinite(lastPostAt)) {
+      setError("That last-post date looks off.");
+      return;
+    }
+    setBusy(true);
+    const res = await submitNomination({
+      blogName: blogName.trim(),
+      authorName: authorName.trim(),
+      blogUrl: blogUrl.trim(),
+      lastPostAt,
+      topPosts: topPosts
+        .map((p) => ({ title: p.title.trim(), url: p.url.trim() }))
+        .filter((p) => p.title || p.url),
+    });
+    setBusy(false);
+    if (res?.error) setError(res.error);
+    else setDone(true);
+  }
+
+  return {
+    blogName,
+    setBlogName,
+    authorName,
+    setAuthorName,
+    blogUrl,
+    setBlogUrl,
+    lastPost,
+    setLastPost,
+    topPosts,
+    setPost,
+    addPost,
+    removePost,
+    busy,
+    error,
+    done,
+    submit,
   };
 }

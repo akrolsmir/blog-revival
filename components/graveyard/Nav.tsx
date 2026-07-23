@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useMyProfile } from "@/lib/hooks";
+import { useMyProfile, useIsAdmin } from "@/lib/hooks";
 
 export function GyNav() {
   const { user, profile } = useMyProfile();
+  const isAdmin = useIsAdmin();
   return (
     <header className="relative z-20 flex items-center justify-end gap-4 px-6 py-6 md:px-12">
       <nav className="gy-caps flex items-center gap-5 text-sm tracking-[0.18em] md:gap-8">
@@ -20,6 +21,11 @@ export function GyNav() {
         <Link href="/claim" className="text-[#b9c2d4] hover:text-moon">
           for bloggers
         </Link>
+        {isAdmin && (
+          <Link href="/admin" className="hidden text-[#b9c2d4] hover:text-moon sm:inline">
+            review
+          </Link>
+        )}
         {user && profile ? (
           <Link
             href="/account"

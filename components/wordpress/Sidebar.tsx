@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useBounties, useMyProfile } from "@/lib/hooks";
+import { useBounties, useMyProfile, useIsAdmin } from "@/lib/hooks";
 import { MatchSlider } from "@/components/graveyard/MatchSlider";
 import { dollars } from "@/lib/format";
 
@@ -10,6 +10,7 @@ export function WpSidebar() {
   const { bloggers, pledgesByBlogger, poolCents, poolUsedCents, liveThresholdCents } =
     useBounties();
   const { user, profile } = useMyProfile();
+  const isAdmin = useIsAdmin();
 
   // Which blogger's math the slider shows. Defaults to the top blog in the
   // Blogroll (bloggers[0], same ordering the Blogroll renders); the dropdown
@@ -131,10 +132,13 @@ export function WpSidebar() {
             <Link href="/claim">Claim your blogger profile</Link>
           </li>
           <li>
-            <a href="mailto:austin@manifund.org?subject=Nominate a dormant blog">
-              Nominate a dormant blog
-            </a>
+            <Link href="/nominate">Nominate a blog</Link>
           </li>
+          {isAdmin && (
+            <li>
+              <Link href="/admin">Review nominations</Link>
+            </li>
+          )}
         </ul>
       </section>
     </aside>
