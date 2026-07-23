@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { db } from "@/lib/db";
 import { useGoogleAuthUrl } from "@/lib/hooks";
@@ -19,12 +19,22 @@ function SignInInner() {
   const [stage, setStage] = useState<"email" | "code">("email");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // ?oauth=google marks the return leg of a fresh OAuth sign-in
+  // (set on the redirectURL by useGoogleAuthUrl).
+  const oauthMethod = searchParams.get("oauth");
+  const trackedOauth = useRef(false);
 
   // Covers the return leg of the OAuth redirect (Instant signs the user in
   // automatically) and anyone visiting /signin while already signed in.
   useEffect(() => {
-    if (user) router.replace(next);
-  }, [user, next, router]);
+    if (!user) return;
+    if (oauthMethod === "google" && !trackedOauth.current) {
+      trackedOauth.current = true;
+      posthog.identify(user.id, {});
+      posthog.capture("signed_in", { method: "google", skin: "graveyard" });
+    }
+    router.replace(next);
+  }, [user, next, router, oauthMethod]);
 
   async function sendCode() {
     setBusy(true);
