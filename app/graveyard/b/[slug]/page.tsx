@@ -8,7 +8,7 @@ import { useBounties, useMyProfile } from "@/lib/hooks";
 import { eyebrowFor } from "@/components/graveyard/Headstone";
 import { PledgeBox } from "@/components/graveyard/PledgeBox";
 import { daysSilent } from "@/lib/qf";
-import { dollars, daysAgoWords } from "@/lib/format";
+import { bloggerIcon, dollars, daysAgoWords } from "@/lib/format";
 
 export default function GraveyardBloggerPage({
   params,
@@ -75,7 +75,19 @@ export default function GraveyardBloggerPage({
     <main className="px-6 pb-24 md:px-12">
       {/* Headstone header */}
       <section className="mx-auto max-w-3xl pt-8 text-center">
-        <div className="gy-stone mx-auto max-w-xl px-8 pb-8 pt-16">
+        <div className="gy-stone mx-auto max-w-xl px-8 pb-8 pt-12">
+          <div className="gy-cameo mx-auto mb-4 inline-block">
+            <img
+              src={bloggerIcon(blogger.blogUrl, blogger.photoUrl, 128)}
+              alt=""
+              width={72}
+              height={72}
+              onError={(e) => {
+                e.currentTarget.parentElement!.style.display = "none";
+              }}
+              className="h-[72px] w-[72px]"
+            />
+          </div>
           <p className="gy-label text-mist/80">{eyebrowFor(blogger.slug)}</p>
           <h1 className="gy-caps mt-3 text-4xl text-moon md:text-5xl">
             {blogger.name}
