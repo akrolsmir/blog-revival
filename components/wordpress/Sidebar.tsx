@@ -16,12 +16,11 @@ export function WpSidebar() {
   } = useBounties();
   const { user, profile } = useMyProfile();
 
-  // Which blogger's math the slider shows. Defaults to the first still-funding
-  // bounty; the dropdown lets you switch. Falls back if the id disappears.
+  // Which blogger's math the slider shows. Defaults to the top blog in the
+  // Blogroll (bloggers[0], same ordering the Blogroll renders); the dropdown
+  // lets you switch. Falls back to the default if the id disappears.
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const defaultTarget =
-    bloggers.find((b) => !b.math.isLive && b.status === "funding") ??
-    bloggers[0];
+  const defaultTarget = bloggers[0];
   const sliderTarget =
     bloggers.find((b) => b.id === selectedId) ?? defaultTarget;
 

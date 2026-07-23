@@ -70,11 +70,10 @@ export function MatchSlider({
           </dd>
         </div>
         <div className="flex justify-between gap-4">
-          <dt className={dim}>effect</dt>
-          <dd className={`${accent} text-right`}>
-            <span className="whitespace-nowrap">
-              {multiple.toFixed(1)}× your dollars
-            </span>
+          <dt className={`${dim} flex-none`}>effect</dt>
+          <dd className={`${accent} min-w-0 text-right`}>
+            <span className="whitespace-nowrap">{multiple.toFixed(1)}×</span>{" "}
+            your dollars
           </dd>
         </div>
       </dl>
