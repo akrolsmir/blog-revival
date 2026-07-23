@@ -8,6 +8,8 @@ import { dollars } from "@/lib/format";
 
 // Fixed scene slots from prototypes/design-graveyard.html, ordered by visual
 // prominence so the top-sorted bounty lands on the biggest stone.
+// r = outer arch radius, ri = inner (carved frame) radius, kept ~11px tighter
+// so the engraved frame sits concentric inside the stone edge.
 const SLOTS = [
   {
     x: 17.5,
@@ -18,6 +20,7 @@ const SLOTS = [
     c1: "#3d4a66",
     c2: "#2a3550",
     r: "105px 105px 5px 5px",
+    ri: "92px 92px 3px 3px",
     name: 26,
     epi: 12,
     gap: 10,
@@ -31,6 +34,7 @@ const SLOTS = [
     c1: "#3a4763",
     c2: "#28334d",
     r: "50% 50% 5px 5px / 42% 42% 5px 5px",
+    ri: "48% 48% 3px 3px / 40% 40% 3px 3px",
     name: 27,
     epi: 12,
     gap: 10,
@@ -44,6 +48,7 @@ const SLOTS = [
     c1: "#33405a",
     c2: "#242f47",
     r: "80px 80px 4px 4px",
+    ri: "68px 68px 2px 2px",
     name: 18,
     epi: 10,
     gap: 7,
@@ -57,6 +62,7 @@ const SLOTS = [
     c1: "#2c374e",
     c2: "#202a3f",
     r: "78px 78px 4px 4px",
+    ri: "66px 66px 2px 2px",
     name: 17,
     epi: 10,
     gap: 6,
@@ -70,6 +76,7 @@ const SLOTS = [
     c1: "#2a3449",
     c2: "#1e2739",
     r: "59px 59px 4px 4px",
+    ri: "48px 48px 2px 2px",
     name: 14,
     epi: 9,
     gap: 4,
@@ -83,6 +90,7 @@ const SLOTS = [
     c1: "#2a3449",
     c2: "#1e2739",
     r: "56px 56px 4px 4px",
+    ri: "46px 46px 2px 2px",
     name: 14,
     epi: 9,
     gap: 4,
@@ -253,40 +261,57 @@ export function GraveyardHero({
               {pct}% funded · {dollars(b.math.totalCents, { round: true })} of{" "}
               {dollars(liveThresholdCents, { round: true })}
             </div>
-            <Link href={`/b/${b.slug}`} className="block">
+            {/* base plinth the stone rests on */}
+            <div
+              className="absolute -bottom-2.5 left-[-13%] right-[-13%] h-[18px] rounded-[3px]"
+              style={{
+                background: "linear-gradient(180deg,#2b3448 0%,#171e30 100%)",
+                boxShadow:
+                  "inset 0 1px 0 rgba(255,255,255,.06), inset 0 -2px 3px rgba(4,7,14,.5), 0 8px 14px rgba(4,7,14,.55)",
+              }}
+            />
+            <Link href={`/b/${b.slug}`} className="relative block">
               <div
-                className="flex flex-col items-center justify-center px-3.5 text-center"
+                className="relative flex flex-col items-center justify-center px-3.5 text-center"
                 style={{
                   height: s.h,
                   gap: s.gap,
                   background: `linear-gradient(175deg, ${s.c1} 0%, ${s.c2} 100%)`,
                   borderRadius: s.r,
                   boxShadow:
-                    "inset 0 2px 0 rgba(255,255,255,.05), inset 0 -22px 34px rgba(5,9,18,.5), 0 6px 0 rgba(4,7,14,.6)",
+                    "inset 0 3px 0 rgba(255,255,255,.08), inset 0 -26px 40px rgba(5,9,18,.55), 0 7px 0 rgba(4,7,14,.6), 0 22px 34px -14px rgba(0,0,0,.6)",
                 }}
               >
+                {/* carved engraved frame */}
                 <div
-                  className="gy-caps tracking-[0.3em] text-[#8e9ab2]"
+                  aria-hidden
+                  className="pointer-events-none absolute inset-[11px]"
+                  style={{
+                    borderRadius: s.ri,
+                    border: "1px solid rgba(8,12,22,.5)",
+                    boxShadow: "0 1px 0 rgba(255,255,255,.05), inset 0 1px 2px rgba(4,8,16,.4)",
+                  }}
+                />
+                <div
+                  className="gy-caps relative tracking-[0.3em] text-[#8e9ab2]"
                   style={{ fontSize: s.epi, ...carve }}
                 >
                   {eyebrowFor(b.slug)}
                 </div>
                 <div
-                  className="gy-caps font-semibold leading-[1.12] tracking-[0.1em] text-[#d3dae8]"
+                  className="gy-caps relative font-semibold leading-[1.12] tracking-[0.1em] text-[#d3dae8]"
                   style={{ fontSize: s.name, ...carve }}
                 >
                   {b.name}
                 </div>
                 <div
-                  className="gy-caps tracking-[0.24em] text-[#7e8aa3]"
+                  className="gy-caps relative tracking-[0.24em] text-[#7e8aa3]"
                   style={{ fontSize: s.epi, ...carve }}
                 >
                   silent {daysSilent(b.lastPostAt).toLocaleString()} days
                 </div>
               </div>
             </Link>
-            {/* grave mound */}
-            <div className="absolute -bottom-3 left-[-12%] right-[-12%] h-[22px] rounded-[50%] bg-abyss" />
             <Candle pct={pct} className="absolute -bottom-2 left-1/2 z-[6] -translate-x-1/2" />
           </div>
         );
@@ -298,29 +323,49 @@ export function GraveyardHero({
           const pct = Math.round((b.math.totalCents / liveThresholdCents) * 100);
           return (
             <div key={b.id} className="group relative">
+              <div
+                className="absolute -bottom-2 left-[-10%] right-[-10%] h-[14px] rounded-[3px]"
+                style={{
+                  background: "linear-gradient(180deg,#2b3448 0%,#171e30 100%)",
+                  boxShadow: "inset 0 1px 0 rgba(255,255,255,.06), 0 6px 10px rgba(4,7,14,.55)",
+                }}
+              />
               <Link
                 href={`/b/${b.slug}`}
-                className="flex min-h-36 flex-col items-center justify-center gap-1.5 rounded-[70px_70px_4px_4px] px-3 py-6 text-center"
+                className="relative flex min-h-36 flex-col items-center justify-center gap-1.5 rounded-[70px_70px_4px_4px] px-3 py-6 text-center"
                 style={{
                   background: "linear-gradient(175deg,#33405a 0%,#242f47 100%)",
                   boxShadow:
-                    "inset 0 2px 0 rgba(255,255,255,.05), inset 0 -22px 34px rgba(5,9,18,.5), 0 6px 0 rgba(4,7,14,.6)",
+                    "inset 0 3px 0 rgba(255,255,255,.08), inset 0 -22px 34px rgba(5,9,18,.55), 0 6px 0 rgba(4,7,14,.6)",
                 }}
               >
-                <div className="gy-caps text-[9px] tracking-[0.3em] text-[#8e9ab2]" style={carve}>
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-[9px] rounded-[60px_60px_2px_2px]"
+                  style={{
+                    border: "1px solid rgba(8,12,22,.5)",
+                    boxShadow: "0 1px 0 rgba(255,255,255,.05)",
+                  }}
+                />
+                <div
+                  className="gy-caps relative text-[9px] tracking-[0.3em] text-[#8e9ab2]"
+                  style={carve}
+                >
                   {eyebrowFor(b.slug)}
                 </div>
                 <div
-                  className="gy-caps text-[15px] font-semibold leading-[1.12] tracking-[0.08em] text-[#d3dae8]"
+                  className="gy-caps relative text-[15px] font-semibold leading-[1.12] tracking-[0.08em] text-[#d3dae8]"
                   style={carve}
                 >
                   {b.name}
                 </div>
-                <div className="gy-caps text-[9px] tracking-[0.24em] text-[#7e8aa3]" style={carve}>
+                <div
+                  className="gy-caps relative text-[9px] tracking-[0.24em] text-[#7e8aa3]"
+                  style={carve}
+                >
                   silent {daysSilent(b.lastPostAt).toLocaleString()} days
                 </div>
               </Link>
-              <div className="absolute -bottom-3 left-[-8%] right-[-8%] h-[18px] rounded-[50%] bg-abyss" />
               <Candle pct={pct} className="absolute -bottom-2 left-1/2 z-[6] -translate-x-1/2" />
             </div>
           );
