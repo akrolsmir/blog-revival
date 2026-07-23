@@ -132,7 +132,13 @@ export default function WordpressHome() {
               </p>
               {top.length > 0 && (
                 <p className="wp-meta mt-0.5">
-                  top patrons: {top.map((t) => t.displayName).join(", ")}
+                  Funded by{" "}
+                  {top.map((t, i) => (
+                    <span key={t.id}>
+                      {i > 0 && ", "}
+                      <Link href={`/p/${t.handle}`}>{t.displayName}</Link>
+                    </span>
+                  ))}
                 </p>
               )}
               <p className="mt-2">

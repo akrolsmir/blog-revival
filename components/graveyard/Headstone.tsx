@@ -29,13 +29,19 @@ export function Headstone({ blogger, index = 0 }: { blogger: BloggerRow; index?:
   const top = topPatrons(blogger);
 
   return (
-    <Link
-      href={`/b/${blogger.slug}`}
-      className={`gy-stone gy-rise group flex flex-col px-6 pb-6 pt-10 text-center transition-transform duration-300 hover:-translate-y-1.5 ${
+    <div
+      className={`gy-stone gy-rise group relative flex flex-col px-6 pb-6 pt-10 text-center transition-transform duration-300 hover:-translate-y-1.5 ${
         isLive ? "gy-stone-live" : ""
       }`}
       style={{ animationDelay: `${Math.min(index, 8) * 70}ms` }}
     >
+      {/* stretched overlay: the whole card links to the blog, leaving the
+          inner patron names free to be their own links */}
+      <Link
+        href={`/b/${blogger.slug}`}
+        aria-label={`${blogger.name} bounty`}
+        className="absolute inset-0 z-0"
+      />
       <div className="gy-cameo mb-3 flex-none self-center">
         <img
           src={bloggerIcon(blogger.blogUrl, blogger.photoUrl)}
@@ -61,8 +67,16 @@ export function Headstone({ blogger, index = 0 }: { blogger: BloggerRow; index?:
         {blogger.epitaph}
       </p>
       {top.length > 0 && (
-        <p className="mt-2 text-[11.5px] leading-snug text-[#7e8aa3] [text-wrap:pretty]">
-          patrons: {top.map((t) => t.displayName).join(", ")}
+        <p className="relative z-10 mt-2 text-[11.5px] leading-snug text-[#7e8aa3] [text-wrap:pretty]">
+          Funded by{" "}
+          {top.map((t, i) => (
+            <span key={t.id}>
+              {i > 0 && ", "}
+              <Link href={`/p/${t.handle}`} className="text-[#a9b3c8] hover:text-moon">
+                {t.displayName}
+              </Link>
+            </span>
+          ))}
         </p>
       )}
       {revived ? (
@@ -92,6 +106,6 @@ export function Headstone({ blogger, index = 0 }: { blogger: BloggerRow; index?:
           </div>
         </div>
       )}
-    </Link>
+    </div>
   );
 }

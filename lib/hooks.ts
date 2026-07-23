@@ -195,16 +195,12 @@ export type TopPatron = {
   totalCents: number;
 };
 
-/**
- * The patrons who've given a blogger the most, biggest first. Only counts
- * community "patron" pledges — Austin/Carol's personal bounties and redirects
- * aren't patrons in this sense and would otherwise top every blog.
- */
+/** The patrons who've given a blogger the most, biggest first. */
 export function topPatrons(blogger: BloggerRow, limit = 3): TopPatron[] {
   const byPatron = new Map<string, TopPatron>();
   for (const p of blogger.pledges ?? []) {
     const patron = p.patron;
-    if (!patron || p.source !== "patron") continue;
+    if (!patron) continue;
     const existing = byPatron.get(patron.id);
     if (existing) existing.totalCents += p.amountCents;
     else
