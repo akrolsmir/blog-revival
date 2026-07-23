@@ -17,21 +17,26 @@ const SLOTS = [
   { x: 70, y: 128, w: 112, h: 134, z: 2, c1: "#2a3449", c2: "#1e2739", r: "56px 56px 4px 4px", name: 14, epi: 9, gap: 4 },
 ];
 
+// Deterministic star field (hash-based so SSR and client render identically).
+const STARS = Array.from({ length: 44 }, (_, i) => {
+  const h = (i * 2654435761) >>> 0;
+  return {
+    left: (h % 1000) / 10, // 0–100%
+    top: ((h >>> 10) % 520) / 10, // 0–52% — keep stars in the sky
+    size: 1 + ((h >>> 20) % 3) / 2, // 1–2px
+    delay: (h >>> 8) % 5000,
+    duration: 3000 + ((h >>> 16) % 4000),
+  };
+});
+
 const TREE_PATH =
   "M96 420 L92 240 C60 210 20 190 10 120 L26 118 C40 168 70 190 92 205 L90 120 C70 96 58 60 60 18 L74 20 C76 60 86 92 98 112 L104 40 L116 42 L110 150 C130 130 152 120 186 122 L184 138 C150 140 128 156 112 180 L108 250 C130 235 158 230 178 236 L176 252 C150 248 126 258 110 278 L104 420 Z";
 const GRASS_PATH =
   "M4 24 C6 14 4 8 0 2 C8 6 10 14 10 20 C13 10 12 6 16 0 C18 8 16 16 15 24 Z M30 24 C32 15 30 9 26 4 C33 8 35 14 34 24 Z M50 24 C52 14 50 8 46 2 C54 7 56 15 55 24 Z";
 
-function Candle({
-  lit,
-  pct,
-  className = "",
-}: {
-  lit: boolean;
-  pct: number;
-  className?: string;
-}) {
-  // Wax height, glow radius and glow strength all scale with funding.
+// Unlit until its headstone is hovered; wax height, glow radius and glow
+// strength all scale with funding.
+function Candle({ pct, className = "" }: { pct: number; className?: string }) {
   const capped = Math.min(pct, 130);
   const waxH = Math.round(12 + capped * 0.2);
   const glowSize = Math.round(70 + capped * 1.1);
@@ -39,23 +44,16 @@ function Candle({
   return (
     <div className={`flex flex-col items-center ${className}`}>
       <div
-        className={`pointer-events-none absolute bottom-0 rounded-full transition-opacity duration-500 ${
-          lit ? "" : "opacity-0 group-hover:[opacity:var(--glow)]"
-        }`}
+        className="pointer-events-none absolute bottom-0 rounded-full opacity-0 transition-opacity duration-500 group-hover:[opacity:var(--glow)]"
         style={{
           width: glowSize,
           height: glowSize,
           background:
             "radial-gradient(circle, rgba(255,196,94,.5) 0%, rgba(255,196,94,0) 68%)",
-          ...(lit ? { opacity: glowOp } : {}),
           ["--glow" as string]: glowOp,
         }}
       />
-      <div
-        className={`gy-scene-flame transition-opacity duration-500 ${
-          lit ? "" : "opacity-0 group-hover:opacity-100"
-        }`}
-      />
+      <div className="gy-scene-flame opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
       <div
         style={{
           width: 12,
@@ -84,53 +82,71 @@ export function GraveyardHero({
   return (
     <section
       id="top"
-      className="gy-sky relative overflow-hidden md:h-[calc(100vh-73px)] md:min-h-[720px] md:max-h-[960px]"
+      className="gy-sky relative md:h-[calc(100vh-73px)] md:min-h-[720px] md:max-h-[960px]"
     >
-      {/* moon + craters */}
-      <div className="gy-moon absolute right-[13%] top-[13%] h-[92px] w-[92px] rounded-full" />
-      <div className="absolute right-[16.5%] top-[20%] h-3.5 w-3.5 rounded-full bg-[#e2ded0] opacity-50" />
-      <div className="absolute right-[14.8%] top-[16%] h-[9px] w-[9px] rounded-full bg-[#e2ded0] opacity-40" />
+      {/* moon + craters — outside the clipped backdrop and above the clouds
+          (z-1) so nothing cuts a straight edge across the glow */}
+      <div className="gy-moon absolute right-[13%] top-[13%] z-[1] h-[92px] w-[92px] rounded-full" />
+      <div className="absolute right-[16.5%] top-[20%] z-[1] h-3.5 w-3.5 rounded-full bg-[#e2ded0] opacity-50" />
+      <div className="absolute right-[14.8%] top-[16%] z-[1] h-[9px] w-[9px] rounded-full bg-[#e2ded0] opacity-40" />
 
-      {/* drifting clouds */}
-      <div className="gy-cloud left-[-6%] top-[4%] h-[120px] w-[56%] bg-[#0a1322] opacity-90 [animation-duration:90s]" />
-      <div className="gy-cloud left-[30%] top-[26%] h-[76px] w-[44%] bg-[#0c1526] opacity-85 [animation-direction:alternate-reverse] [animation-duration:70s]" />
-      <div className="gy-cloud right-[-8%] top-[-3%] h-[90px] w-[38%] bg-[#0a1322] opacity-80 [animation-duration:110s]" />
+      {/* clipped backdrop: stars, clouds, hills, trees all overflow the
+          viewport and must be contained */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* twinkling stars */}
+        {STARS.map((s, i) => (
+          <div
+            key={i}
+            className="gy-star"
+            style={{
+              left: `${s.left}%`,
+              top: `${s.top}%`,
+              width: s.size,
+              height: s.size,
+              animationDelay: `${s.delay}ms`,
+              animationDuration: `${s.duration}ms`,
+            }}
+          />
+        ))}
 
-      {/* hills + ground */}
-      <div className="gy-hill bottom-[96px] left-[-12%] right-[-12%] h-[280px] bg-[#0f1728]" />
-      <div className="gy-hill bottom-[28px] left-[-18%] right-[-18%] h-[230px] bg-[#0b1322]" />
-      <div className="absolute bottom-0 left-0 right-0 h-[110px] bg-abyss" />
-      <div className="gy-hill bottom-[74px] left-[-10%] right-[-10%] h-[120px] bg-abyss" />
+        {/* drifting clouds */}
+        <div className="gy-cloud left-[-6%] top-[4%] h-[120px] w-[56%] bg-[#0a1322] opacity-90 [animation-duration:90s]" />
+        <div className="gy-cloud left-[30%] top-[26%] h-[76px] w-[44%] bg-[#0c1526] opacity-85 [animation-direction:alternate-reverse] [animation-duration:70s]" />
+        <div className="gy-cloud right-[-8%] top-[-3%] h-[90px] w-[38%] bg-[#0a1322] opacity-80 [animation-duration:110s]" />
 
-      {/* bare trees */}
-      <svg
-        viewBox="0 0 200 420"
-        className="absolute bottom-9 left-[-24px] z-[1] hidden h-[460px] w-[220px] md:block"
-        aria-hidden="true"
-      >
-        <path d={TREE_PATH} fill="#060b15" />
-      </svg>
-      <svg
-        viewBox="0 0 200 420"
-        className="absolute bottom-[60px] right-[-40px] z-[1] hidden h-[400px] w-[190px] -scale-x-100 md:block"
-        aria-hidden="true"
-      >
-        <path d={TREE_PATH} fill="#060b15" />
-      </svg>
+        {/* hills + ground */}
+        <div className="gy-hill bottom-[96px] left-[-12%] right-[-12%] h-[280px] bg-[#0f1728]" />
+        <div className="gy-hill bottom-[28px] left-[-18%] right-[-18%] h-[230px] bg-[#0b1322]" />
+        <div className="absolute bottom-0 left-0 right-0 h-[110px] bg-abyss" />
+        <div className="gy-hill bottom-[74px] left-[-10%] right-[-10%] h-[120px] bg-abyss" />
+
+        {/* bare trees */}
+        <svg
+          viewBox="0 0 200 420"
+          className="absolute bottom-9 left-[-24px] z-[1] hidden h-[460px] w-[220px] md:block"
+          aria-hidden="true"
+        >
+          <path d={TREE_PATH} fill="#060b15" />
+        </svg>
+        <svg
+          viewBox="0 0 200 420"
+          className="absolute bottom-[60px] right-[-40px] z-[1] hidden h-[400px] w-[190px] -scale-x-100 md:block"
+          aria-hidden="true"
+        >
+          <path d={TREE_PATH} fill="#060b15" />
+        </svg>
+      </div>
 
       {/* hero copy */}
       <div className="relative z-10 mx-auto max-w-[700px] px-6 pt-14 text-center md:pt-20">
-        <div className="gy-caps mb-4 text-[13px] tracking-[0.34em] text-[#93a0ba]">
+        {/* <div className="gy-caps mb-4 text-[13px] tracking-[0.34em] text-[#93a0ba]">
           a manifund project &nbsp;·&nbsp; quadratic funding
-        </div>
-        <h1 className="mb-5 text-[40px] leading-[1.06] text-[#f0f2f7] [text-wrap:balance] md:text-[50px]">
-          The best blogs on the internet aren&rsquo;t dead. They&rsquo;re
-          resting.
+        </div> */}
+        <h1 className="mb-5 text-[40px] leading-[1.06] text-[#f0f2f7] text-balance md:text-[50px]">
+          The Blog Revival Project
         </h1>
-        <p className="mx-auto mb-8 max-w-[520px] text-[19px] leading-[1.55] text-[#a9b3c8] [text-wrap:pretty]">
-          We pay bounties for beloved dormant bloggers to write one more post.
-          Leave a pledge for a blogger you miss — we&rsquo;ll light a candle at
-          their grave.
+        <p className="mx-auto mb-8 max-w-[520px] text-[19px] leading-[1.55] text-[#a9b3c8] text-pretty">
+          Many of our favorite blogs have gone silent. <br />We're offering each $1k+, as a bounty to post again.
         </p>
         <div className="flex justify-center gap-4">
           <Link
@@ -203,7 +219,6 @@ export function GraveyardHero({
             {/* grave mound */}
             <div className="absolute -bottom-3 left-[-12%] right-[-12%] h-[22px] rounded-[50%] bg-abyss" />
             <Candle
-              lit={lit}
               pct={pct}
               className="absolute -bottom-2 left-1/2 z-[6] -translate-x-1/2"
             />
@@ -217,7 +232,6 @@ export function GraveyardHero({
           const pct = Math.round(
             (b.math.totalCents / liveThresholdCents) * 100
           );
-          const lit = b.math.isLive;
           return (
             <div key={b.id} className="group relative">
               <Link
@@ -241,7 +255,6 @@ export function GraveyardHero({
               </Link>
               <div className="absolute -bottom-3 left-[-8%] right-[-8%] h-[18px] rounded-[50%] bg-abyss" />
               <Candle
-                lit={lit}
                 pct={pct}
                 className="absolute -bottom-2 left-1/2 z-[6] -translate-x-1/2"
               />

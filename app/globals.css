@@ -115,8 +115,9 @@
 }
 
 /* Hero scene: sky, drifting clouds, rolling hills */
+/* Starts at the page bg color so no seam shows at the section's top edge. */
 .gy-sky {
-  background: linear-gradient(180deg, #0a101e 0%, #0e1728 48%, #131e34 78%, #16223a 100%);
+  background: linear-gradient(180deg, var(--color-night) 0%, #0e1728 48%, #131e34 78%, #16223a 100%);
 }
 .gy-cloud {
   position: absolute;
@@ -130,6 +131,17 @@
 .gy-hill {
   position: absolute;
   border-radius: 100% 100% 0 0 / 100% 100% 0 0;
+}
+.gy-star {
+  position: absolute;
+  border-radius: 50%;
+  background: #dfe4ee;
+  opacity: 0.15;
+  animation: gy-twinkle 4s ease-in-out infinite;
+}
+@keyframes gy-twinkle {
+  0%, 100% { opacity: 0.1; }
+  50% { opacity: 0.65; }
 }
 /* Static flame variant for the hero scene (flex-positioned, not absolute) */
 .gy-scene-flame {
@@ -178,6 +190,7 @@
   .gy-flame { animation: none; }
   .gy-scene-flame { animation: none; }
   .gy-cloud { animation: none; }
+  .gy-star { animation: none; opacity: 0.35; }
 }
 
 /* ---------- WordPress 2005 skin ---------- */
