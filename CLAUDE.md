@@ -74,6 +74,16 @@ Money flow (all writes server-side; clients never create pledges):
 - Permissions (instant.perms.ts): pledges/settings are server-write-only;
   bloggers updatable only by their claimant; profile handle is unique.
 
+## Docs
+
+Medium-to-large changes (eg 10+ files and/or 1000+ lines) get a short writeup in `docs/`, named
+`YYYY-MM-DD-<topic>.md` (see docs/2026-07-23-theming.md): what & why, a
+concrete "What changed" list, how it works now, non-obvious gotchas. These
+are point-in-time records — where one disagrees with the code or this
+file, trust the code. Titles and summaries in plain literal prose; compact
+phrasing is fine in the detail sections. Link a doc from this file when it
+explains standing architecture.
+
 ## Gotchas
 
 - The InstantDB app id in .env is shared with other experiments — a schema
