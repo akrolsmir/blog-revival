@@ -16,11 +16,7 @@ export async function POST(req: NextRequest) {
   const stripe = stripeClient();
   let event: Stripe.Event;
   try {
-    event = await stripe.webhooks.constructEventAsync(
-      await req.text(),
-      signature,
-      secret
-    );
+    event = await stripe.webhooks.constructEventAsync(await req.text(), signature, secret);
   } catch {
     return NextResponse.json({ error: "Bad signature" }, { status: 400 });
   }

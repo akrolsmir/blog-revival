@@ -3,7 +3,7 @@
 import Link from "next/link";
 import type { BloggerRow } from "@/lib/hooks";
 import { daysSilent } from "@/lib/qf";
-import { dollars } from "@/lib/format";
+import { bloggerIcon, dollars } from "@/lib/format";
 
 const EYEBROWS = [
   "here lies",
@@ -29,12 +29,24 @@ export function Headstone({ blogger, index = 0 }: { blogger: BloggerRow; index?:
 
   return (
     <Link
-      href={`/graveyard/b/${blogger.slug}`}
+      href={`/b/${blogger.slug}`}
       className={`gy-stone gy-rise group flex flex-col px-6 pb-6 pt-10 text-center transition-transform duration-300 hover:-translate-y-1.5 ${
         isLive ? "gy-stone-live" : ""
       }`}
       style={{ animationDelay: `${Math.min(index, 8) * 70}ms` }}
     >
+      <div className="gy-cameo mb-3 flex-none self-center">
+        <img
+          src={bloggerIcon(blogger.blogUrl, blogger.photoUrl)}
+          alt=""
+          width={44}
+          height={44}
+          onError={(e) => {
+            e.currentTarget.parentElement!.style.display = "none";
+          }}
+          className="h-11 w-11"
+        />
+      </div>
       <div className="gy-caps text-[11px] tracking-[0.3em] text-[#8e9ab2]">
         {eyebrowFor(blogger.slug)}
       </div>

@@ -44,20 +44,14 @@ export function WpPledgeForm({
         skin: "wordpress",
       });
       setConfirmed(true);
-      router.replace(`/wordpress/b/${bloggerSlug}`, { scroll: false });
+      router.replace(`/b/${bloggerSlug}`, { scroll: false });
     });
   }, [searchParams, bloggerSlug, router]);
 
   const cents = Math.round(Number(amount) * 100);
   const valid = Number.isFinite(cents) && cents >= 100;
   const { addedMatchCents } = valid
-    ? marginalMatch(
-        pledgesByBlogger,
-        poolCents,
-        liveThresholdCents,
-        bloggerId,
-        cents
-      )
+    ? marginalMatch(pledgesByBlogger, poolCents, liveThresholdCents, bloggerId, cents)
     : { addedMatchCents: 0 };
 
   async function pledge() {
@@ -77,7 +71,6 @@ export function WpPledgeForm({
       bloggerSlug,
       profileId: profile.id,
       amountCents: cents,
-      skin: "wordpress",
     });
     if (res.url) window.location.href = res.url;
     else {
@@ -109,35 +102,18 @@ export function WpPledgeForm({
         {valid && (
           <span className="text-[12px]">
             → est. match{" "}
-            <strong className="text-wpgreen">
-              +{dollars(addedMatchCents, { round: true })}
-            </strong>
+            <strong className="text-wpgreen">+{dollars(addedMatchCents, { round: true })}</strong>
           </span>
         )}
       </div>
       {profile ? (
-        <button
-          type="button"
-          onClick={pledge}
-          disabled={busy || !valid}
-          className="mt-3"
-        >
-          {busy
-            ? "Opening checkout…"
-            : `Pledge ${valid ? dollars(cents, { round: true }) : ""} →`}
+        <button type="button" onClick={pledge} disabled={busy || !valid} className="mt-3">
+          {busy ? "Opening checkout…" : `Pledge ${valid ? dollars(cents, { round: true }) : ""} →`}
         </button>
       ) : (
         <p className="mt-3 text-[12.5px]">
-          <Link
-            href={
-              user
-                ? `/wordpress/account?next=/wordpress/b/${bloggerSlug}`
-                : `/wordpress/signin?next=/wordpress/b/${bloggerSlug}`
-            }
-          >
-            {user
-              ? "Finish your patron profile to pledge"
-              : "Sign in to pledge"}
+          <Link href={user ? `/account?next=/b/${bloggerSlug}` : `/signin?next=/b/${bloggerSlug}`}>
+            {user ? "Finish your patron profile to pledge" : "Sign in to pledge"}
           </Link>
         </p>
       )}
@@ -147,13 +123,10 @@ export function WpPledgeForm({
           blogger action on an already-revived bounty). Decide: build it, or
           rewrite this to match reality. */}
       <p className="mt-3 text-[12px] leading-relaxed wp-meta">
-        Your funds are locked for one month. If {bloggerName}{" "}
-        hasn&rsquo;t published a post by then, you&rsquo;re free to redirect your
-        pledge to anyone else on Manifund.
+        Your funds are locked for one month. If {bloggerName} hasn&rsquo;t published a post by then,
+        you&rsquo;re free to redirect your pledge to anyone else on Manifund.
       </p>
-      <p className="wp-meta mt-2">
-        tax-deductible · Manifund 501(c)(3) · card payments via Stripe
-      </p>
+      <p className="wp-meta mt-2">tax-deductible · Manifund 501(c)(3) · card payments via Stripe</p>
     </div>
   );
 }

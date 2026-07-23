@@ -31,22 +31,19 @@ export function MatchSlider({
     poolCents,
     liveThresholdCents,
     bloggerId,
-    amountCents
+    amountCents,
   );
   const multiple = (amountCents + addedMatchCents) / amountCents;
 
-  const line = dark
-    ? "border-moon/15 text-moon"
-    : "border-wpborder text-wpink";
+  const line = dark ? "border-moon/15 text-moon" : "border-wpborder text-wpink";
   const dim = dark ? "text-mist" : "text-wpmeta";
   const accent = dark ? "text-candle" : "text-wpgreen";
 
   return (
     <div className={`rounded-md border ${line} p-5`}>
       <p className={`text-sm ${dim}`}>
-        Pledge to <strong className={dark ? "text-moon" : ""}>{bloggerName}</strong>{" "}
-        ({patronCount} patron{patronCount === 1 ? "" : "s"} so far) and watch
-        quadratic funding multiply it:
+        Pledge to <strong className={dark ? "text-moon" : ""}>{bloggerName}</strong> ({patronCount}{" "}
+        patron{patronCount === 1 ? "" : "s"} so far) and watch quadratic funding multiply it:
       </p>
       <input
         type="range"
@@ -72,8 +69,7 @@ export function MatchSlider({
         <div className="flex justify-between gap-4">
           <dt className={`${dim} flex-none`}>effect</dt>
           <dd className={`${accent} min-w-0 text-right`}>
-            <span className="whitespace-nowrap">{multiple.toFixed(1)}×</span>{" "}
-            your dollars
+            <span className="whitespace-nowrap">{multiple.toFixed(1)}×</span> your dollars
           </dd>
         </div>
       </dl>

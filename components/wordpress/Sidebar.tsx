@@ -7,13 +7,8 @@ import { MatchSlider } from "@/components/graveyard/MatchSlider";
 import { dollars } from "@/lib/format";
 
 export function WpSidebar() {
-  const {
-    bloggers,
-    pledgesByBlogger,
-    poolCents,
-    poolUsedCents,
-    liveThresholdCents,
-  } = useBounties();
+  const { bloggers, pledgesByBlogger, poolCents, poolUsedCents, liveThresholdCents } =
+    useBounties();
   const { user, profile } = useMyProfile();
 
   // Which blogger's math the slider shows. Defaults to the top blog in the
@@ -21,8 +16,7 @@ export function WpSidebar() {
   // lets you switch. Falls back to the default if the id disappears.
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const defaultTarget = bloggers[0];
-  const sliderTarget =
-    bloggers.find((b) => b.id === selectedId) ?? defaultTarget;
+  const sliderTarget = bloggers.find((b) => b.id === selectedId) ?? defaultTarget;
 
   // How the matching pool is currently allocated across bloggers, plus the
   // unspent remainder. poolUsedCents is exactly the sum of every match.
@@ -38,9 +32,7 @@ export function WpSidebar() {
         <ul className="mt-2 space-y-1.5">
           {bloggers.slice(0, 8).map((b) => (
             <li key={b.id} className="flex items-baseline justify-between gap-2">
-              <Link href={`/wordpress/b/${b.slug}`}>
-                {b.blogName ?? b.name}
-              </Link>
+              <Link href={`/b/${b.slug}`}>{b.blogName ?? b.name}</Link>
               <span
                 className={`text-right text-[12px] font-bold ${
                   b.math.isLive ? "text-wpgreen" : "text-wpmeta"
@@ -51,9 +43,7 @@ export function WpSidebar() {
             </li>
           ))}
         </ul>
-        <p className="wp-meta mt-2 italic">
-          total pledged so far, incl. match
-        </p>
+        <p className="wp-meta mt-2 italic">total pledged so far, incl. match</p>
       </section>
 
       {sliderTarget && (
@@ -88,14 +78,9 @@ export function WpSidebar() {
           <table className="mt-1 w-full text-[12.5px]">
             <tbody>
               {allocated.map((b) => (
-                <tr
-                  key={b.id}
-                  className="border-b border-dotted border-wpborder"
-                >
+                <tr key={b.id} className="border-b border-dotted border-wpborder">
                   <td className="py-1 pr-2">
-                    <Link href={`/wordpress/b/${b.slug}`}>
-                      {b.blogName ?? b.name}
-                    </Link>
+                    <Link href={`/b/${b.slug}`}>{b.blogName ?? b.name}</Link>
                   </td>
                   <td className="py-1 text-right font-bold text-wpgreen">
                     {dollars(b.math.matchCents, { round: true })}
@@ -110,9 +95,7 @@ export function WpSidebar() {
               </tr>
               <tr>
                 <td className="py-1 pr-2 font-bold">Total pool</td>
-                <td className="py-1 text-right font-bold">
-                  {dollars(poolCents, { round: true })}
-                </td>
+                <td className="py-1 text-right font-bold">{dollars(poolCents, { round: true })}</td>
               </tr>
             </tbody>
           </table>
@@ -125,41 +108,32 @@ export function WpSidebar() {
           {user && profile ? (
             <>
               <li>
-                <Link href="/wordpress/account">
-                  Howdy, {profile.displayName}
-                </Link>
+                <Link href="/account">Howdy, {profile.displayName}</Link>
               </li>
               <li>
-                <Link href={`/wordpress/p/${profile.handle}`}>
-                  Your public profile
-                </Link>
+                <Link href={`/p/${profile.handle}`}>Your public profile</Link>
               </li>
             </>
           ) : (
             <>
               <li>
-                <Link href="/wordpress/signin">Sign in</Link>
+                <Link href="/signin">Sign in</Link>
               </li>
               <li>
-                <Link href={user ? "/wordpress/account" : "/wordpress/signin"}>
-                  Become a patron
-                </Link>
+                <Link href={user ? "/account" : "/signin"}>Become a patron</Link>
               </li>
             </>
           )}
           <li>
-            <Link href="/wordpress/patrons">Browse patrons</Link>
+            <Link href="/patrons">Browse patrons</Link>
           </li>
           <li>
-            <Link href="/wordpress/claim">Claim your blogger profile</Link>
+            <Link href="/claim">Claim your blogger profile</Link>
           </li>
           <li>
             <a href="mailto:austin@manifund.org?subject=Nominate a dormant blog">
               Nominate a dormant blog
             </a>
-          </li>
-          <li>
-            <Link href="/graveyard">The other demo (spooky)</Link>
           </li>
         </ul>
       </section>

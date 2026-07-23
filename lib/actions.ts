@@ -13,7 +13,6 @@ export async function startCheckout(args: {
   profileId: string;
   amountCents: number;
   note?: string;
-  skin: "graveyard" | "wordpress";
 }): Promise<{ url?: string; error?: string }> {
   const distinctId = posthog.get_distinct_id();
   const sessionId = posthog.get_session_id();
@@ -85,16 +84,13 @@ export async function donateBounty(bloggerId: string, charityName: string) {
   return res.json();
 }
 
-export async function startConnectOnboarding(
-  bloggerId: string,
-  skin: "graveyard" | "wordpress"
-) {
+export async function startConnectOnboarding(bloggerId: string) {
   const token = await refreshToken();
   if (!token) return { error: "Sign in first" };
   const res = await fetch("/api/connect/onboard", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ bloggerId, refreshToken: token, skin }),
+    body: JSON.stringify({ bloggerId, refreshToken: token }),
   });
   return res.json();
 }

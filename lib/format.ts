@@ -20,14 +20,10 @@ export function daysAgoWords(days: number): string {
  * their old blog via Google's faviconV2 service (the one Chrome uses). Blogs
  * without a favicon 404 — pair this with an onError that hides the <img>.
  */
-export function bloggerIcon(
-  blogUrl: string,
-  photoUrl?: string | null,
-  size = 64
-): string {
+export function bloggerIcon(blogUrl: string, photoUrl?: string | null, size = 64): string {
   if (photoUrl) return photoUrl;
   const target = /^https?:\/\//.test(blogUrl) ? blogUrl : `https://${blogUrl}`;
   return `https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=${encodeURIComponent(
-    target
+    target,
   )}&size=${size}`;
 }
