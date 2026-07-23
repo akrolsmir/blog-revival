@@ -1,6 +1,7 @@
 "use client";
 
 import { db } from "@/lib/db";
+import posthog from "posthog-js";
 
 // Client wrappers around the API routes. All money movement happens
 // server-side; these just kick off flows.
@@ -14,9 +15,14 @@ export async function startCheckout(args: {
   note?: string;
   skin: "graveyard" | "wordpress";
 }): Promise<{ url?: string; error?: string }> {
+  const distinctId = posthog.get_distinct_id();
+  const sessionId = posthog.get_session_id();
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  if (distinctId) headers["x-posthog-distinct-id"] = distinctId;
+  if (sessionId) headers["x-posthog-session-id"] = sessionId;
   const res = await fetch("/api/checkout", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers,
     body: JSON.stringify(args),
   });
   return res.json();

@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { db } from "@/lib/db";
 import { useGoogleAuthUrl } from "@/lib/hooks";
+import posthog from "posthog-js";
 
 function SignInInner() {
   const router = useRouter();
@@ -30,6 +31,7 @@ function SignInInner() {
     setError(null);
     try {
       await db.auth.sendMagicCode({ email });
+      posthog.capture("magic_code_requested", { method: "email", skin: "wordpress" });
       setStage("code");
     } catch (e: any) {
       setError(e?.body?.message ?? "Couldn't send the code. Check the email.");
@@ -41,7 +43,9 @@ function SignInInner() {
     setBusy(true);
     setError(null);
     try {
-      await db.auth.signInWithMagicCode({ email, code });
+      const result = await db.auth.signInWithMagicCode({ email, code });
+      posthog.identify(result.user.id, {});
+      posthog.capture("signed_in", { method: "magic_code", skin: "wordpress" });
       router.push(next);
     } catch (e: any) {
       setError(e?.body?.message ?? "That code didn't match. Try again.");

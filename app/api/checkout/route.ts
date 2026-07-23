@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stripeClient, stripeConfigured } from "@/lib/stripe";
+import { getPostHogClient } from "@/lib/posthog-server";
 
 // Creates a Stripe Checkout session for a pledge. The pledge row is written
 // server-side once payment completes (webhook or confirm fallback) — never
@@ -56,6 +57,20 @@ export async function POST(req: NextRequest) {
     success_url: `${back}?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: back,
   });
+
+  const phDistinctId = req.headers.get("x-posthog-distinct-id") ?? profileId;
+  const posthog = getPostHogClient();
+  posthog.capture({
+    distinctId: phDistinctId,
+    event: "checkout_session_created",
+    properties: {
+      blogger_id: bloggerId,
+      blogger_name: bloggerName,
+      amount_cents: amount,
+      skin,
+    },
+  });
+  await posthog.flush();
 
   return NextResponse.json({ url: session.url });
 }

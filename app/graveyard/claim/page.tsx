@@ -11,6 +11,7 @@ import {
   startConnectOnboarding,
   withdrawBounty,
 } from "@/lib/actions";
+import posthog from "posthog-js";
 import { dollars } from "@/lib/format";
 
 export default function GraveyardClaimPage() {
@@ -156,6 +157,11 @@ export default function GraveyardClaimPage() {
                         disabled={busy || !postUrl.trim()}
                         onClick={() =>
                           run(async () => {
+                            posthog.capture("revival_post_linked", {
+                              blogger_id: b.id,
+                              blogger_name: b.name,
+                              skin: "graveyard",
+                            });
                             await db.transact(
                               db.tx.bloggers[b.id].update({
                                 revivalPostUrl: postUrl.trim(),
@@ -200,10 +206,15 @@ export default function GraveyardClaimPage() {
                         type="button"
                         disabled={busy || !b.stripeAccountId}
                         onClick={() =>
-                          run(
-                            () => withdrawBounty(b.id),
-                            "Transfer sent. Check your Stripe dashboard."
-                          )
+                          run(async () => {
+                            posthog.capture("bounty_withdrawn", {
+                              blogger_id: b.id,
+                              blogger_name: b.name,
+                              amount_cents: b.math.totalCents,
+                              skin: "graveyard",
+                            });
+                            return withdrawBounty(b.id);
+                          }, "Transfer sent. Check your Stripe dashboard.")
                         }
                         className="gy-caps rounded-sm border border-candle/60 px-5 py-2.5 text-sm text-candle hover:bg-candle/10 disabled:opacity-40"
                       >
@@ -231,10 +242,15 @@ export default function GraveyardClaimPage() {
                         type="button"
                         disabled={busy || !redirectTarget}
                         onClick={() =>
-                          run(
-                            () => redirectBounty(b.id, redirectTarget),
-                            "Redirected. Two revivals for the price of one."
-                          )
+                          run(async () => {
+                            posthog.capture("bounty_redirected", {
+                              blogger_id: b.id,
+                              blogger_name: b.name,
+                              target_blogger_id: redirectTarget,
+                              skin: "graveyard",
+                            });
+                            return redirectBounty(b.id, redirectTarget);
+                          }, "Redirected. Two revivals for the price of one.")
                         }
                         className="gy-caps rounded-sm border border-moon/30 px-4 py-2 text-sm text-moon/85 hover:border-moon/60 disabled:opacity-40"
                       >
@@ -252,10 +268,15 @@ export default function GraveyardClaimPage() {
                         type="button"
                         disabled={busy || !charity.trim()}
                         onClick={() =>
-                          run(
-                            () => donateBounty(b.id, charity.trim()),
-                            "Donated. Manifund will regrant it."
-                          )
+                          run(async () => {
+                            posthog.capture("bounty_donated", {
+                              blogger_id: b.id,
+                              blogger_name: b.name,
+                              charity_name: charity.trim(),
+                              skin: "graveyard",
+                            });
+                            return donateBounty(b.id, charity.trim());
+                          }, "Donated. Manifund will regrant it.")
                         }
                         className="gy-caps rounded-sm border border-moon/30 px-4 py-2 text-sm text-moon/85 hover:border-moon/60 disabled:opacity-40"
                       >
@@ -291,10 +312,13 @@ export default function GraveyardClaimPage() {
               type="button"
               disabled={busy || !selected}
               onClick={() =>
-                run(
-                  () => claimBlogger(selected),
-                  "Claimed. We'll verify and email you shortly."
-                )
+                run(async () => {
+                  posthog.capture("blogger_claimed", {
+                    blogger_id: selected,
+                    skin: "graveyard",
+                  });
+                  return claimBlogger(selected);
+                }, "Claimed. We'll verify and email you shortly.")
               }
               className="gy-caps rounded-sm bg-candle px-6 py-2.5 font-medium text-night hover:bg-candle/90 disabled:opacity-40"
             >
