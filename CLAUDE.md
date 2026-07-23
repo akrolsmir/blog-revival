@@ -9,6 +9,7 @@ they're JS-bundled single files).
 
 - `bun run dev` — dev server on :3000 (use bun, not npm; bun.lock is canonical)
 - `bunx tsc --noEmit` — type check (no test suite exists)
+- `bun run format` — oxfmt autoformatter (`format:check` to verify; prototypes/ excluded)
 - `bunx instant-cli push` — push instant.schema.ts / instant.perms.ts changes
 - `bun run scripts/reset.ts && bun run scripts/seed.ts` — wipe + reseed demo data
 - Secrets live in `.env` (gitignored); template in `.env.example`
