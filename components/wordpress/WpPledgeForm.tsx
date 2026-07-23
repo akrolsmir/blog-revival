@@ -105,14 +105,6 @@ export function WpPledgeForm({
         </p>
       )}
       {error && <p className="mt-2 text-[12.5px] text-red-700">{error}</p>}
-      {/* TODO: copy below describes a 1-month lock + patron reclaim that the
-          backend does NOT implement yet (no time logic; redirect/donate is a
-          blogger action on an already-revived bounty). Decide: build it, or
-          rewrite this to match reality. */}
-      <p className="mt-3 text-[12px] leading-relaxed wp-meta">
-        Your funds are locked for one month. If {bloggerName} hasn&rsquo;t published a post by then,
-        you&rsquo;re free to redirect your pledge to anyone else on Manifund.
-      </p>
       <p className="wp-meta mt-2">tax-deductible · Manifund 501(c)(3) · card payments via Stripe</p>
     </div>
   );
