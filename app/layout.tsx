@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Cormorant_SC, Newsreader } from "next/font/google";
+import { ThemeProvider } from "@/lib/theme";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -22,7 +23,7 @@ const newsreader = Newsreader({
 });
 
 export const metadata: Metadata = {
-  title: "Blog Revival Project",
+  title: "revive.blog — The Blog Revival Project",
   description:
     "Bounties for beloved dormant bloggers to write one more post. Quadratic funding by Manifund.",
 };
@@ -36,8 +37,11 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${cormorant.variable} ${cormorantSC.variable} ${newsreader.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <ThemeProvider>{children}</ThemeProvider>
+      </body>
     </html>
   );
 }

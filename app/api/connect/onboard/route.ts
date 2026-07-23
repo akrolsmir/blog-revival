@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
       { status: 503 }
     );
   }
-  const { bloggerId, refreshToken, skin } = await req.json();
+  const { bloggerId, refreshToken } = await req.json();
   if (!bloggerId || !refreshToken) {
     return NextResponse.json({ error: "Missing fields" }, { status: 400 });
   }
@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
   }
 
   const origin = req.headers.get("origin") ?? "http://localhost:3000";
-  const back = `${origin}/${skin === "wordpress" ? "wordpress" : "graveyard"}/claim`;
+  const back = `${origin}/claim`;
   const link = await stripe.accountLinks.create({
     account: accountId,
     refresh_url: back,

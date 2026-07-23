@@ -182,7 +182,7 @@ export function GraveyardHero({
               {pct}% funded · {dollars(b.math.totalCents, { round: true })} of{" "}
               {dollars(liveThresholdCents, { round: true })}
             </div>
-            <Link href={`/graveyard/b/${b.slug}`} className="block">
+            <Link href={`/b/${b.slug}`} className="block">
               <div
                 className="flex flex-col items-center justify-center px-3.5 text-center"
                 style={{
@@ -233,7 +233,7 @@ export function GraveyardHero({
           return (
             <div key={b.id} className="group relative">
               <Link
-                href={`/graveyard/b/${b.slug}`}
+                href={`/b/${b.slug}`}
                 className="flex min-h-36 flex-col items-center justify-center gap-1.5 rounded-[70px_70px_4px_4px] px-3 py-6 text-center"
                 style={{
                   background: "linear-gradient(175deg,#33405a 0%,#242f47 100%)",

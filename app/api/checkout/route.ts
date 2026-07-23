@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json();
-  const { bloggerId, bloggerName, bloggerSlug, profileId, amountCents, note, skin } =
+  const { bloggerId, bloggerName, bloggerSlug, profileId, amountCents, note } =
     body ?? {};
 
   if (!bloggerId || !profileId || !amountCents) {
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
   }
 
   const origin = req.headers.get("origin") ?? "http://localhost:3000";
-  const back = `${origin}/${skin === "wordpress" ? "wordpress" : "graveyard"}/b/${bloggerSlug}`;
+  const back = `${origin}/b/${bloggerSlug}`;
 
   const stripe = stripeClient();
   const session = await stripe.checkout.sessions.create({

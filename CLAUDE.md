@@ -15,18 +15,33 @@ they're JS-bundled single files).
 
 ## Architecture
 
-One shared backend, two parallel demo frontends with identical features:
+One shared backend, one route tree, two skins keyed to dark/light mode
+(dark → graveyard, light → WordPress). Full rationale and gotchas:
+docs/2026-07-23-theming.md. `lib/theme.tsx` wraps next-themes:
+system preference by default, explicit choice persisted; it sets
+`skin-gy`/`skin-wp` on `<html>` pre-paint and exposes `useSkin()`
+(undefined until mounted — skinned trees must not render during hydration).
 
-- `app/graveyard/**` + `components/graveyard/**` — dark cemetery skin
-  (Cormorant Garamond headings, Cormorant SC small-caps, Newsreader body;
-  UI gold `#e6b85c`, flame `#ffc45e`, on navy `#0b1120`)
-- `app/wordpress/**` + `components/wordpress/**` — 2005 WordPress pastiche
-  (Georgia headings, Lucida body, Kubrick blue header, sidebar widgets)
-- Page routes per skin: `/` home, `b/[slug]` blogger, `p/[handle]` patron,
-  `signin`, `account`, `claim`. Keep the two skins feature-equivalent when
-  adding anything; shared logic goes in `lib/`, only markup differs.
+- `components/graveyard/**` — dark cemetery skin (Cormorant Garamond
+  headings, Cormorant SC small-caps, Newsreader body; UI gold `#e6b85c`,
+  flame `#ffc45e`, on navy `#0b1120`)
+- `components/wordpress/**` — 2005 WordPress pastiche (Georgia headings,
+  Lucida body, Kubrick blue header, sidebar widgets)
+- Routes in `app/(site)/`: `/` home, `b/[slug]` blogger, `p/[handle]`
+  patron, `patrons`, `signin`, `account`, `claim`. Each route (and the
+  (site) layout, which picks the Shell) is a thin `useSkin()` switch over
+  the per-skin page components in `components/<skin>/pages/*`; chrome lives
+  in `components/<skin>/Shell.tsx`. Keep the two skins feature-equivalent
+  when adding anything; shared logic goes in `lib/`, only markup differs.
+  The theme switcher is a fixed corner button (`components/ThemeFab.tsx`)
+  rendered by the (site) layout outside both shells.
+- `/graveyard/*` and `/wordpress/*` are legacy URLs: they force the matching
+  theme and redirect to the unified path. `/choose` is the old side-by-side
+  demo picker.
 - Skin CSS is scoped by `.gy` / `.wp` wrapper classes defined in
-  app/globals.css (Tailwind v4 `@theme` tokens + custom classes).
+  app/globals.css (Tailwind v4 `@theme` tokens + custom classes). The
+  html-level `skin-*` classes set only the background — never put `.wp` on
+  `<html>`: its 13px font-size would rescale every rem unit.
 
 Data: InstantDB (client SDK in `lib/db.ts`, admin SDK in `lib/admin.ts` —
 never import admin in client code). All pages are client components using

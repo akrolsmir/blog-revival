@@ -38,7 +38,7 @@ export function WpSidebar() {
         <ul className="mt-2 space-y-1.5">
           {bloggers.slice(0, 8).map((b) => (
             <li key={b.id} className="flex items-baseline justify-between gap-2">
-              <Link href={`/wordpress/b/${b.slug}`}>
+              <Link href={`/b/${b.slug}`}>
                 {b.blogName ?? b.name}
               </Link>
               <span
@@ -93,7 +93,7 @@ export function WpSidebar() {
                   className="border-b border-dotted border-wpborder"
                 >
                   <td className="py-1 pr-2">
-                    <Link href={`/wordpress/b/${b.slug}`}>
+                    <Link href={`/b/${b.slug}`}>
                       {b.blogName ?? b.name}
                     </Link>
                   </td>
@@ -125,12 +125,12 @@ export function WpSidebar() {
           {user && profile ? (
             <>
               <li>
-                <Link href="/wordpress/account">
+                <Link href="/account">
                   Howdy, {profile.displayName}
                 </Link>
               </li>
               <li>
-                <Link href={`/wordpress/p/${profile.handle}`}>
+                <Link href={`/p/${profile.handle}`}>
                   Your public profile
                 </Link>
               </li>
@@ -138,28 +138,25 @@ export function WpSidebar() {
           ) : (
             <>
               <li>
-                <Link href="/wordpress/signin">Sign in</Link>
+                <Link href="/signin">Sign in</Link>
               </li>
               <li>
-                <Link href={user ? "/wordpress/account" : "/wordpress/signin"}>
+                <Link href={user ? "/account" : "/signin"}>
                   Become a patron
                 </Link>
               </li>
             </>
           )}
           <li>
-            <Link href="/wordpress/patrons">Browse patrons</Link>
+            <Link href="/patrons">Browse patrons</Link>
           </li>
           <li>
-            <Link href="/wordpress/claim">Claim your blogger profile</Link>
+            <Link href="/claim">Claim your blogger profile</Link>
           </li>
           <li>
             <a href="mailto:austin@manifund.org?subject=Nominate a dormant blog">
               Nominate a dormant blog
             </a>
-          </li>
-          <li>
-            <Link href="/graveyard">The other demo (spooky)</Link>
           </li>
         </ul>
       </section>

@@ -29,7 +29,7 @@ export function Headstone({ blogger, index = 0 }: { blogger: BloggerRow; index?:
 
   return (
     <Link
-      href={`/graveyard/b/${blogger.slug}`}
+      href={`/b/${blogger.slug}`}
       className={`gy-stone gy-rise group flex flex-col px-6 pb-6 pt-10 text-center transition-transform duration-300 hover:-translate-y-1.5 ${
         isLive ? "gy-stone-live" : ""
       }`}

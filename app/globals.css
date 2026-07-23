@@ -28,6 +28,17 @@
   --font-body: var(--font-newsreader), "Newsreader", Georgia, serif;
 }
 
+/* Theme classes set on <html> by next-themes before first paint, so the
+   viewport shows the right skin's background while the client tree mounts.
+   Kept separate from .gy/.wp: those set typography (incl. a 13px base in .wp)
+   that must not land on the root element and change rem sizing. */
+html.skin-gy {
+  background: var(--color-night);
+}
+html.skin-wp {
+  background: var(--color-wpbg);
+}
+
 /* ---------- Graveyard skin ---------- */
 
 .gy {

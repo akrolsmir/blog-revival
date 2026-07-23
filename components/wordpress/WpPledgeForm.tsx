@@ -38,7 +38,7 @@ export function WpPledgeForm({
     confirmedRef.current = true;
     confirmCheckoutSession(sessionId).then(() => {
       setConfirmed(true);
-      router.replace(`/wordpress/b/${bloggerSlug}`, { scroll: false });
+      router.replace(`/b/${bloggerSlug}`, { scroll: false });
     });
   }, [searchParams, bloggerSlug, router]);
 
@@ -64,7 +64,6 @@ export function WpPledgeForm({
       bloggerSlug,
       profileId: profile.id,
       amountCents: cents,
-      skin: "wordpress",
     });
     if (res.url) window.location.href = res.url;
     else {
@@ -118,8 +117,8 @@ export function WpPledgeForm({
           <Link
             href={
               user
-                ? `/wordpress/account?next=/wordpress/b/${bloggerSlug}`
-                : `/wordpress/signin?next=/wordpress/b/${bloggerSlug}`
+                ? `/account?next=/b/${bloggerSlug}`
+                : `/signin?next=/b/${bloggerSlug}`
             }
           >
             {user

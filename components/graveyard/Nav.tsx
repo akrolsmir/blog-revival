@@ -8,28 +8,28 @@ export function GyNav() {
   return (
     <header className="relative z-20 flex items-center justify-end gap-4 px-6 py-6 md:px-12">
       <nav className="gy-caps flex items-center gap-5 text-sm tracking-[0.18em] md:gap-8">
-        <Link href="/graveyard#how" className="hidden text-[#b9c2d4] hover:text-moon sm:inline">
+        <Link href="/#how" className="hidden text-[#b9c2d4] hover:text-moon sm:inline">
           how it works
         </Link>
-        <Link href="/graveyard#blogroll" className="hidden text-[#b9c2d4] hover:text-moon sm:inline">
+        <Link href="/#blogroll" className="hidden text-[#b9c2d4] hover:text-moon sm:inline">
           the blogroll
         </Link>
-        <Link href="/graveyard/patrons" className="hidden text-[#b9c2d4] hover:text-moon sm:inline">
+        <Link href="/patrons" className="hidden text-[#b9c2d4] hover:text-moon sm:inline">
           patrons
         </Link>
-        <Link href="/graveyard/claim" className="text-[#b9c2d4] hover:text-moon">
+        <Link href="/claim" className="text-[#b9c2d4] hover:text-moon">
           for bloggers
         </Link>
         {user && profile ? (
           <Link
-            href="/graveyard/account"
+            href="/account"
             className="rounded-[3px] border border-gold/50 px-4 py-2 text-gold hover:bg-gold/10"
           >
             {profile.handle}
           </Link>
         ) : (
           <Link
-            href={user ? "/graveyard/account" : "/graveyard/signin"}
+            href={user ? "/account" : "/signin"}
             className="rounded-[3px] bg-gold px-5 py-2 text-[#171208] shadow-[0_0_24px_rgba(230,184,92,.28)] hover:bg-gold/90"
           >
             become a patron
@@ -57,20 +57,17 @@ export function GyFooter() {
         , a 501(c)(3) nonprofit. Pledges are tax-deductible per US law.
       </p>
       <nav className="gy-caps mt-6 flex flex-wrap justify-center gap-x-8 gap-y-3 text-[13px] tracking-[0.18em] text-mist">
-        <Link href="/graveyard#how" className="hover:text-moon">
+        <Link href="/#how" className="hover:text-moon">
           how it works
         </Link>
-        <Link href="/graveyard#blogroll" className="hover:text-moon">
+        <Link href="/#blogroll" className="hover:text-moon">
           the blogroll
         </Link>
-        <Link href="/graveyard/patrons" className="hover:text-moon">
+        <Link href="/patrons" className="hover:text-moon">
           patrons
         </Link>
-        <Link href="/graveyard/claim" className="hover:text-moon">
+        <Link href="/claim" className="hover:text-moon">
           claim your grave
-        </Link>
-        <Link href="/wordpress" className="hover:text-moon">
-          the other demo
         </Link>
       </nav>
       <p className="mt-7 text-[13px] italic text-[#525e76]">

@@ -43,7 +43,7 @@ export function PledgeBox({
     confirmedRef.current = true;
     confirmCheckoutSession(sessionId).then(() => {
       setConfirmed(true);
-      router.replace(`/graveyard/b/${bloggerSlug}`, { scroll: false });
+      router.replace(`/b/${bloggerSlug}`, { scroll: false });
     });
   }, [searchParams, bloggerSlug, router]);
 
@@ -70,7 +70,6 @@ export function PledgeBox({
       profileId: profile.id,
       amountCents: effective,
       note,
-      skin: "graveyard",
     });
     if (res.url) {
       window.location.href = res.url;
@@ -155,8 +154,8 @@ export function PledgeBox({
         <Link
           href={
             user
-              ? `/graveyard/account?next=/graveyard/b/${bloggerSlug}`
-              : `/graveyard/signin?next=/graveyard/b/${bloggerSlug}`
+              ? `/account?next=/b/${bloggerSlug}`
+              : `/signin?next=/b/${bloggerSlug}`
           }
           className="mt-4 block rounded-sm bg-candle px-6 py-3 text-center font-medium text-night transition hover:bg-candle/90"
         >
