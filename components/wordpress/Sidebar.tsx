@@ -75,31 +75,6 @@ export function WpSidebar() {
               dark={false}
             />
           </div>
-          <h3 className="wp-widget-title mt-3">Where the pool goes</h3>
-          <table className="mt-1 w-full text-[12.5px]">
-            <tbody>
-              {allocated.map((b) => (
-                <tr key={b.id} className="border-b border-dotted border-wpborder">
-                  <td className="py-1 pr-2">
-                    <Link href={`/b/${b.slug}`}>{b.blogName ?? b.name}</Link>
-                  </td>
-                  <td className="py-1 text-right font-bold text-wpgreen">
-                    {dollars(b.math.matchCents, { round: true })}
-                  </td>
-                </tr>
-              ))}
-              <tr className="border-b border-dotted border-wpborder">
-                <td className="py-1 pr-2 italic wp-meta">Leftover (unspent)</td>
-                <td className="py-1 text-right font-bold wp-meta">
-                  {dollars(leftoverCents, { round: true })}
-                </td>
-              </tr>
-              <tr>
-                <td className="py-1 pr-2 font-bold">Total pool</td>
-                <td className="py-1 text-right font-bold">{dollars(poolCents, { round: true })}</td>
-              </tr>
-            </tbody>
-          </table>
         </section>
       )}
 
@@ -140,6 +115,34 @@ export function WpSidebar() {
             </li>
           )}
         </ul>
+      </section>
+
+      <section>
+        <h2 className="wp-widget-title">Where the pool goes</h2>
+        <table className="mt-2 w-full text-[12.5px]">
+          <tbody>
+            {allocated.map((b) => (
+              <tr key={b.id} className="border-b border-dotted border-wpborder">
+                <td className="py-1 pr-2">
+                  <Link href={`/b/${b.slug}`}>{b.blogName ?? b.name}</Link>
+                </td>
+                <td className="py-1 text-right font-bold text-wpgreen">
+                  {dollars(b.math.matchCents, { round: true })}
+                </td>
+              </tr>
+            ))}
+            <tr className="border-b border-dotted border-wpborder">
+              <td className="py-1 pr-2 italic wp-meta">Leftover (unspent)</td>
+              <td className="py-1 text-right font-bold wp-meta">
+                {dollars(leftoverCents, { round: true })}
+              </td>
+            </tr>
+            <tr>
+              <td className="py-1 pr-2 font-bold">Total pool</td>
+              <td className="py-1 text-right font-bold">{dollars(poolCents, { round: true })}</td>
+            </tr>
+          </tbody>
+        </table>
       </section>
     </aside>
   );

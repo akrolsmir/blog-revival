@@ -38,42 +38,39 @@ export default function WordpressHome() {
             marginal post from even a good substacker.
           </p>
           <p>
-            The Blog Revival Project coordinates bounties. Patrons pledge toward a specific blogger
-            and the blogger can write one new post of at least 1000 words to claim the funds.
+            To address this, the Blog Revival Project coordinates bounties. Patrons pledge toward a
+            specific blogger and the blogger can write one new post of at least 1000 words to claim
+            the funds. Pledges are matched from a {dollars(poolCents, { round: true })}{" "}
+            <a
+              href="https://vitalik.eth.limo/general/2019/12/07/quadratic.html"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              quadratic funding
+            </a>{" "}
+            pool, so many small pledges beat one big one.
           </p>
           <p>
-            Pledges are matched from a{" "}
-            <strong>
-              {dollars(poolCents, { round: true })}{" "}
-              <a
-                href="https://vitalik.eth.limo/general/2019/12/07/quadratic.html"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                quadratic funding
-              </a>{" "}
-              pool
-            </strong>
-            , so many small pledges beat one big one.
+            <Link href="/signin?next=/account">Sign up now</Link>! The first 100 patrons will get
+            $25 of credit to pledge to the bloggers of their choice.
           </p>
         </div>
         <div
           id="math"
           className="mt-5 rounded border border-wpborder bg-[#fafaf8] px-6 py-5 text-center"
         >
-          <p className="wp-serif text-[17px] italic">
-            match<sub>b</sub> &nbsp;=&nbsp; pool ×{" "}
+          <p className="wp-serif text-[18px] italic">
+            match &nbsp;=&nbsp;{" "}
             <span className="whitespace-nowrap">
-              (Σ<sub>i</sub> √p<sub>i,b</sub>)² &nbsp;/&nbsp; Σ<sub>b′</sub>(Σ
-              <sub>i</sub> √p<sub>i,b′</sub>)²
+              (√p<sub>1</sub> + √p<sub>2</sub> + … + √p<sub>n</sub>)<sup>2</sup> − (p<sub>1</sub> +
+              p<sub>2</sub> + … + p<sub>n</sub>)
             </span>
           </p>
-          <p className="wp-meta mt-3">
-            example: 12 patrons pledge $740 →{" "}
-            <span className="font-bold text-wpgreen">+$312 match</span> = <strong>$1,052</strong> /
-            $1,000 → <span className="font-bold text-wpgreen">LIVE</span>
-          </p>
         </div>
+        <p className="mt-3 text-[13.5px] leading-relaxed">
+          If ten people each donate $1, then the sum-of-square-roots is $10, and the square of that
+          is $100, so $10 worth of donations will get matched with $90 from the pool.
+        </p>
         <p className="mt-4">
           <a href="#bounties" className="font-bold">
             Read the bounties ↓
