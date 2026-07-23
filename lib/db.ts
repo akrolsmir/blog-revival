@@ -13,4 +13,10 @@ if (!appId) {
   );
 }
 
-export const db = init({ appId: appId ?? "missing-app-id", schema });
+export const db = init({
+  appId: appId ?? "missing-app-id",
+  schema,
+  devtool: {
+    position: "bottom-left",
+  },
+});
