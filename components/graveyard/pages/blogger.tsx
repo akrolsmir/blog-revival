@@ -82,9 +82,6 @@ export default function GraveyardBloggerPage({ params }: { params: Promise<{ slu
             <p className="mt-2 italic text-moon/70">of {blogger.blogName}</p>
           )}
           <p className="gy-label mt-3 text-mist/70">silent {silent.toLocaleString()} days</p>
-          {blogger.epitaph && (
-            <p className="mt-5 italic leading-relaxed text-moon/80">{blogger.epitaph}</p>
-          )}
           <div className="mt-6 flex items-center justify-center gap-6">
             <a
               href={blogger.blogUrl}
@@ -191,7 +188,6 @@ export default function GraveyardBloggerPage({ params }: { params: Promise<{ slu
           {/* Mourners' register */}
           <div className="mt-8 rounded-md border border-moon/15 p-6">
             <h2 className="gy-caps text-xl text-moon">mourners&rsquo; register</h2>
-            <p className="mt-1 text-sm text-mist">Why we miss this blog — signed by the patrons.</p>
             <ul className="mt-5 space-y-5">
               {comments.map((c: any) => (
                 <li key={c.id} className="border-l-2 border-moon/20 pl-4">
@@ -219,7 +215,6 @@ export default function GraveyardBloggerPage({ params }: { params: Promise<{ slu
                   value={commentText}
                   onChange={(e) => setCommentText(e.target.value)}
                   rows={2}
-                  placeholder="What did this blog change for you?"
                   className="w-full rounded-sm border border-moon/25 bg-transparent px-3 py-2 text-[15px] text-moon placeholder:text-mist/60"
                 />
                 <button

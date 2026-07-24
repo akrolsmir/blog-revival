@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import type { BloggerRow } from "@/lib/hooks";
 import { eyebrowFor } from "@/components/graveyard/Headstone";
+import type { BloggerRow } from "@/lib/hooks";
 import { daysSilent } from "@/lib/qf";
 import { dollars } from "@/lib/format";
 

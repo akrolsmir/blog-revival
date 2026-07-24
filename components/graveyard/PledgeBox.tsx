@@ -59,7 +59,7 @@ export function PledgeBox({
   }
 
   function deposit() {
-    setNotice("Adding funds by card isn’t available yet — coming soon.");
+    setNotice("Adding funds by card isn’t available yet.");
   }
 
   return (
