@@ -122,8 +122,7 @@ export default function WpBloggerPage({ params }: { params: Promise<{ slug: stri
               <li key={post.url}>
                 <a href={post.url} target="_blank" rel="noopener noreferrer">
                   {post.title}
-                </a>{" "}
-                <span className="wp-meta">({post.date})</span>
+                </a>
               </li>
             ))}
           </ul>
@@ -204,7 +203,6 @@ export default function WpBloggerPage({ params }: { params: Promise<{ slug: stri
         {profile ? (
           <div className="mt-5">
             <h4 className="text-[13px] font-bold">Leave a Reply</h4>
-            <p className="wp-meta mt-1">Why did you love this blog? The blogger reads these.</p>
             <textarea
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}

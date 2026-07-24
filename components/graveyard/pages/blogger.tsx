@@ -171,7 +171,7 @@ export default function GraveyardBloggerPage({ params }: { params: Promise<{ slu
               <h2 className="gy-caps text-xl text-moon">last words</h2>
               <ul className="mt-4 space-y-3">
                 {blogger.recentPosts.map((post) => (
-                  <li key={post.url} className="flex items-baseline justify-between gap-4">
+                  <li key={post.url}>
                     <a
                       href={post.url}
                       target="_blank"
@@ -180,7 +180,6 @@ export default function GraveyardBloggerPage({ params }: { params: Promise<{ slu
                     >
                       {post.title}
                     </a>
-                    <span className="gy-label shrink-0 text-mist/60">{post.date}</span>
                   </li>
                 ))}
               </ul>
