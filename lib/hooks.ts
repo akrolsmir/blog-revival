@@ -146,10 +146,6 @@ export function useGoogleAuthUrl() {
   return url;
 }
 
-// Profiles whose photo we've already backfilled this session, so the many
-// components calling useMyProfile don't each fire a duplicate write.
-const syncedPhotos = new Set<string>();
-
 /** The signed-in user's profile (or null). */
 export function useMyProfile() {
   const { user, isLoading: authLoading } = db.useAuth();
@@ -166,16 +162,6 @@ export function useMyProfile() {
   );
   const profile = data?.profiles?.[0] ?? null;
 
-  // Google sign-in gives InstantDB the account's imageURL; copy it onto the
-  // profile once (if they haven't set their own photo) so patrons get avatars.
-  useEffect(() => {
-    const img = user?.imageURL;
-    if (img && profile && !profile.photoUrl && !syncedPhotos.has(profile.id)) {
-      syncedPhotos.add(profile.id);
-      db.transact(db.tx.profiles[profile.id].update({ photoUrl: img }));
-    }
-  }, [user, profile]);
-
   return {
     user: user ?? null,
     profile,
@@ -191,7 +177,6 @@ export type TopPatron = {
   id: string;
   handle: string;
   displayName: string;
-  photoUrl?: string;
   totalCents: number;
 };
 
@@ -208,7 +193,6 @@ export function topPatrons(blogger: BloggerRow, limit = 3): TopPatron[] {
         id: patron.id,
         handle: patron.handle,
         displayName: patron.displayName,
-        photoUrl: patron.photoUrl,
         totalCents: p.amountCents,
       });
   }

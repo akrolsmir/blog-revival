@@ -43,16 +43,7 @@ export default function GraveyardPatronPage({ params }: { params: Promise<{ hand
   return (
     <main className="mx-auto max-w-3xl px-6 py-16">
       <p className="gy-label text-mist">keeper of candles</p>
-      <div className="mt-3 flex items-center gap-4">
-        {profile.photoUrl && (
-          <img
-            src={profile.photoUrl}
-            alt=""
-            className="h-14 w-14 flex-none rounded-full border border-moon/20 object-cover"
-          />
-        )}
-        <h1 className="text-5xl">{profile.displayName}</h1>
-      </div>
+      <h1 className="mt-3 text-5xl">{profile.displayName}</h1>
       <p className="gy-label mt-2 text-mist">@{profile.handle}</p>
       {profile.bio && <p className="mt-5 text-lg text-moon/85">{profile.bio}</p>}
 
