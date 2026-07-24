@@ -3,7 +3,13 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useMyProfile, useIsAdmin } from "@/lib/hooks";
-import { listPendingNominations, reviewNomination, listClaims, verifyClaim } from "@/lib/actions";
+import {
+  listPendingNominations,
+  reviewNomination,
+  listClaims,
+  verifyClaim,
+  deleteClaim,
+} from "@/lib/actions";
 
 type Nom = {
   id: string;
@@ -76,6 +82,15 @@ export default function AdminPage() {
       setClaims((cs) =>
         (cs ?? []).map((c) => (c.id === bloggerId ? { ...c, claimVerified: verified } : c)),
       );
+  }
+
+  async function removeClaim(bloggerId: string) {
+    setBusyId(bloggerId);
+    setError(null);
+    const res = await deleteClaim(bloggerId);
+    setBusyId(null);
+    if (res?.error) setError(res.error);
+    else setClaims((cs) => (cs ?? []).filter((c) => c.id !== bloggerId));
   }
 
   return (
@@ -251,14 +266,24 @@ export default function AdminPage() {
                       {busyId === c.id ? "…" : "Un-verify"}
                     </button>
                   ) : (
-                    <button
-                      type="button"
-                      disabled={busyId === c.id}
-                      onClick={() => verify(c.id, true)}
-                      className="rounded-md bg-green-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-green-700 disabled:opacity-50"
-                    >
-                      {busyId === c.id ? "…" : "Verify identity"}
-                    </button>
+                    <>
+                      <button
+                        type="button"
+                        disabled={busyId === c.id}
+                        onClick={() => verify(c.id, true)}
+                        className="rounded-md bg-green-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-green-700 disabled:opacity-50"
+                      >
+                        {busyId === c.id ? "…" : "Verify identity"}
+                      </button>
+                      <button
+                        type="button"
+                        disabled={busyId === c.id}
+                        onClick={() => removeClaim(c.id)}
+                        className="rounded-md border border-red-300 px-3 py-1.5 text-sm font-medium text-red-700 hover:bg-red-50 disabled:opacity-50"
+                      >
+                        Delete claim
+                      </button>
+                    </>
                   )}
                 </div>
               </li>

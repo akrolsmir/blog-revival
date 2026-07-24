@@ -188,3 +188,14 @@ export async function verifyClaim(bloggerId: string, verified: boolean) {
   });
   return res.json();
 }
+
+export async function deleteClaim(bloggerId: string) {
+  const token = await refreshToken();
+  if (!token) return { error: "Sign in first" };
+  const res = await fetch("/api/claims/delete", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ bloggerId, refreshToken: token }),
+  });
+  return res.json();
+}

@@ -145,7 +145,7 @@ export default function WpClaimPage() {
         );
       })}
 
-      {user && profile && (
+      {user && profile && mine.length === 0 && (
         <section className="mt-6">
           <h3 className="text-[15px] font-bold">Find yourself on the blogroll</h3>
           <div className="mt-2 flex flex-wrap items-center gap-2">

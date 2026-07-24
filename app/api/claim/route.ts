@@ -37,6 +37,16 @@ export async function POST(req: NextRequest) {
     if (blogger.claimedBy) {
       return NextResponse.json({ error: "This profile has already been claimed" }, { status: 409 });
     }
+    // One identity per person: reject if this profile already claims a blogger.
+    const { bloggers: ownClaims } = await db.query({
+      bloggers: { $: { where: { "claimedBy.id": profile.id } } },
+    });
+    if (ownClaims.length > 0) {
+      return NextResponse.json(
+        { error: "You've already claimed a profile. Email us to change it." },
+        { status: 409 },
+      );
+    }
     await db.transact([
       db.tx.bloggers[bloggerId].update({ claimVerified: false }).link({ claimedBy: profile.id }),
     ]);

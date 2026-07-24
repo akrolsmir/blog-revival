@@ -164,8 +164,8 @@ export default function GraveyardClaimPage() {
         );
       })}
 
-      {/* Claim a profile */}
-      {user && profile && (
+      {/* Claim a profile — one per person, so hide once they have one. */}
+      {user && profile && mine.length === 0 && (
         <section className="mt-10 rounded-md border border-moon/15 p-6">
           <h2 className="gy-caps text-xl text-moon">find your headstone</h2>
           <div className="mt-4 flex flex-wrap items-center gap-3">
