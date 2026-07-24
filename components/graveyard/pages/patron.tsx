@@ -42,7 +42,7 @@ export default function GraveyardPatronPage({ params }: { params: Promise<{ hand
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-16">
-      <p className="gy-label text-mist">keeper of candles</p>
+      <p className="gy-label text-mist">patron of the revival</p>
       <h1 className="mt-3 text-5xl">{profile.displayName}</h1>
       <p className="gy-label mt-2 text-mist">@{profile.handle}</p>
       {profile.bio && <p className="mt-5 text-lg text-moon/85">{profile.bio}</p>}
@@ -105,7 +105,7 @@ export default function GraveyardPatronPage({ params }: { params: Promise<{ hand
 
       <section className="mt-8 rounded-md border border-moon/15 p-6">
         <div className="flex items-baseline justify-between">
-          <h2 className="gy-caps text-xl text-moon">candles lit</h2>
+          <h2 className="gy-caps text-xl text-moon">pledges</h2>
           <span className="gy-label text-mist">{dollars(totalCents, { round: true })} pledged</span>
         </div>
         <ul className="mt-4 space-y-2">
@@ -131,7 +131,7 @@ export default function GraveyardPatronPage({ params }: { params: Promise<{ hand
               </span>
             </li>
           ))}
-          {pledges.length === 0 && <li className="italic text-mist">No candles yet.</li>}
+          {pledges.length === 0 && <li className="italic text-mist">No pledges yet.</li>}
         </ul>
       </section>
     </main>

@@ -71,10 +71,10 @@ export function PledgeBox({
 
   return (
     <div className="rounded-md border border-moon/15 p-6">
-      <h3 className="gy-caps text-xl text-moon">light a candle</h3>
+      <h3 className="gy-caps text-xl text-moon">make a pledge</h3>
       {confirmed && (
         <p className="mt-3 rounded-sm border border-candle/40 bg-candle/10 px-4 py-3 text-sm text-candle">
-          Your candle is lit. {bloggerName} will see your pledge.
+          Pledge received — thank you! It&rsquo;s on the ledger below.
         </p>
       )}
       <div className="mt-4 flex flex-wrap gap-2">
@@ -124,7 +124,7 @@ export function PledgeBox({
             disabled={busy || !valid || effective > balance}
             className="w-full rounded-sm bg-candle px-6 py-3 font-medium text-night transition hover:bg-candle/90 disabled:opacity-50"
           >
-            {busy ? "lighting…" : `Pledge ${valid ? dollars(effective, { round: true }) : ""}`}
+            {busy ? "pledging…" : `Pledge ${valid ? dollars(effective, { round: true }) : ""}`}
           </button>
           <div className="mt-2 flex items-center justify-between text-sm">
             <button

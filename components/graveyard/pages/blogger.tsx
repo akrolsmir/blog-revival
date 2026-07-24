@@ -95,7 +95,7 @@ export default function GraveyardBloggerPage({ params }: { params: Promise<{ slu
             </a>
             {math.isLive && !revived && (
               <span className="gy-label flex items-center gap-2 text-candle">
-                live — candle lit
+                live — bounty unlocked
                 <span className="gy-candle !h-5 !w-2">
                   <span className="gy-flame" />
                 </span>
@@ -260,7 +260,7 @@ export default function GraveyardBloggerPage({ params }: { params: Promise<{ slu
           </p>
           {/* Recent pledges */}
           <div className="mt-8 rounded-md border border-moon/15 p-6">
-            <h3 className="gy-caps text-lg text-moon">candles lit</h3>
+            <h3 className="gy-caps text-lg text-moon">pledges</h3>
             <ul className="mt-3 space-y-3">
               {(blogger.pledges ?? [])
                 .slice()
@@ -277,7 +277,7 @@ export default function GraveyardBloggerPage({ params }: { params: Promise<{ slu
                   </li>
                 ))}
               {(blogger.pledges ?? []).length === 0 && (
-                <li className="text-sm italic text-mist">No candles yet. The grave is dark.</li>
+                <li className="text-sm italic text-mist">No pledges yet. The grave is dark.</li>
               )}
             </ul>
           </div>

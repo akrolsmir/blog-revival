@@ -229,7 +229,7 @@ function AccountInner() {
 
       {myPledges.length > 0 && (
         <section className="mt-14">
-          <h2 className="gy-caps text-2xl text-moon">candles you&rsquo;ve lit</h2>
+          <h2 className="gy-caps text-2xl text-moon">your pledges</h2>
           <ul className="mt-4 space-y-2">
             {myPledges.map((p: any) => (
               <li

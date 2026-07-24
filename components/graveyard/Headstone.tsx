@@ -81,7 +81,7 @@ export function Headstone({ blogger, index = 0 }: { blogger: BloggerRow; index?:
       )}
       {revived ? (
         <div className="gy-caps mt-4 text-xs tracking-[0.14em] text-gold">
-          revived — the candle did its work
+          revived — the bounty did its work
         </div>
       ) : (
         <div className="mt-4">
