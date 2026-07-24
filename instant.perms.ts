@@ -21,9 +21,19 @@ const rules = {
     allow: {
       view: "true",
       // Blogger rows are created/updated by the server (admin SDK) or by
-      // the claiming flow; claimed bloggers can update their own row.
+      // the claiming flow. A claimant may update their own row, but ONLY to
+      // link a revival post (status funding -> revived). Every field that
+      // gates or moves money — claimVerified (admin review), stripeAccountId,
+      // bountyDirection, slug, and the `paid` status transition — is
+      // server-only, else a claimant could self-approve their own payout.
       create: "false",
-      update: "isClaimant",
+      update:
+        "isClaimant" +
+        " && newData.claimVerified == data.claimVerified" +
+        " && newData.stripeAccountId == data.stripeAccountId" +
+        " && newData.bountyDirection == data.bountyDirection" +
+        " && newData.slug == data.slug" +
+        " && (newData.status == data.status || newData.status == 'revived')",
       delete: "false",
     },
     bind: ["isClaimant", "auth.id != null && auth.id in data.ref('claimedBy.user.id')"],
