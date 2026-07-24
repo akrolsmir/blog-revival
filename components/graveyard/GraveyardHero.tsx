@@ -146,6 +146,14 @@ function Candle({ pct, className = "" }: { pct: number; className?: string }) {
   );
 }
 
+// Shrink an engraved name so its longest word fits the stone. Cormorant SC
+// caps run ~0.62em per glyph, +0.1em tracking; the carved frame and padding
+// eat ~36px of the slot width.
+function nameSize(base: number, stoneWidth: number, name: string): number {
+  const longest = Math.max(...name.split(/\s+/).map((w) => w.length), 1);
+  return Math.min(base, Math.floor((stoneWidth - 36) / (longest * 0.72)));
+}
+
 export function GraveyardHero({
   bloggers,
   liveThresholdCents,
@@ -294,7 +302,7 @@ export function GraveyardHero({
                 </div>
                 <div
                   className="gy-caps relative font-semibold leading-[1.12] tracking-[0.1em] text-[#d3dae8]"
-                  style={{ fontSize: s.name, ...carve }}
+                  style={{ fontSize: nameSize(s.name, s.w, b.name), ...carve }}
                 >
                   {b.name}
                 </div>
@@ -345,8 +353,8 @@ export function GraveyardHero({
                   {eyebrowFor(b.slug)}
                 </div>
                 <div
-                  className="gy-caps relative text-[15px] font-semibold leading-[1.12] tracking-[0.08em] text-[#d3dae8]"
-                  style={carve}
+                  className="gy-caps relative font-semibold leading-[1.12] tracking-[0.08em] text-[#d3dae8]"
+                  style={{ fontSize: nameSize(15, 180, b.name), ...carve }}
                 >
                   {b.name}
                 </div>

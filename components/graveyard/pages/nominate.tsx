@@ -55,18 +55,18 @@ export default function GyNominatePage() {
 
       <div className="mt-10 space-y-6">
         <label className="block">
-          <span className={labelCls}>blog name (optional)</span>
-          <input
-            value={f.blogName}
-            onChange={(e) => f.setBlogName(e.target.value)}
-            className={inputCls}
-          />
-        </label>
-        <label className="block">
           <span className={labelCls}>name (or pseudonym)</span>
           <input
             value={f.authorName}
             onChange={(e) => f.setAuthorName(e.target.value)}
+            className={inputCls}
+          />
+        </label>
+        <label className="block">
+          <span className={labelCls}>blog name (optional)</span>
+          <input
+            value={f.blogName}
+            onChange={(e) => f.setBlogName(e.target.value)}
             className={inputCls}
           />
         </label>

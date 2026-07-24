@@ -39,18 +39,18 @@ export default function WpNominatePage() {
       <h2 className="text-[22px] font-bold">Nominate a blog</h2>
       <div className="mt-5 space-y-4">
         <label className="block">
-          <span className="text-[12px] font-bold">Blog name (optional)</span>
-          <input
-            value={f.blogName}
-            onChange={(e) => f.setBlogName(e.target.value)}
-            className="mt-1 w-full"
-          />
-        </label>
-        <label className="block">
           <span className="text-[12px] font-bold">Name (or pseudonym)</span>
           <input
             value={f.authorName}
             onChange={(e) => f.setAuthorName(e.target.value)}
+            className="mt-1 w-full"
+          />
+        </label>
+        <label className="block">
+          <span className="text-[12px] font-bold">Blog name (optional)</span>
+          <input
+            value={f.blogName}
+            onChange={(e) => f.setBlogName(e.target.value)}
             className="mt-1 w-full"
           />
         </label>
