@@ -210,14 +210,15 @@ export default function GraveyardBloggerPage({ params }: { params: Promise<{ slu
                 </li>
               )}
             </ul>
-            {profile ? (
-              <div className="mt-6">
-                <textarea
-                  value={commentText}
-                  onChange={(e) => setCommentText(e.target.value)}
-                  rows={2}
-                  className="w-full rounded-sm border border-moon/25 bg-transparent px-3 py-2 text-[15px] text-moon placeholder:text-mist/60"
-                />
+            <div className="mt-6">
+              <textarea
+                value={commentText}
+                onChange={(e) => setCommentText(e.target.value)}
+                disabled={!profile}
+                rows={2}
+                className="w-full rounded-sm border border-moon/25 bg-transparent px-3 py-2 text-[15px] text-moon placeholder:text-mist/60 disabled:cursor-not-allowed disabled:opacity-50"
+              />
+              {profile ? (
                 <button
                   type="button"
                   onClick={addComment}
@@ -226,18 +227,15 @@ export default function GraveyardBloggerPage({ params }: { params: Promise<{ slu
                 >
                   sign the register
                 </button>
-              </div>
-            ) : (
-              <p className="mt-6 text-sm text-mist">
+              ) : (
                 <Link
                   href={`/signin?next=/b/${blogger.slug}`}
-                  className="text-candle underline underline-offset-4"
+                  className="gy-caps mt-3 inline-block rounded-sm border border-candle/60 px-5 py-2 text-sm text-candle hover:bg-candle/10"
                 >
-                  Sign in
-                </Link>{" "}
-                to sign the register.
-              </p>
-            )}
+                  sign in to sign the register
+                </Link>
+              )}
+            </div>
           </div>
         </div>
 

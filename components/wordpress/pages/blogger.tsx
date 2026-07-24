@@ -200,15 +200,16 @@ export default function WpBloggerPage({ params }: { params: Promise<{ slug: stri
             </li>
           ))}
         </ol>
-        {profile ? (
-          <div className="mt-5">
-            <h4 className="text-[13px] font-bold">Leave a Reply</h4>
-            <textarea
-              value={commentText}
-              onChange={(e) => setCommentText(e.target.value)}
-              rows={3}
-              className="mt-2 w-full"
-            />
+        <div className="mt-5">
+          <h4 className="text-[13px] font-bold">Leave a Reply</h4>
+          <textarea
+            value={commentText}
+            onChange={(e) => setCommentText(e.target.value)}
+            disabled={!profile}
+            rows={3}
+            className="mt-2 w-full disabled:cursor-not-allowed disabled:opacity-60"
+          />
+          {profile ? (
             <button
               type="button"
               onClick={addComment}
@@ -217,12 +218,12 @@ export default function WpBloggerPage({ params }: { params: Promise<{ slug: stri
             >
               Submit Comment
             </button>
-          </div>
-        ) : (
-          <p className="mt-5 text-[12.5px]">
-            <Link href={`/signin?next=/b/${blogger.slug}`}>Sign in</Link> to leave a comment.
-          </p>
-        )}
+          ) : (
+            <Link href={`/signin?next=/b/${blogger.slug}`} className="wp-btn mt-2 inline-block">
+              Sign in to leave a comment
+            </Link>
+          )}
+        </div>
       </section>
 
       <p className="mt-8">
