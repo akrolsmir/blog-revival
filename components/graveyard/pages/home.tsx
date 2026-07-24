@@ -3,11 +3,12 @@
 import { useState } from "react";
 import { useBounties } from "@/lib/hooks";
 import { GraveyardHero } from "@/components/graveyard/GraveyardHero";
+import { Headstone } from "@/components/graveyard/Headstone";
 import { MatchSlider } from "@/components/graveyard/MatchSlider";
 import { dollars } from "@/lib/format";
 
 export default function GraveyardHome() {
-  const { bloggers, pledgesByBlogger, poolCents, poolUsedCents, liveThresholdCents } =
+  const { isLoading, bloggers, pledgesByBlogger, poolCents, poolUsedCents, liveThresholdCents } =
     useBounties();
 
   // Default to the highest-funded blogger (top of the sorted list); the
@@ -111,6 +112,19 @@ export default function GraveyardHome() {
             </div>
           )}
         </div>
+      </section>
+
+      {/* Blogroll */}
+      <section id="blogroll" className="px-6 pb-28 pt-16 md:px-12">
+        {isLoading ? (
+          <p className="gy-caps text-center tracking-[0.2em] text-mist">raising the dead…</p>
+        ) : (
+          <div className="mx-auto grid max-w-[1160px] gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {bloggers.map((b, i) => (
+              <Headstone key={b.id} blogger={b} index={i} />
+            ))}
+          </div>
+        )}
       </section>
     </main>
   );
