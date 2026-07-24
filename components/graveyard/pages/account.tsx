@@ -262,7 +262,7 @@ function AccountInner() {
 
 export default function AccountPage() {
   return (
-    <Suspense>
+    <Suspense fallback={<p className="gy-label py-32 text-center text-mist">stirring…</p>}>
       <AccountInner />
     </Suspense>
   );

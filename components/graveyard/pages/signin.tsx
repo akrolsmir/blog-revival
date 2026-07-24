@@ -139,7 +139,7 @@ function SignInInner() {
 
 export default function SignInPage() {
   return (
-    <Suspense>
+    <Suspense fallback={<p className="gy-label py-32 text-center text-mist">stirring…</p>}>
       <SignInInner />
     </Suspense>
   );

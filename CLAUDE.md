@@ -93,4 +93,12 @@ explains standing architecture.
   Never run `instant-cli push --yes` without reading the plan first.
 - Components using useSearchParams (PledgeBox, WpPledgeForm, signin,
   account pages) must stay wrapped in <Suspense> or the build fails.
+- A page must render a real DOM element on its *first* render after a
+  navigation. Next's layout-router picks the scroll target in that render;
+  if it finds nothing it silently skips the segment and you stay at the old
+  page's scroll offset. So no `return null` at a page root, and give every
+  root-level <Suspense> a non-empty fallback. This is why the mount gate
+  lives in one SkinGate provider in lib/theme.tsx and useSkin() is a bare
+  context read — a per-component `mounted` flag would render null exactly
+  when it matters.
 - Amounts are integer cents everywhere; format only via lib/format.ts.

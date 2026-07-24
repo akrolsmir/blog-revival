@@ -225,7 +225,7 @@ function AccountInner() {
 
 export default function WpAccountPage() {
   return (
-    <Suspense>
+    <Suspense fallback={<p className="wp-meta italic">Loading…</p>}>
       <AccountInner />
     </Suspense>
   );

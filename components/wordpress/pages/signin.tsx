@@ -130,7 +130,7 @@ function SignInInner() {
 
 export default function WpSignInPage() {
   return (
-    <Suspense>
+    <Suspense fallback={<p className="wp-meta italic">Loading…</p>}>
       <SignInInner />
     </Suspense>
   );
