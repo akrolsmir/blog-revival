@@ -7,8 +7,12 @@ const rules = {
   profiles: {
     allow: {
       view: "true",
-      create: "isOwner",
-      update: "isOwner",
+      // creditCents/gotSignupCredit are server-controlled (grant + spend go
+      // through the admin SDK). Clients own their profile but can't set or
+      // change their own balance.
+      create: "isOwner && data.creditCents == null && data.gotSignupCredit == null",
+      update:
+        "isOwner && newData.creditCents == data.creditCents && newData.gotSignupCredit == data.gotSignupCredit",
       delete: "false",
     },
     bind: ["isOwner", "auth.id != null && auth.id in data.ref('user.id')"],
