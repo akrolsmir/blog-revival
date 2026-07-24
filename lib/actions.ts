@@ -166,3 +166,25 @@ export async function reviewNomination(nominationId: string, action: "approve" |
   });
   return res.json();
 }
+
+export async function listClaims() {
+  const token = await refreshToken();
+  if (!token) return { error: "Sign in first" };
+  const res = await fetch("/api/claims/pending", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ refreshToken: token }),
+  });
+  return res.json();
+}
+
+export async function verifyClaim(bloggerId: string, verified: boolean) {
+  const token = await refreshToken();
+  if (!token) return { error: "Sign in first" };
+  const res = await fetch("/api/claims/verify", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ bloggerId, verified, refreshToken: token }),
+  });
+  return res.json();
+}
