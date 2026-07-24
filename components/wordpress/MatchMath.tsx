@@ -22,7 +22,7 @@ export function WpMatchMath() {
         >
           {bloggers.map((b) => (
             <option key={b.id} value={b.id}>
-              {b.blogName ?? b.name}
+              {b.name}
             </option>
           ))}
         </select>
@@ -33,7 +33,7 @@ export function WpMatchMath() {
           poolCents={poolCents}
           liveThresholdCents={liveThresholdCents}
           bloggerId={sliderTarget.id}
-          bloggerName={sliderTarget.blogName ?? sliderTarget.name}
+          bloggerName={sliderTarget.name}
           patronCount={sliderTarget.supporterCount}
           dark={false}
         />

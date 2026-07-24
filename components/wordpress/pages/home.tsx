@@ -131,9 +131,12 @@ export default function WordpressHome() {
                   className="h-7 w-7 flex-none rounded border border-wpborder bg-white object-contain"
                 />
                 <Link href={`/b/${b.slug}`} className="!text-wpink !no-underline hover:!underline">
-                  {b.blogName ?? b.name}
+                  {b.name}
                 </Link>
               </h2>
+              {b.blogName && b.blogName !== b.name && (
+                <p className="wp-meta mt-0.5 italic">{b.blogName}</p>
+              )}
               <p className="mt-1 text-[12.5px]">
                 {dollars(b.math.directCents, { round: true })} direct +{" "}
                 <span className="font-bold">

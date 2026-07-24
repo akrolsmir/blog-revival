@@ -94,7 +94,7 @@ export default function GraveyardHome() {
                 >
                   {bloggers.map((b) => (
                     <option key={b.id} value={b.id}>
-                      {b.blogName ?? b.name}
+                      {b.name}
                     </option>
                   ))}
                 </select>

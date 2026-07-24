@@ -21,7 +21,7 @@ export function WpSidebar() {
         <ul className="mt-2 space-y-1.5">
           {bloggers.map((b) => (
             <li key={b.id} className="flex items-baseline justify-between gap-2">
-              <Link href={`/b/${b.slug}`}>{b.blogName ?? b.name}</Link>
+              <Link href={`/b/${b.slug}`}>{b.name}</Link>
               <span
                 className={`text-right text-[12px] font-bold ${
                   b.math.isLive ? "text-wpgreen" : "text-wpmeta"
@@ -42,7 +42,7 @@ export function WpSidebar() {
             {allocated.map((b) => (
               <tr key={b.id} className="border-b border-dotted border-wpborder">
                 <td className="py-1 pr-2">
-                  <Link href={`/b/${b.slug}`}>{b.blogName ?? b.name}</Link>
+                  <Link href={`/b/${b.slug}`}>{b.name}</Link>
                 </td>
                 <td className="py-1 text-right font-bold text-wpgreen">
                   {dollars(b.math.matchCents, { round: true })}
