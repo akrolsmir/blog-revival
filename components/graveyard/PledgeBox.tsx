@@ -37,7 +37,14 @@ export function PledgeBox({
   const valid = Number.isFinite(effective) && effective >= 100;
   const balance = profile?.creditCents ?? 0;
   const { addedMatchCents } = valid
-    ? marginalMatch(pledgesByBlogger, poolCents, liveThresholdCents, bloggerId, effective)
+    ? marginalMatch(
+        pledgesByBlogger,
+        poolCents,
+        liveThresholdCents,
+        bloggerId,
+        effective,
+        profile?.id,
+      )
     : { addedMatchCents: 0 };
 
   async function pledge() {
@@ -145,9 +152,6 @@ export function PledgeBox({
       )}
       {notice && <p className="mt-3 text-sm text-mist">{notice}</p>}
       {error && <p className="mt-3 text-sm text-red-300">{error}</p>}
-      <p className="mt-3 text-center text-xs text-mist/70">
-        Manifund is a 501(c)(3); pledges are tax-deductible.
-      </p>
     </div>
   );
 }

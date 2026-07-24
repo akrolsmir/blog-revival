@@ -108,14 +108,17 @@ export function computeQf(
   return { perBlogger, poolCents, poolUsedCents, scale };
 }
 
-/** What would a hypothetical new pledge of `amountCents` from a brand-new
- * patron do to this blogger's match? Powers the live demo slider. */
+/** What would a hypothetical new pledge of `amountCents` do to this blogger's
+ * match? Pass `patronId` when the pledger is known so the new pledge groups
+ * with their past pledges (√(a+b), not a fresh patron); omit it for the
+ * anonymous demo slider. */
 export function marginalMatch(
   pledgesByBlogger: Map<string, PledgeLike[]>,
   poolCents: number,
   liveThresholdCents: number,
   bloggerId: string,
   amountCents: number,
+  patronId?: string,
 ): { before: BountyMath; after: BountyMath; addedMatchCents: number } {
   const before =
     computeQf(pledgesByBlogger, poolCents, liveThresholdCents).perBlogger.get(bloggerId) ??
@@ -129,7 +132,7 @@ export function marginalMatch(
       amountCents,
       source: "patron",
       status: "paid",
-      patronId: "hypothetical-new-patron",
+      patronId: patronId ?? "hypothetical-new-patron",
     },
   ]);
   const after =

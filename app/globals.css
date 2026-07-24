@@ -332,6 +332,7 @@ html.skin-wp {
   border-bottom: 1px dotted #bbb;
 }
 
+.wp input:not([type]),
 .wp input[type="text"],
 .wp input[type="email"],
 .wp input[type="url"],

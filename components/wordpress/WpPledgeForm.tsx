@@ -34,7 +34,7 @@ export function WpPledgeForm({
   const valid = Number.isFinite(cents) && cents >= 100;
   const balance = profile?.creditCents ?? 0;
   const { addedMatchCents } = valid
-    ? marginalMatch(pledgesByBlogger, poolCents, liveThresholdCents, bloggerId, cents)
+    ? marginalMatch(pledgesByBlogger, poolCents, liveThresholdCents, bloggerId, cents, profile?.id)
     : { addedMatchCents: 0 };
 
   async function pledge() {
@@ -114,7 +114,6 @@ export function WpPledgeForm({
       )}
       {notice && <p className="wp-meta mt-2">{notice}</p>}
       {error && <p className="mt-2 text-[12.5px] text-red-700">{error}</p>}
-      <p className="wp-meta mt-2">tax-deductible · Manifund 501(c)(3)</p>
     </div>
   );
 }
