@@ -71,7 +71,7 @@ export default function WordpressHome() {
       <article>
         <h2 className="text-[26px] font-bold leading-snug">Quadratic funding</h2>
         <p className="wp-meta mt-1">{fmtDate(new Date())}</p>
-        <div className="mt-4 grid gap-6 md:grid-cols-[1fr_248px]">
+        <div className="mt-4 grid gap-6 min-[1180px]:grid-cols-[1fr_248px]">
           <div className="min-w-0">
             <div className="space-y-4 text-[13.5px] leading-relaxed">
               <p>
@@ -81,7 +81,7 @@ export default function WordpressHome() {
             </div>
             <div
               id="math"
-              className="mt-5 overflow-x-auto rounded border border-wpborder bg-[#fafaf8] px-3 py-5 text-center text-[15px] sm:px-6 sm:text-[20px]"
+              className="mt-5 overflow-x-auto rounded border border-wpborder bg-[#fafaf8] px-4 py-5 text-center text-[clamp(15px,1.8vw,20px)]"
               dangerouslySetInnerHTML={{
                 __html:
                   "<math><mrow><mi>funding</mi><mo>=</mo><msup><mrow><mo>(</mo>" +
