@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { adminDb } from "@/lib/admin";
-import { MAX_SIGNUP_CREDITS, SIGNUP_CREDIT_CENTS } from "@/lib/credit";
+import { FOUNDER_CREDIT_CENTS, MAX_SIGNUP_CREDITS, SIGNUP_CREDIT_CENTS } from "@/lib/credit";
 
 // Grant the signed-in patron their one-time signup credit, if the first-N
 // slots aren't used up. Idempotent per profile (gotSignupCredit guards it).
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
 
   const [mineRes, allRes] = await Promise.all([
     db.query({ profiles: { $: { where: { "user.id": user.id } } } }),
-    db.query({ profiles: {} }),
+    db.query({ profiles: { user: {} } }),
   ]);
   const profile = mineRes.profiles[0];
   if (!profile) {
@@ -28,7 +28,20 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true, creditCents: profile.creditCents ?? 0 });
   }
 
-  const grantedCount = (allRes.profiles as any[]).filter((p) => p.gotSignupCredit).length;
+  const email = (user.email ?? "").toLowerCase();
+
+  // Founder grant: a fixed one-time credit that doesn't consume a first-100 slot.
+  const founderCents = FOUNDER_CREDIT_CENTS[email];
+  if (founderCents != null) {
+    const creditCents = (profile.creditCents ?? 0) + founderCents;
+    await db.transact([db.tx.profiles[profile.id].update({ creditCents, gotSignupCredit: true })]);
+    return NextResponse.json({ ok: true, creditCents, granted: true });
+  }
+
+  // Standard signup credit for the first N non-founder patrons.
+  const grantedCount = (allRes.profiles as any[]).filter(
+    (p) => p.gotSignupCredit && FOUNDER_CREDIT_CENTS[(p.user?.email ?? "").toLowerCase()] == null,
+  ).length;
   if (grantedCount >= MAX_SIGNUP_CREDITS) {
     // Mark as processed so we don't re-check every load, but grant nothing.
     await db.transact([db.tx.profiles[profile.id].update({ gotSignupCredit: true })]);
