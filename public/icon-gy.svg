@@ -1,0 +1,44 @@
+<!--
+  Graveyard skin favicon: a carved gold "R" on a headstone against night sky.
+  Colors track app/globals.css (.gy): night #0b1120, stone #3d4a66/#2c374e,
+  gold #e6b85c. The R is an outlined Cormorant Garamond 600 glyph (the skin's
+  heading face) so the mark needs no font loading — favicon SVGs render in a
+  restricted context with no webfonts.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="gy-sky" x1="32" y1="0" x2="32" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#101b31" />
+      <stop offset="1" stop-color="#0b1120" />
+    </linearGradient>
+    <linearGradient id="gy-stone" x1="32" y1="9" x2="32" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#526180" />
+      <stop offset="0.55" stop-color="#3f4d6a" />
+      <stop offset="1" stop-color="#2d3855" />
+    </linearGradient>
+    <linearGradient id="gy-gold" x1="32" y1="23" x2="32" y2="51" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f6d489" />
+      <stop offset="1" stop-color="#e3b054" />
+    </linearGradient>
+  </defs>
+
+  <rect width="64" height="64" rx="10" fill="url(#gy-sky)" />
+
+  <!-- headstone: flush with the bottom edge so it reads as grounded at 16px -->
+  <path d="M8 64V33a24 24 0 0 1 48 0v31Z" fill="url(#gy-stone)" />
+  <!-- lit rim; the mist-toned edge separates stone from sky -->
+  <path
+    d="M8 64V33a24 24 0 0 1 48 0v31"
+    fill="none"
+    stroke="#9aa5bb"
+    stroke-opacity="0.42"
+    stroke-width="1.6"
+  />
+
+  <!-- Cormorant Garamond 700 "R", cap height 28, baseline y=51 -->
+  <g transform="translate(14.83 51) scale(0.28)" fill="url(#gy-gold)">
+    <path
+      d="M84.39 0.00Q82.01 0.00 76.67 -5.97Q71.34 -11.94 63.85 -23.25Q56.37 -34.55 46.97 -50.32L61.62 -54.78Q74.36 -35.51 83.36 -23.89Q92.36 -12.26 99.36 -7.09Q106.37 -1.91 112.74 -1.91Q113.06 -1.91 113.06 -0.96Q113.06 0.00 112.74 0.00Q101.59 0.00 94.59 0.00Q87.58 0.00 84.39 0.00ZM50.16 -100.00Q64.81 -100.00 72.69 -94.67Q80.57 -89.33 80.57 -79.78Q80.57 -70.38 75.32 -63.14Q70.06 -55.89 61.86 -51.91Q53.66 -47.93 44.59 -47.93Q42.36 -47.93 40.05 -47.93Q37.74 -47.93 35.83 -48.09V-12.90Q35.83 -8.28 36.62 -5.89Q37.42 -3.50 39.81 -2.71Q42.20 -1.91 47.13 -1.91Q47.45 -1.91 47.45 -0.96Q47.45 0.00 47.13 0.00Q42.99 0.00 37.90 -0.16Q32.80 -0.32 26.75 -0.32Q21.02 -0.32 15.84 -0.16Q10.67 0.00 6.53 0.00Q6.05 0.00 6.05 -0.96Q6.05 -1.91 6.53 -1.91Q11.46 -1.91 13.85 -2.71Q16.24 -3.50 17.12 -5.89Q17.99 -8.28 17.99 -12.90V-86.62Q17.99 -91.24 17.20 -93.55Q16.40 -95.86 14.01 -96.74Q11.62 -97.61 6.69 -97.61Q6.37 -97.61 6.37 -98.57Q6.37 -99.52 6.69 -99.52Q10.83 -99.52 15.92 -99.28Q21.02 -99.04 26.75 -99.04Q32.01 -99.04 38.30 -99.52Q44.59 -100.00 50.16 -100.00ZM62.42 -73.73Q62.42 -83.12 60.51 -88.06Q58.60 -92.99 55.25 -94.82Q51.91 -96.66 47.61 -96.66Q41.24 -96.66 38.54 -94.27Q35.83 -91.88 35.83 -86.31V-52.55Q38.06 -52.23 40.61 -52.07Q43.15 -51.91 45.06 -51.91Q54.46 -51.91 58.44 -57.09Q62.42 -62.26 62.42 -73.73Z"
+    />
+  </g>
+</svg>

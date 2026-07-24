@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Cormorant_SC, Newsreader } from "next/font/google";
+import { FaviconSwitcher } from "@/components/FaviconSwitcher";
 import { ThemeProvider } from "@/lib/theme";
 import "./globals.css";
 
@@ -26,6 +27,9 @@ export const metadata: Metadata = {
   title: "revive.blog — Blog Revival Project",
   description:
     "Bounties for beloved dormant bloggers to write one more post. Quadratic funding by Manifund.",
+  // rel="icon" is owned by <FaviconSwitcher/>, which follows the chosen skin —
+  // see the note there for why it isn't declared here.
+  icons: { apple: "/apple-touch-icon.png" },
 };
 
 export default function RootLayout({
@@ -40,7 +44,10 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <FaviconSwitcher />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
