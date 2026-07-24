@@ -81,7 +81,7 @@ export default function WordpressHome() {
             </div>
             <div
               id="math"
-              className="mt-5 overflow-x-auto rounded border border-wpborder bg-[#fafaf8] px-6 py-5 text-center text-[20px]"
+              className="mt-5 overflow-x-auto rounded border border-wpborder bg-[#fafaf8] px-3 py-5 text-center text-[15px] sm:px-6 sm:text-[20px]"
               dangerouslySetInnerHTML={{
                 __html:
                   "<math><mrow><mi>funding</mi><mo>=</mo><msup><mrow><mo>(</mo>" +
