@@ -8,7 +8,7 @@ import { marginalMatch, type PledgeLike } from "@/lib/qf";
 import { dollars } from "@/lib/format";
 import posthog from "posthog-js";
 
-const PRESETS = [1000, 2500, 5000, 10000];
+const PRESETS = [500, 1000, 2500, 10000];
 
 export function PledgeBox({
   bloggerId,

@@ -13,8 +13,7 @@ export default function GraveyardPatronsPage() {
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-16">
-      <p className="gy-label text-mist">keepers of candles</p>
-      <h1 className="mt-3 text-5xl">Patrons</h1>
+      <h1 className="text-5xl">Patrons</h1>
       <ul className="mt-10 divide-y divide-moon/10">
         {patrons.map((p) => (
           <li key={p.id} className="flex items-baseline justify-between gap-4 py-3">

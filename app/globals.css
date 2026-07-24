@@ -54,18 +54,22 @@ html.skin-wp {
   font-weight: 500;
 }
 
-/* Cormorant SC is a true small-caps face; lowercase renders as small caps. */
+/* Cormorant SC is a true small-caps face; lowercase renders as small caps.
+   It's a light display face, so nudge the weight up for legibility at the
+   tiny UI sizes these classes are used at. */
 .gy-caps {
   font-family: var(--font-caps);
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
   text-transform: lowercase;
+  font-weight: 500;
 }
 
 .gy-label {
   font-family: var(--font-caps);
-  letter-spacing: 0.3em;
+  letter-spacing: 0.2em;
   text-transform: lowercase;
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
+  font-weight: 600;
 }
 
 /* Arched headstone card */

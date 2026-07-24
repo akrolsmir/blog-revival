@@ -99,7 +99,7 @@ export function Headstone({ blogger, index = 0 }: { blogger: BloggerRow; index?:
                 isLive ? "text-gold" : "text-mist"
               }`}
             >
-              {isLive ? "live — candle lit" : `${pct}% funded`}
+              {isLive ? "live" : `${pct}% funded`}
             </span>
           </div>
         </div>
