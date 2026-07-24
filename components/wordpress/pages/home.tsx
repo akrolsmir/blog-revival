@@ -50,33 +50,51 @@ export default function WordpressHome() {
             </a>{" "}
             pool, so many small pledges beat one big one.
           </p>
-          <p>
+          <p className="font-bold">
             <Link href="/signin?next=/account">Sign up now</Link>! The first 100 patrons will get
             $25 of credit to pledge to the bloggers of their choice.
           </p>
         </div>
-        <div
-          id="math"
-          className="mt-5 rounded border border-wpborder bg-[#fafaf8] px-6 py-5 text-center"
-        >
-          <p className="wp-serif text-[18px] italic">
-            match &nbsp;=&nbsp;{" "}
-            <span className="whitespace-nowrap">
-              (√p<sub>1</sub> + √p<sub>2</sub> + … + √p<sub>n</sub>)<sup>2</sup> − (p<sub>1</sub> +
-              p<sub>2</sub> + … + p<sub>n</sub>)
-            </span>
-          </p>
-        </div>
-        <p className="mt-3 text-[13.5px] leading-relaxed">
-          If ten people each donate $1, then the sum-of-square-roots is $10, and the square of that
-          is $100, so $10 worth of donations will get matched with $90 from the pool.
-        </p>
         <p className="mt-4">
           <a href="#bounties" className="font-bold">
             Read the bounties ↓
           </a>{" "}
           · <Link href="/account">Become a patron</Link> ·{" "}
           <Link href="/claim">Claim your blogger profile</Link>
+        </p>
+      </article>
+
+      <hr className="border-t border-dotted border-wpborder" />
+
+      {/* Quadratic funding post */}
+      <article>
+        <h2 className="text-[26px] font-bold leading-snug">Quadratic funding</h2>
+        <p className="wp-meta mt-1">{fmtDate(new Date())}</p>
+        <div className="mt-4 space-y-4 text-[13.5px] leading-relaxed">
+          <p>
+            The actual funding allocated to a bounty is the sum of the square roots of each
+            individual pledge, squared.
+          </p>
+        </div>
+        <div
+          id="math"
+          className="mt-5 rounded border border-wpborder bg-[#fafaf8] px-6 py-5 text-center text-[20px]"
+          dangerouslySetInnerHTML={{
+            __html:
+              "<math><mrow><mi>funding</mi><mo>=</mo><msup><mrow><mo>(</mo>" +
+              "<msqrt><msub><mi>p</mi><mn>1</mn></msub></msqrt><mo>+</mo>" +
+              "<msqrt><msub><mi>p</mi><mn>2</mn></msub></msqrt><mo>+</mo><mo>⋯</mo><mo>+</mo>" +
+              "<msqrt><msub><mi>p</mi><mi>n</mi></msub></msqrt><mo>)</mo></mrow><mn>2</mn></msup>" +
+              "</mrow></math>",
+          }}
+        />
+        <p className="mt-3 text-[13.5px] leading-relaxed">
+          For instance, if ten people each donate $1, then the sum-of-square-roots is $10, and the
+          square of that is $100, so $10 worth of donations will get matched with $90 from the pool.
+        </p>
+        <p className="mt-3 text-[13.5px] leading-relaxed">
+          If the total match amount exceeds the money in the pool, the pool will be divided
+          proportionally between bounties.
         </p>
       </article>
 

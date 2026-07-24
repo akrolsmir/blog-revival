@@ -82,14 +82,9 @@ export function WpSidebar() {
         <h2 className="wp-widget-title">Meta</h2>
         <ul className="mt-2 space-y-1.5">
           {user && profile ? (
-            <>
-              <li>
-                <Link href="/account">Howdy, {profile.displayName}</Link>
-              </li>
-              <li>
-                <Link href={`/p/${profile.handle}`}>Your public profile</Link>
-              </li>
-            </>
+            <li>
+              <Link href="/account">Howdy, {profile.displayName}</Link>
+            </li>
           ) : (
             <>
               <li>

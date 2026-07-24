@@ -32,10 +32,10 @@ export default function GraveyardBloggerPage({ params }: { params: Promise<{ slu
         <p className="gy-label text-mist">no grave here</p>
         <h1 className="mt-4 text-4xl">This plot is empty.</h1>
         <Link
-          href="/#blogroll"
+          href="/blogs"
           className="gy-caps mt-6 inline-block text-candle underline underline-offset-4"
         >
-          back to the blogroll
+          back to the blogs
         </Link>
       </main>
     );

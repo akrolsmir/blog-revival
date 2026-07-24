@@ -224,16 +224,19 @@ export function GraveyardHero({
         <h1 className="mb-5 text-[40px] leading-[1.06] text-[#f0f2f7] text-balance md:text-[50px]">
           The Blog Revival Project
         </h1>
-        <p className="mx-auto mb-8 max-w-[520px] text-[19px] leading-[1.55] text-[#a9b3c8] text-pretty">
+        <p className="mx-auto mb-4 max-w-[520px] text-[19px] leading-[1.55] text-[#a9b3c8] text-pretty">
           Many of our favorite blogs have gone silent. <br />
-          We're offering each $1000+, as a bounty to post again.
+          We're offering each $1000+ as a bounty to post again.
+        </p>
+        <p className="mx-auto mb-8 max-w-[520px] text-[16px] text-candle">
+          The first 100 users to sign up get $25 of credit to pledge to bloggers.
         </p>
         <div className="flex justify-center gap-4">
           <Link
-            href="#blogroll"
+            href="/signin?next=/account"
             className="gy-caps rounded-[3px] bg-gold px-7 py-3 text-[15px] text-[#171208] shadow-[0_0_30px_rgba(230,184,92,.3)] transition hover:bg-gold/90"
           >
-            fund a revival
+            become a patron
           </Link>
           <Link
             href="#how"

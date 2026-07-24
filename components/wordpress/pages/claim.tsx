@@ -136,9 +136,7 @@ export default function WpClaimPage() {
                     </div>
                   )}
                   <p className="wp-meta mt-2">
-                    Once your post is linked and your claim verified, we&rsquo;ll email you to
-                    arrange the payout — bank transfer, redirect to another blogger, or a charity
-                    via Manifund.
+                    Once your identity is confirmed, you can email us to arrange the payout.
                   </p>
                 </div>
               </>

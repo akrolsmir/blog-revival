@@ -63,9 +63,7 @@ export function Headstone({ blogger, index = 0 }: { blogger: BloggerRow; index?:
       <div className="gy-caps mt-1 text-xs tracking-[0.18em] text-[#7e8aa3]">
         silent {silent.toLocaleString()} days
       </div>
-      <p className="mt-3.5 min-h-[42px] flex-1 text-[14.5px] italic leading-[1.45] text-[#98a3b9] [text-wrap:pretty]">
-        {blogger.epitaph}
-      </p>
+      <div className="mt-3.5 flex-1" />
       {top.length > 0 && (
         <p className="relative z-10 mt-2 text-[11.5px] leading-snug text-[#7e8aa3] [text-wrap:pretty]">
           Funded by{" "}

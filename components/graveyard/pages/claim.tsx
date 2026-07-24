@@ -48,8 +48,7 @@ export default function GraveyardClaimPage() {
             <Link href="/signin?next=/claim" className="text-candle underline underline-offset-4">
               Sign in
             </Link>{" "}
-            to claim a profile. We verify every claim by hand before paying out — pseudonymous
-            bloggers included.
+            to claim a profile.
           </p>
         </div>
       )}
@@ -86,13 +85,6 @@ export default function GraveyardClaimPage() {
                 : `not yet live — needs ${dollars(liveThresholdCents - b.math.totalCents, { round: true })} more`}
               )
             </p>
-
-            {!b.claimVerified && (
-              <p className="mt-4 text-sm leading-relaxed text-moon/80">
-                Manifund reviews each claim by hand (usually within a day) — we&rsquo;ll email you.
-                Meanwhile you can line up your revival post.
-              </p>
-            )}
 
             {b.status === "paid" ? (
               <p className="mt-4 text-moon/85">
@@ -164,9 +156,7 @@ export default function GraveyardClaimPage() {
                 </div>
 
                 <p className="mt-5 text-sm leading-relaxed text-moon/70">
-                  Once your post is linked and your claim verified, we&rsquo;ll email you to arrange
-                  the payout — bank transfer, redirect to another blogger, or a charity via
-                  Manifund.
+                  Once your identity is confirmed, you can email us to arrange the payout.
                 </p>
               </>
             )}

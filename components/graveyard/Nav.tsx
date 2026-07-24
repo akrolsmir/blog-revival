@@ -18,8 +18,8 @@ export function GyNav() {
         <Link href="/#how" className="hidden text-[#b9c2d4] hover:text-moon sm:inline">
           how it works
         </Link>
-        <Link href="/#blogroll" className="hidden text-[#b9c2d4] hover:text-moon sm:inline">
-          the blogroll
+        <Link href="/blogs" className="hidden text-[#b9c2d4] hover:text-moon sm:inline">
+          blogs
         </Link>
         <Link href="/patrons" className="hidden text-[#b9c2d4] hover:text-moon sm:inline">
           patrons
@@ -70,8 +70,8 @@ export function GyFooter() {
         <Link href="/#how" className="hover:text-moon">
           how it works
         </Link>
-        <Link href="/#blogroll" className="hover:text-moon">
-          the blogroll
+        <Link href="/blogs" className="hover:text-moon">
+          blogs
         </Link>
         <Link href="/patrons" className="hover:text-moon">
           patrons

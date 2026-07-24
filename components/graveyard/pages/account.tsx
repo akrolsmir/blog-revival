@@ -164,20 +164,16 @@ function AccountInner() {
             value={postsILike}
             onChange={(e) => setPostsILike(e.target.value)}
             rows={3}
-            placeholder="Deep dives with real numbers. Sincere retrospectives. Anything that changes what I do next week."
             className="mt-2 w-full rounded-sm border border-moon/25 bg-transparent px-3 py-2 text-moon placeholder:text-mist/50"
           />
         </label>
         <div className="grid gap-6 sm:grid-cols-2">
           <label className="block">
-            <span className="gy-label text-mist">
-              favorite living blogs (one per line, &ldquo;name | url&rdquo;)
-            </span>
+            <span className="gy-label text-mist">favorite living blogs</span>
             <textarea
               value={alive}
               onChange={(e) => setAlive(e.target.value)}
               rows={4}
-              placeholder={"Astral Codex Ten | https://astralcodexten.com"}
               className="mt-2 w-full rounded-sm border border-moon/25 bg-transparent px-3 py-2 text-[13px] text-moon placeholder:text-mist/50"
             />
           </label>
@@ -187,7 +183,6 @@ function AccountInner() {
               value={dead}
               onChange={(e) => setDead(e.target.value)}
               rows={4}
-              placeholder={"Cold Takes | https://cold-takes.com"}
               className="mt-2 w-full rounded-sm border border-moon/25 bg-transparent px-3 py-2 text-[13px] text-moon placeholder:text-mist/50"
             />
           </label>
