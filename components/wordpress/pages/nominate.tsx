@@ -39,7 +39,7 @@ export default function WpNominatePage() {
       <h2 className="text-[22px] font-bold">Nominate a blog</h2>
       <div className="mt-5 space-y-4">
         <label className="block">
-          <span className="text-[12px] font-bold">Blog name</span>
+          <span className="text-[12px] font-bold">Blog name (optional)</span>
           <input
             value={f.blogName}
             onChange={(e) => f.setBlogName(e.target.value)}
@@ -55,7 +55,7 @@ export default function WpNominatePage() {
           />
         </label>
         <label className="block">
-          <span className="text-[12px] font-bold">Link to the blog</span>
+          <span className="text-[12px] font-bold">Link to the blog (or other website)</span>
           <input
             type="url"
             value={f.blogUrl}
@@ -65,7 +65,7 @@ export default function WpNominatePage() {
           />
         </label>
         <label className="block">
-          <span className="text-[12px] font-bold">Last post</span>
+          <span className="text-[12px] font-bold">Last post (optional)</span>
           <input
             type="date"
             value={f.lastPost}

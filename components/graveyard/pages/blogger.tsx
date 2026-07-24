@@ -42,7 +42,7 @@ export default function GraveyardBloggerPage({ params }: { params: Promise<{ slu
   }
 
   const { math } = blogger;
-  const silent = daysSilent(blogger.lastPostAt);
+  const silent = blogger.lastPostAt != null ? daysSilent(blogger.lastPostAt) : null;
   const pct = Math.min(100, Math.round((math.totalCents / liveThresholdCents) * 100));
   const comments = (commentData?.comments ?? []).sort(
     (a: any, b: any) => b.createdAt - a.createdAt,
@@ -81,7 +81,9 @@ export default function GraveyardBloggerPage({ params }: { params: Promise<{ slu
           {blogger.blogName && blogger.blogName !== blogger.name && (
             <p className="mt-2 italic text-moon/70">of {blogger.blogName}</p>
           )}
-          <p className="gy-label mt-3 text-mist/70">silent {silent.toLocaleString()} days</p>
+          {silent != null && (
+            <p className="gy-label mt-3 text-mist/70">silent {silent.toLocaleString()} days</p>
+          )}
           <div className="mt-6 flex items-center justify-center gap-6">
             <a
               href={blogger.blogUrl}

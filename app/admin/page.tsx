@@ -13,10 +13,10 @@ import {
 
 type Nom = {
   id: string;
-  blogName: string;
+  blogName?: string;
   authorName: string;
   blogUrl: string;
-  lastPostAt: number;
+  lastPostAt?: number;
   topPosts?: { title: string; url: string }[];
   createdAt: number;
   submitter?: { handle: string; displayName: string } | null;
@@ -137,8 +137,10 @@ export default function AdminPage() {
                 className="rounded-lg border border-neutral-200 bg-white p-4 shadow-sm"
               >
                 <div className="flex flex-wrap items-baseline gap-x-2">
-                  <span className="text-lg font-bold">{n.blogName}</span>
-                  <span className="text-sm text-neutral-500">by {n.authorName}</span>
+                  <span className="text-lg font-bold">{n.blogName || n.authorName}</span>
+                  {n.blogName && (
+                    <span className="text-sm text-neutral-500">by {n.authorName}</span>
+                  )}
                 </div>
                 <p className="mt-1 text-sm">
                   <a
@@ -149,7 +151,9 @@ export default function AdminPage() {
                   >
                     {n.blogUrl.replace(/^https?:\/\/(www\.)?/, "")}
                   </a>
-                  <span className="text-neutral-500"> · last post {fmtDate(n.lastPostAt)}</span>
+                  {n.lastPostAt != null && (
+                    <span className="text-neutral-500"> · last post {fmtDate(n.lastPostAt)}</span>
+                  )}
                 </p>
                 {n.topPosts && n.topPosts.length > 0 && (
                   <ul className="mt-2 list-inside list-disc text-sm text-neutral-700">

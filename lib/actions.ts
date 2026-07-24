@@ -132,7 +132,7 @@ export async function submitNomination(data: {
   blogName: string;
   authorName: string;
   blogUrl: string;
-  lastPostAt: number;
+  lastPostAt?: number;
   topPosts: { title: string; url: string }[];
 }) {
   const token = await refreshToken();

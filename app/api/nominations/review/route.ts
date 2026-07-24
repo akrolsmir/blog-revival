@@ -57,12 +57,13 @@ export async function POST(req: NextRequest) {
       db.tx.bloggers[bloggerId].update({
         slug,
         name: nom.authorName,
-        blogName: nom.blogName,
         blogUrl: nom.blogUrl,
-        lastPostAt: nom.lastPostAt,
         recentPosts: (nom.topPosts as any) ?? [],
         status: "funding",
         createdAt: Date.now(),
+        // Blog name and last-post date are optional on a nomination.
+        ...(nom.blogName ? { blogName: nom.blogName } : {}),
+        ...(Number.isFinite(nom.lastPostAt) ? { lastPostAt: nom.lastPostAt } : {}),
       }),
       db.tx.nominations[nominationId].update({ status: "approved" }),
     ]);

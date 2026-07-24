@@ -298,12 +298,14 @@ export function GraveyardHero({
                 >
                   {b.name}
                 </div>
-                <div
-                  className="gy-caps relative tracking-[0.24em] text-[#7e8aa3]"
-                  style={{ fontSize: s.epi, ...carve }}
-                >
-                  silent {daysSilent(b.lastPostAt).toLocaleString()} days
-                </div>
+                {b.lastPostAt != null && (
+                  <div
+                    className="gy-caps relative tracking-[0.24em] text-[#7e8aa3]"
+                    style={{ fontSize: s.epi, ...carve }}
+                  >
+                    silent {daysSilent(b.lastPostAt).toLocaleString()} days
+                  </div>
+                )}
               </div>
             </Link>
             {/* grave mound */}
@@ -348,12 +350,14 @@ export function GraveyardHero({
                 >
                   {b.name}
                 </div>
-                <div
-                  className="gy-caps relative text-[9px] tracking-[0.24em] text-[#7e8aa3]"
-                  style={carve}
-                >
-                  silent {daysSilent(b.lastPostAt).toLocaleString()} days
-                </div>
+                {b.lastPostAt != null && (
+                  <div
+                    className="gy-caps relative text-[9px] tracking-[0.24em] text-[#7e8aa3]"
+                    style={carve}
+                  >
+                    silent {daysSilent(b.lastPostAt).toLocaleString()} days
+                  </div>
+                )}
               </Link>
               <div className="absolute -bottom-3 left-[-8%] right-[-8%] h-[18px] rounded-[50%] bg-abyss" />
               <Candle pct={pct} className="absolute -bottom-2 left-1/2 z-[6] -translate-x-1/2" />

@@ -55,7 +55,7 @@ export default function GyNominatePage() {
 
       <div className="mt-10 space-y-6">
         <label className="block">
-          <span className={labelCls}>blog name</span>
+          <span className={labelCls}>blog name (optional)</span>
           <input
             value={f.blogName}
             onChange={(e) => f.setBlogName(e.target.value)}
@@ -71,7 +71,7 @@ export default function GyNominatePage() {
           />
         </label>
         <label className="block">
-          <span className={labelCls}>link to the blog</span>
+          <span className={labelCls}>link to the blog (or other website)</span>
           <input
             type="url"
             value={f.blogUrl}
@@ -81,7 +81,7 @@ export default function GyNominatePage() {
           />
         </label>
         <label className="block">
-          <span className={labelCls}>last post</span>
+          <span className={labelCls}>last post (optional)</span>
           <input
             type="date"
             value={f.lastPost}

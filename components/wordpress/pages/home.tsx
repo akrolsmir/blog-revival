@@ -111,7 +111,7 @@ export default function WordpressHome() {
       <div id="bounties" className="grid gap-5 sm:grid-cols-2">
         {isLoading && <p className="wp-meta italic">Loading the bounties…</p>}
         {bloggers.map((b) => {
-          const silent = daysSilent(b.lastPostAt);
+          const silent = b.lastPostAt != null ? daysSilent(b.lastPostAt) : null;
           const revived = b.status === "revived" || b.status === "paid";
           const top = topPatrons(b);
           return (
@@ -155,7 +155,12 @@ export default function WordpressHome() {
                 <a href={b.blogUrl} target="_blank" rel="noopener noreferrer" className="italic">
                   {b.blogUrl.replace(/^https?:\/\/(www\.)?/, "")}
                 </a>{" "}
-                · last post <em>{silent.toLocaleString()}</em> days ago · {b.supporterCount} patron
+                {silent != null && (
+                  <>
+                    · last post <em>{silent.toLocaleString()}</em> days ago{" "}
+                  </>
+                )}
+                · {b.supporterCount} patron
                 {b.supporterCount === 1 ? "" : "s"}
               </p>
               {top.length > 0 && (

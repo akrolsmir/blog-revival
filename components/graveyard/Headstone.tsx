@@ -21,7 +21,7 @@ export function eyebrowFor(slug: string): string {
 }
 
 export function Headstone({ blogger, index = 0 }: { blogger: BloggerRow; index?: number }) {
-  const silent = daysSilent(blogger.lastPostAt);
+  const silent = blogger.lastPostAt != null ? daysSilent(blogger.lastPostAt) : null;
   const { math } = blogger;
   const isLive = math.isLive;
   const pct = Math.min(100, Math.round((math.totalCents / 1000_00) * 100));
@@ -60,9 +60,11 @@ export function Headstone({ blogger, index = 0 }: { blogger: BloggerRow; index?:
       <h3 className="gy-caps mt-2 text-[22px] font-semibold leading-[1.15] tracking-[0.08em] text-[#d3dae8] [text-shadow:0_-1px_1px_rgba(4,8,16,.9),0_1px_0_rgba(255,255,255,.07)]">
         {blogger.name}
       </h3>
-      <div className="gy-caps mt-1 text-xs tracking-[0.18em] text-[#7e8aa3]">
-        silent {silent.toLocaleString()} days
-      </div>
+      {silent != null && (
+        <div className="gy-caps mt-1 text-xs tracking-[0.18em] text-[#7e8aa3]">
+          silent {silent.toLocaleString()} days
+        </div>
+      )}
       <div className="mt-3.5 flex-1" />
       {top.length > 0 && (
         <p className="relative z-10 mt-2 text-[11.5px] leading-snug text-[#7e8aa3] [text-wrap:pretty]">

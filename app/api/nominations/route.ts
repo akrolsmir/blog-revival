@@ -18,12 +18,12 @@ export async function POST(req: NextRequest) {
   const bn = String(blogName ?? "").trim();
   const an = String(authorName ?? "").trim();
   const url = String(blogUrl ?? "").trim();
-  if (!bn || !an || !url || !Number.isFinite(lastPostAt)) {
-    return NextResponse.json(
-      { error: "Blog name, name, blog link, and last post date are required." },
-      { status: 400 },
-    );
+  // Only the person's name and a link are required; blog name and last-post
+  // date are optional.
+  if (!an || !url) {
+    return NextResponse.json({ error: "Name and link are required." }, { status: 400 });
   }
+  const lastPost = Number.isFinite(lastPostAt) ? lastPostAt : null;
 
   const posts = Array.isArray(topPosts)
     ? topPosts
@@ -43,13 +43,13 @@ export async function POST(req: NextRequest) {
 
   const nominationId = id();
   const tx = db.tx.nominations[nominationId].update({
-    blogName: bn,
     authorName: an,
     blogUrl: url,
-    lastPostAt,
     topPosts: posts,
     status: "pending",
     createdAt: Date.now(),
+    ...(bn ? { blogName: bn } : {}),
+    ...(lastPost !== null ? { lastPostAt: lastPost } : {}),
   });
   await db.transact([profile ? tx.link({ submitter: profile.id }) : tx]);
 

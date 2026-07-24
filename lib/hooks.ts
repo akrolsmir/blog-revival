@@ -18,7 +18,7 @@ export type BloggerRow = {
   blogUrl: string;
   photoUrl?: string;
   epitaph?: string;
-  lastPostAt: number;
+  lastPostAt?: number;
   recentPosts?: { title: string; url: string; date: string }[];
   status: string;
   revivalPostUrl?: string;
@@ -230,14 +230,18 @@ export function useNominationForm() {
 
   async function submit() {
     setError(null);
-    if (!blogName.trim() || !authorName.trim() || !blogUrl.trim() || !lastPost) {
-      setError("Please fill in the blog name, name, blog link, and last post date.");
+    if (!authorName.trim() || !blogUrl.trim()) {
+      setError("Please fill in the name and link.");
       return;
     }
-    const lastPostAt = new Date(lastPost).getTime();
-    if (!Number.isFinite(lastPostAt)) {
-      setError("That last-post date looks off.");
-      return;
+    // Blog name and last-post date are optional.
+    let lastPostAt: number | undefined;
+    if (lastPost) {
+      lastPostAt = new Date(lastPost).getTime();
+      if (!Number.isFinite(lastPostAt)) {
+        setError("That last-post date looks off.");
+        return;
+      }
     }
     setBusy(true);
     const res = await submitNomination({

@@ -31,7 +31,7 @@ export default function WpBloggerPage({ params }: { params: Promise<{ slug: stri
     );
   }
 
-  const silent = daysSilent(blogger.lastPostAt);
+  const silent = blogger.lastPostAt != null ? daysSilent(blogger.lastPostAt) : null;
   const revived = blogger.status === "revived" || blogger.status === "paid";
   const comments = (commentData?.comments ?? []).sort(
     (a: any, b: any) => a.createdAt - b.createdAt,
@@ -86,7 +86,12 @@ export default function WpBloggerPage({ params }: { params: Promise<{ slug: stri
         <a href={blogger.blogUrl} target="_blank" rel="noopener noreferrer">
           {blogger.blogUrl.replace(/^https?:\/\/(www\.)?/, "")}
         </a>{" "}
-        · last post <em>{silent.toLocaleString()}</em> days ago · {blogger.supporterCount} patron
+        {silent != null && (
+          <>
+            · last post <em>{silent.toLocaleString()}</em> days ago{" "}
+          </>
+        )}
+        · {blogger.supporterCount} patron
         {blogger.supporterCount === 1 ? "" : "s"} ·{" "}
         <a href="#comments">{comments.length} comments</a>
       </p>

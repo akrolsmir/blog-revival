@@ -40,7 +40,7 @@ const _schema = i.schema({
       blogUrl: i.string(),
       photoUrl: i.string().optional(),
       epitaph: i.string().optional(), // one-line memorial text
-      lastPostAt: i.number().indexed(), // ms epoch of last substantive post
+      lastPostAt: i.number().optional().indexed(), // ms epoch of last substantive post (optional)
       recentPosts: i.json().optional(), // [{ title, url, date }]
       // funding | live | revived (post published) | paid (bounty claimed)
       status: i.string().indexed(),
@@ -82,10 +82,10 @@ const _schema = i.schema({
     // by a signed-in submitter; stays pending until an admin approves it,
     // which spins up a bloggers row (a live bounty).
     nominations: i.entity({
-      blogName: i.string(),
+      blogName: i.string().optional(),
       authorName: i.string(), // the blogger's name or pseudonym
       blogUrl: i.string(),
-      lastPostAt: i.number(), // ms epoch of their last post
+      lastPostAt: i.number().optional(), // ms epoch of their last post (optional)
       topPosts: i.json().optional(), // [{ title, url }]
       status: i.string().indexed(), // pending | approved | rejected
       createdAt: i.number().indexed(),
