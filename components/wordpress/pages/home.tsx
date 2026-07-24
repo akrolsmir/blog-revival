@@ -72,7 +72,7 @@ export default function WordpressHome() {
         <h2 className="text-[26px] font-bold leading-snug">Quadratic funding</h2>
         <p className="wp-meta mt-1">{fmtDate(new Date())}</p>
         <div className="mt-4 grid gap-6 md:grid-cols-[1fr_248px]">
-          <div>
+          <div className="min-w-0">
             <div className="space-y-4 text-[13.5px] leading-relaxed">
               <p>
                 The actual funding allocated to a bounty is the sum of the square roots of each
@@ -81,7 +81,7 @@ export default function WordpressHome() {
             </div>
             <div
               id="math"
-              className="mt-5 rounded border border-wpborder bg-[#fafaf8] px-6 py-5 text-center text-[20px]"
+              className="mt-5 overflow-x-auto rounded border border-wpborder bg-[#fafaf8] px-6 py-5 text-center text-[20px]"
               dangerouslySetInnerHTML={{
                 __html:
                   "<math><mrow><mi>funding</mi><mo>=</mo><msup><mrow><mo>(</mo>" +
