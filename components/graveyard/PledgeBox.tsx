@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
 import { useMyProfile } from "@/lib/hooks";
-import { startCheckout, confirmCheckoutSession, pledgeWithCredit } from "@/lib/actions";
+import { pledgeWithCredit } from "@/lib/actions";
 import { marginalMatch, type PledgeLike } from "@/lib/qf";
 import { dollars } from "@/lib/format";
 import posthog from "posthog-js";
@@ -27,33 +26,16 @@ export function PledgeBox({
   liveThresholdCents: number;
 }) {
   const { user, profile } = useMyProfile();
-  const router = useRouter();
-  const searchParams = useSearchParams();
   const [amountCents, setAmountCents] = useState(2500);
   const [custom, setCustom] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
   const [confirmed, setConfirmed] = useState(false);
-  const confirmedRef = useRef(false);
-
-  // Returning from Stripe Checkout: verify the session server-side.
-  useEffect(() => {
-    const sessionId = searchParams.get("session_id");
-    if (!sessionId || confirmedRef.current) return;
-    confirmedRef.current = true;
-    confirmCheckoutSession(sessionId).then(() => {
-      posthog.capture("pledge_confirmed", {
-        blogger_id: bloggerId,
-        blogger_name: bloggerName,
-        skin: "graveyard",
-      });
-      setConfirmed(true);
-      router.replace(`/b/${bloggerSlug}`, { scroll: false });
-    });
-  }, [searchParams, bloggerSlug, router]);
 
   const effective = custom ? Math.round(Number(custom) * 100) : amountCents;
   const valid = Number.isFinite(effective) && effective >= 100;
+  const balance = profile?.creditCents ?? 0;
   const { addedMatchCents } = valid
     ? marginalMatch(pledgesByBlogger, poolCents, liveThresholdCents, bloggerId, effective)
     : { addedMatchCents: 0 };
@@ -62,46 +44,22 @@ export function PledgeBox({
     if (!profile || !valid) return;
     setBusy(true);
     setError(null);
+    setNotice(null);
     posthog.capture("pledge_initiated", {
       blogger_id: bloggerId,
       blogger_name: bloggerName,
       amount_cents: effective,
       estimated_match_cents: addedMatchCents,
       skin: "graveyard",
-    });
-    const res = await startCheckout({
-      bloggerId,
-      bloggerName,
-      bloggerSlug,
-      profileId: profile.id,
-      amountCents: effective,
-    });
-    if (res.url) {
-      window.location.href = res.url;
-    } else {
-      setError(res.error ?? "Something went wrong starting checkout.");
-      setBusy(false);
-    }
-  }
-
-  const creditCents = profile?.creditCents ?? 0;
-
-  async function payWithCredit() {
-    if (!profile || !valid) return;
-    setBusy(true);
-    setError(null);
-    posthog.capture("pledge_initiated", {
-      blogger_id: bloggerId,
-      blogger_name: bloggerName,
-      amount_cents: effective,
-      estimated_match_cents: addedMatchCents,
-      skin: "graveyard",
-      method: "credit",
     });
     const res = await pledgeWithCredit(bloggerId, effective);
     setBusy(false);
     if (res?.error) setError(res.error);
     else setConfirmed(true);
+  }
+
+  function deposit() {
+    setNotice("Adding funds by card isn’t available yet — coming soon.");
   }
 
   return (
@@ -152,44 +110,31 @@ export function PledgeBox({
         </p>
       )}
       {profile ? (
-        creditCents > 0 ? (
-          <div className="mt-4">
-            <button
-              type="button"
-              onClick={payWithCredit}
-              disabled={busy || !valid || effective > creditCents}
-              className="w-full rounded-sm bg-candle px-6 py-3 font-medium text-night transition hover:bg-candle/90 disabled:opacity-50"
-            >
-              {busy
-                ? "lighting…"
-                : `Pledge ${valid ? dollars(effective, { round: true }) : ""} with credit`}
-            </button>
-            <div className="mt-2 flex items-center justify-between text-sm">
-              <button
-                type="button"
-                onClick={pledge}
-                disabled={busy || !valid}
-                className="text-mist underline underline-offset-4 hover:text-moon disabled:opacity-50"
-              >
-                or pay by card
-              </button>
-              <span className="gy-label text-mist">
-                {dollars(creditCents, { round: true })} credit left
-              </span>
-            </div>
-          </div>
-        ) : (
+        <div className="mt-4">
           <button
             type="button"
             onClick={pledge}
-            disabled={busy || !valid}
-            className="mt-4 w-full rounded-sm bg-candle px-6 py-3 font-medium text-night transition hover:bg-candle/90 disabled:opacity-50"
+            disabled={busy || !valid || effective > balance}
+            className="w-full rounded-sm bg-candle px-6 py-3 font-medium text-night transition hover:bg-candle/90 disabled:opacity-50"
           >
-            {busy
-              ? "Opening checkout…"
-              : `Pledge ${valid ? dollars(effective, { round: true }) : ""} — tax-deductible`}
+            {busy ? "lighting…" : `Pledge ${valid ? dollars(effective, { round: true }) : ""}`}
           </button>
-        )
+          <div className="mt-2 flex items-center justify-between text-sm">
+            <button
+              type="button"
+              onClick={deposit}
+              className="text-mist underline underline-offset-4 hover:text-moon"
+            >
+              Deposit funds
+            </button>
+            <span className="gy-label text-mist">Balance: {dollars(balance, { round: true })}</span>
+          </div>
+          {valid && effective > balance && (
+            <p className="mt-2 text-sm text-mist">
+              Not enough balance — deposits aren&rsquo;t available yet.
+            </p>
+          )}
+        </div>
       ) : (
         <Link
           href={user ? `/account?next=/b/${bloggerSlug}` : `/signin?next=/b/${bloggerSlug}`}
@@ -198,9 +143,10 @@ export function PledgeBox({
           {user ? "Finish your patron profile to pledge" : "Sign in to pledge"}
         </Link>
       )}
+      {notice && <p className="mt-3 text-sm text-mist">{notice}</p>}
       {error && <p className="mt-3 text-sm text-red-300">{error}</p>}
       <p className="mt-3 text-center text-xs text-mist/70">
-        Card payments via Stripe. Manifund is a 501(c)(3); pledges are tax-deductible.
+        Manifund is a 501(c)(3); pledges are tax-deductible.
       </p>
     </div>
   );

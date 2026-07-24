@@ -127,8 +127,8 @@ function AccountInner() {
       <h1 className="mt-3 text-4xl">{profile ? "Your patron profile" : "Become a patron"}</h1>
       {(profile?.creditCents ?? 0) > 0 && (
         <p className="mt-4 rounded-sm border border-candle/40 bg-candle/10 px-4 py-3 text-candle">
-          You have <strong>{dollars(profile!.creditCents!, { round: true })}</strong> of pledge
-          credit to spend on bloggers.
+          Your balance is <strong>{dollars(profile!.creditCents!, { round: true })}</strong> to
+          pledge with.
         </p>
       )}
       <p className="mt-3 text-moon/80">

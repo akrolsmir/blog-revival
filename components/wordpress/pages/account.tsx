@@ -117,8 +117,8 @@ function AccountInner() {
       <h2 className="text-[22px] font-bold">{profile ? "Edit your profile" : "Become a patron"}</h2>
       {(profile?.creditCents ?? 0) > 0 && (
         <p className="mt-2 rounded border border-wpgreen/40 bg-green-50 px-3 py-2 text-[13px] text-wpgreen">
-          You have <strong>{dollars(profile!.creditCents!, { round: true })}</strong> of pledge
-          credit to spend on bloggers.
+          Your balance is <strong>{dollars(profile!.creditCents!, { round: true })}</strong> to
+          pledge with.
         </p>
       )}
 

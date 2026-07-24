@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
 import { useMyProfile } from "@/lib/hooks";
-import { startCheckout, confirmCheckoutSession, pledgeWithCredit } from "@/lib/actions";
+import { pledgeWithCredit } from "@/lib/actions";
 import { marginalMatch, type PledgeLike } from "@/lib/qf";
 import { dollars } from "@/lib/format";
 import posthog from "posthog-js";
@@ -25,31 +24,15 @@ export function WpPledgeForm({
   liveThresholdCents: number;
 }) {
   const { user, profile } = useMyProfile();
-  const router = useRouter();
-  const searchParams = useSearchParams();
   const [amount, setAmount] = useState("25");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
   const [confirmed, setConfirmed] = useState(false);
-  const confirmedRef = useRef(false);
-
-  useEffect(() => {
-    const sessionId = searchParams.get("session_id");
-    if (!sessionId || confirmedRef.current) return;
-    confirmedRef.current = true;
-    confirmCheckoutSession(sessionId).then(() => {
-      posthog.capture("pledge_confirmed", {
-        blogger_id: bloggerId,
-        blogger_name: bloggerName,
-        skin: "wordpress",
-      });
-      setConfirmed(true);
-      router.replace(`/b/${bloggerSlug}`, { scroll: false });
-    });
-  }, [searchParams, bloggerSlug, router]);
 
   const cents = Math.round(Number(amount) * 100);
   const valid = Number.isFinite(cents) && cents >= 100;
+  const balance = profile?.creditCents ?? 0;
   const { addedMatchCents } = valid
     ? marginalMatch(pledgesByBlogger, poolCents, liveThresholdCents, bloggerId, cents)
     : { addedMatchCents: 0 };
@@ -58,45 +41,22 @@ export function WpPledgeForm({
     if (!profile || !valid) return;
     setBusy(true);
     setError(null);
+    setNotice(null);
     posthog.capture("pledge_initiated", {
       blogger_id: bloggerId,
       blogger_name: bloggerName,
       amount_cents: cents,
       estimated_match_cents: addedMatchCents,
       skin: "wordpress",
-    });
-    const res = await startCheckout({
-      bloggerId,
-      bloggerName,
-      bloggerSlug,
-      profileId: profile.id,
-      amountCents: cents,
-    });
-    if (res.url) window.location.href = res.url;
-    else {
-      setError(res.error ?? "Something went wrong starting checkout.");
-      setBusy(false);
-    }
-  }
-
-  const creditCents = profile?.creditCents ?? 0;
-
-  async function payWithCredit() {
-    if (!profile || !valid) return;
-    setBusy(true);
-    setError(null);
-    posthog.capture("pledge_initiated", {
-      blogger_id: bloggerId,
-      blogger_name: bloggerName,
-      amount_cents: cents,
-      estimated_match_cents: addedMatchCents,
-      skin: "wordpress",
-      method: "credit",
     });
     const res = await pledgeWithCredit(bloggerId, cents);
     setBusy(false);
     if (res?.error) setError(res.error);
     else setConfirmed(true);
+  }
+
+  function deposit() {
+    setNotice("Adding funds by card isn’t available yet — coming soon.");
   }
 
   return (
@@ -127,31 +87,24 @@ export function WpPledgeForm({
         )}
       </div>
       {profile ? (
-        <div className="mt-3 flex flex-wrap items-center gap-2">
-          {creditCents > 0 && (
+        <>
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <button type="button" onClick={pledge} disabled={busy || !valid || cents > balance}>
+              {busy ? "Pledging…" : `Pledge ${valid ? dollars(cents, { round: true }) : ""}`}
+            </button>
             <button
               type="button"
-              onClick={payWithCredit}
-              disabled={busy || !valid || cents > creditCents}
+              onClick={deposit}
+              className="!bg-none !font-normal !text-wplink underline"
             >
-              {busy
-                ? "Pledging…"
-                : `Pledge ${valid ? dollars(cents, { round: true }) : ""} with credit`}
+              Deposit funds
             </button>
+          </div>
+          <p className="wp-meta mt-1.5">Balance: {dollars(balance, { round: true })}</p>
+          {valid && cents > balance && (
+            <p className="wp-meta">Not enough balance — deposits aren&rsquo;t available yet.</p>
           )}
-          <button
-            type="button"
-            onClick={pledge}
-            disabled={busy || !valid}
-            className={creditCents > 0 ? "!bg-none !font-normal !text-wplink underline" : ""}
-          >
-            {busy && creditCents === 0
-              ? "Opening checkout…"
-              : creditCents > 0
-                ? "or pay by card"
-                : `Pledge ${valid ? dollars(cents, { round: true }) : ""} →`}
-          </button>
-        </div>
+        </>
       ) : (
         <p className="mt-3 text-[12.5px]">
           <Link href={user ? `/account?next=/b/${bloggerSlug}` : `/signin?next=/b/${bloggerSlug}`}>
@@ -159,11 +112,9 @@ export function WpPledgeForm({
           </Link>
         </p>
       )}
-      {creditCents > 0 && (
-        <p className="wp-meta mt-1.5">{dollars(creditCents, { round: true })} credit available.</p>
-      )}
+      {notice && <p className="wp-meta mt-2">{notice}</p>}
       {error && <p className="mt-2 text-[12.5px] text-red-700">{error}</p>}
-      <p className="wp-meta mt-2">tax-deductible · Manifund 501(c)(3) · card payments via Stripe</p>
+      <p className="wp-meta mt-2">tax-deductible · Manifund 501(c)(3)</p>
     </div>
   );
 }
