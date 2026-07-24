@@ -5,6 +5,9 @@ import { useBounties } from "@/lib/hooks";
 import { GraveyardHero } from "@/components/graveyard/GraveyardHero";
 import { Headstone } from "@/components/graveyard/Headstone";
 import { MatchSlider } from "@/components/graveyard/MatchSlider";
+import { GraveyardFaq } from "@/components/graveyard/Faq";
+import { linkify } from "@/components/Linkify";
+import { LAUNCH_PARAGRAPHS, LAUNCH_SIGNATURE } from "@/lib/content";
 import { dollars } from "@/lib/format";
 
 export default function GraveyardHome() {
@@ -20,39 +23,22 @@ export default function GraveyardHome() {
     <main>
       <GraveyardHero bloggers={bloggers} liveThresholdCents={liveThresholdCents} />
 
-      {/* Mechanism */}
-      <section id="how" className="bg-parchment px-6 py-24 text-[#2a3040] md:px-12">
-        <div className="mx-auto max-w-[1060px]">
-          <div className="mb-16 text-center">
-            <p className="gy-caps text-[13px] tracking-[0.32em] text-[#8a7f5f]">the mechanism</p>
-            <h2 className="mt-3 text-4xl text-[#232838] md:text-[46px]">How a revival works</h2>
-          </div>
-          <div className="grid gap-11 md:grid-cols-3">
-            {[
-              {
-                numeral: "I",
-                title: "Leave a pledge",
-                body: "Pick a blogger you miss and pledge any amount.",
-              },
-              {
-                numeral: "II",
-                title: "Your pledge gets matched",
-                body: "Quadratic matching from the pool adds more money the more people pledge.",
-              },
-              {
-                numeral: "III",
-                title: "At $1,000, it goes live",
-                body: "If the blogger writes the post and links it here, they can claim the bounty.",
-              },
-            ].map((step) => (
-              <div key={step.numeral} className="flex flex-col gap-3.5">
-                <div className="gy-caps flex h-11 w-11 items-center justify-center rounded-full border-[1.5px] border-[#b8ac88] text-[19px] text-[#8a7f5f]">
-                  {step.numeral}
-                </div>
-                <h3 className="text-[25px] font-semibold text-[#232838]">{step.title}</h3>
-                <p className="leading-[1.6] text-[#565c70] [text-wrap:pretty]">{step.body}</p>
-              </div>
+      {/* Launch post */}
+      <section id="about" className="bg-parchment px-6 py-24 text-[#2a3040] md:px-12">
+        <div className="mx-auto max-w-[680px]">
+          <h2 className="text-4xl text-[#232838] md:text-[42px]">What is this?</h2>
+          <div className="mt-8 space-y-5 text-[17px] leading-[1.7] text-[#3a4152]">
+            {LAUNCH_PARAGRAPHS.map((p, i) => (
+              <p key={i} className="[text-wrap:pretty]">
+                {linkify(
+                  p,
+                  "font-medium text-[#8a5a1c] underline underline-offset-2 hover:text-[#6d4715]",
+                )}
+              </p>
             ))}
+            <p className="gy-caps pt-1 text-[15px] tracking-[0.14em] text-[#6b6242]">
+              {LAUNCH_SIGNATURE}
+            </p>
           </div>
         </div>
       </section>
@@ -125,6 +111,17 @@ export default function GraveyardHome() {
             ))}
           </div>
         )}
+      </section>
+
+      {/* FAQ */}
+      <section id="faq" className="border-t border-[#141d30] px-6 pb-28 pt-20 md:px-12">
+        <div className="mx-auto max-w-[720px]">
+          <p className="gy-label text-mist">answers</p>
+          <h2 className="mt-3 text-4xl md:text-[46px]">FAQ</h2>
+          <div className="mt-10">
+            <GraveyardFaq />
+          </div>
+        </div>
       </section>
     </main>
   );

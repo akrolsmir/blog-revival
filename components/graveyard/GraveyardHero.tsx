@@ -239,7 +239,7 @@ export function GraveyardHero({
             become a patron
           </Link>
           <Link
-            href="#how"
+            href="#match"
             className="gy-caps rounded-[3px] border border-[#3c485f] px-7 py-3 text-[15px] text-[#cfd6e4] transition hover:border-[#5b6981]"
           >
             how it works

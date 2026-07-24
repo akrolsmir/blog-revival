@@ -5,6 +5,9 @@ import { useBounties, topPatrons } from "@/lib/hooks";
 import { daysSilent } from "@/lib/qf";
 import { dollars, bloggerIcon } from "@/lib/format";
 import { WpMatchMath } from "@/components/wordpress/MatchMath";
+import { WpFaq } from "@/components/wordpress/Faq";
+import { linkify } from "@/components/Linkify";
+import { LAUNCH_PARAGRAPHS } from "@/lib/content";
 
 function fmtDate(d: Date): string {
   return d.toLocaleDateString("en-US", {
@@ -15,53 +18,31 @@ function fmtDate(d: Date): string {
 }
 
 export default function WordpressHome() {
-  const { isLoading, bloggers, poolCents } = useBounties();
+  const { isLoading, bloggers } = useBounties();
 
   return (
     <div className="space-y-10">
-      {/* Intro post */}
+      {/* Launch post */}
       <article>
         <h2 className="text-[26px] font-bold leading-snug">
           A lot of great bloggers have stopped blogging. Let&rsquo;s offer them bounties to start
           again!
         </h2>
-        <p className="wp-meta mt-1">{fmtDate(new Date())}</p>
+        <p className="wp-meta mt-1">Posted by Carol and Austin · {fmtDate(new Date())}</p>
         <div className="mt-4 space-y-4 text-[13.5px] leading-relaxed">
-          <p>
-            Some of the bloggers that most shaped our thinking — Holden Karnofsky, Paul Christiano,
-            Sam Altman, and many others — aren't blogging anymore. Many blogs are victims of their
-            own success, and over time more important context ends up stuck in the heads of people
-            who are too busy to blog.
-          </p>
-          <p>
-            Substack is great, but the platform economics reward frequent posting to build an
-            audience. The marginal post from someone who rarely blogs is worth a lot more than the
-            marginal post from even a good substacker.
-          </p>
-          <p>
-            To address this, the Blog Revival Project coordinates bounties. Patrons pledge toward a
-            specific blogger and the blogger can write one new post of at least 1000 words to claim
-            the funds. Pledges are matched from a {dollars(poolCents, { round: true })}{" "}
-            <a
-              href="https://vitalik.eth.limo/general/2019/12/07/quadratic.html"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              quadratic funding
-            </a>{" "}
-            pool, so many small pledges beat one big one.
-          </p>
-          <p className="font-bold">
-            <Link href="/signin?next=/account">Sign up now</Link>! The first 100 patrons will get
-            $25 of credit to pledge to the bloggers of their choice.
-          </p>
+          {LAUNCH_PARAGRAPHS.map((p, i) => (
+            <p key={i}>{linkify(p)}</p>
+          ))}
         </div>
         <p className="mt-4">
+          <Link href="/signin?next=/account" className="font-bold">
+            Sign up now
+          </Link>{" "}
+          ·{" "}
           <a href="#bounties" className="font-bold">
             Read the bounties ↓
           </a>{" "}
-          · <Link href="/account">Become a patron</Link> ·{" "}
-          <Link href="/claim">Claim your blogger profile</Link>
+          · <a href="#faq">FAQ ↓</a>
         </p>
       </article>
 
@@ -183,6 +164,16 @@ export default function WordpressHome() {
           );
         })}
       </div>
+
+      <hr className="border-t border-dotted border-wpborder" />
+
+      {/* FAQ post */}
+      <article id="faq">
+        <h2 className="text-[26px] font-bold leading-snug">Frequently asked questions</h2>
+        <div className="mt-4">
+          <WpFaq />
+        </div>
+      </article>
     </div>
   );
 }

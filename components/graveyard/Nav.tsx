@@ -15,11 +15,14 @@ export function GyNav() {
         revive.blog
       </Link>
       <nav className="gy-caps flex items-center gap-5 text-sm tracking-[0.18em] md:gap-8">
-        <Link href="/#how" className="hidden text-[#b9c2d4] hover:text-moon sm:inline">
-          how it works
+        <Link href="/#about" className="hidden text-[#b9c2d4] hover:text-moon sm:inline">
+          about
         </Link>
         <Link href="/#blogroll" className="hidden text-[#b9c2d4] hover:text-moon sm:inline">
           blogs
+        </Link>
+        <Link href="/#faq" className="hidden text-[#b9c2d4] hover:text-moon sm:inline">
+          faq
         </Link>
         <Link href="/patrons" className="hidden text-[#b9c2d4] hover:text-moon sm:inline">
           patrons
@@ -67,11 +70,14 @@ export function GyFooter() {
         , a 501(c)(3) nonprofit. Pledges are tax-deductible.
       </p>
       <nav className="gy-caps mt-6 flex flex-wrap justify-center gap-x-8 gap-y-3 text-[13px] tracking-[0.18em] text-mist">
-        <Link href="/#how" className="hover:text-moon">
-          how it works
+        <Link href="/#about" className="hover:text-moon">
+          about
         </Link>
         <Link href="/#blogroll" className="hover:text-moon">
           blogs
+        </Link>
+        <Link href="/#faq" className="hover:text-moon">
+          faq
         </Link>
         <Link href="/patrons" className="hover:text-moon">
           patrons

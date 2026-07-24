@@ -34,6 +34,9 @@ export function WpMeta() {
           <li>
             <Link href="/nominate">Nominate a blog</Link>
           </li>
+          <li>
+            <Link href="/#faq">FAQ</Link>
+          </li>
           {isAdmin && (
             <li>
               <Link href="/admin">Review nominations</Link>
