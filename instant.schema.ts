@@ -24,6 +24,10 @@ const _schema = i.schema({
       favoriteAliveBlogs: i.json().optional(), // [{ name, url }]
       favoriteDeadBlogs: i.json().optional(), // [{ name, url }]
       postsILike: i.string().optional(), // "what kind of posts I like"
+      // Pledge credit (in cents). Granted server-side: $25 to the first 100
+      // signups; gotSignupCredit guards against double-granting.
+      creditCents: i.number().optional(),
+      gotSignupCredit: i.boolean().optional(),
       createdAt: i.number(),
     }),
 

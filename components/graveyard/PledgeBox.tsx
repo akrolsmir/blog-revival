@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMyProfile } from "@/lib/hooks";
-import { startCheckout, confirmCheckoutSession } from "@/lib/actions";
+import { startCheckout, confirmCheckoutSession, pledgeWithCredit } from "@/lib/actions";
 import { marginalMatch, type PledgeLike } from "@/lib/qf";
 import { dollars } from "@/lib/format";
 import posthog from "posthog-js";
@@ -84,6 +84,26 @@ export function PledgeBox({
     }
   }
 
+  const creditCents = profile?.creditCents ?? 0;
+
+  async function payWithCredit() {
+    if (!profile || !valid) return;
+    setBusy(true);
+    setError(null);
+    posthog.capture("pledge_initiated", {
+      blogger_id: bloggerId,
+      blogger_name: bloggerName,
+      amount_cents: effective,
+      estimated_match_cents: addedMatchCents,
+      skin: "graveyard",
+      method: "credit",
+    });
+    const res = await pledgeWithCredit(bloggerId, effective);
+    setBusy(false);
+    if (res?.error) setError(res.error);
+    else setConfirmed(true);
+  }
+
   return (
     <div className="rounded-md border border-moon/15 p-6">
       <h3 className="gy-caps text-xl text-moon">light a candle</h3>
@@ -132,16 +152,44 @@ export function PledgeBox({
         </p>
       )}
       {profile ? (
-        <button
-          type="button"
-          onClick={pledge}
-          disabled={busy || !valid}
-          className="mt-4 w-full rounded-sm bg-candle px-6 py-3 font-medium text-night transition hover:bg-candle/90 disabled:opacity-50"
-        >
-          {busy
-            ? "Opening checkout…"
-            : `Pledge ${valid ? dollars(effective, { round: true }) : ""} — tax-deductible`}
-        </button>
+        creditCents > 0 ? (
+          <div className="mt-4">
+            <button
+              type="button"
+              onClick={payWithCredit}
+              disabled={busy || !valid || effective > creditCents}
+              className="w-full rounded-sm bg-candle px-6 py-3 font-medium text-night transition hover:bg-candle/90 disabled:opacity-50"
+            >
+              {busy
+                ? "lighting…"
+                : `Pledge ${valid ? dollars(effective, { round: true }) : ""} with credit`}
+            </button>
+            <div className="mt-2 flex items-center justify-between text-sm">
+              <button
+                type="button"
+                onClick={pledge}
+                disabled={busy || !valid}
+                className="text-mist underline underline-offset-4 hover:text-moon disabled:opacity-50"
+              >
+                or pay by card
+              </button>
+              <span className="gy-label text-mist">
+                {dollars(creditCents, { round: true })} credit left
+              </span>
+            </div>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={pledge}
+            disabled={busy || !valid}
+            className="mt-4 w-full rounded-sm bg-candle px-6 py-3 font-medium text-night transition hover:bg-candle/90 disabled:opacity-50"
+          >
+            {busy
+              ? "Opening checkout…"
+              : `Pledge ${valid ? dollars(effective, { round: true }) : ""} — tax-deductible`}
+          </button>
+        )
       ) : (
         <Link
           href={user ? `/account?next=/b/${bloggerSlug}` : `/signin?next=/b/${bloggerSlug}`}

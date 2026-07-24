@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { db } from "@/lib/db";
 import { id } from "@instantdb/react";
 import { useMyProfile } from "@/lib/hooks";
+import { claimSignupCredit } from "@/lib/actions";
 import { dollars } from "@/lib/format";
 import posthog from "posthog-js";
 
@@ -104,6 +105,7 @@ function AccountInner() {
         is_new_profile: !profile,
         skin: "graveyard",
       });
+      await claimSignupCredit();
       setSaved(true);
       if (next) router.push(next);
     } catch (e: any) {
@@ -123,6 +125,12 @@ function AccountInner() {
     <main className="mx-auto max-w-2xl px-6 py-16">
       <p className="gy-label text-mist">your plot in the yard</p>
       <h1 className="mt-3 text-4xl">{profile ? "Your patron profile" : "Become a patron"}</h1>
+      {(profile?.creditCents ?? 0) > 0 && (
+        <p className="mt-4 rounded-sm border border-candle/40 bg-candle/10 px-4 py-3 text-candle">
+          You have <strong>{dollars(profile!.creditCents!, { round: true })}</strong> of pledge
+          credit to spend on bloggers.
+        </p>
+      )}
       <p className="mt-3 text-moon/80">
         Patrons keep the graveyard lit. Tell the bloggers who you are and what you&rsquo;re hoping
         they&rsquo;ll write.

@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { db } from "@/lib/db";
 import { id } from "@instantdb/react";
 import { useMyProfile } from "@/lib/hooks";
+import { claimSignupCredit } from "@/lib/actions";
 import { dollars } from "@/lib/format";
 import posthog from "posthog-js";
 
@@ -99,6 +100,7 @@ function AccountInner() {
         is_new_profile: !profile,
         skin: "wordpress",
       });
+      await claimSignupCredit();
       setSaved(true);
       if (next) router.push(next);
     } catch {
@@ -113,6 +115,12 @@ function AccountInner() {
   return (
     <div>
       <h2 className="text-[22px] font-bold">{profile ? "Edit your profile" : "Become a patron"}</h2>
+      {(profile?.creditCents ?? 0) > 0 && (
+        <p className="mt-2 rounded border border-wpgreen/40 bg-green-50 px-3 py-2 text-[13px] text-wpgreen">
+          You have <strong>{dollars(profile!.creditCents!, { round: true })}</strong> of pledge
+          credit to spend on bloggers.
+        </p>
+      )}
 
       <div className="mt-5 space-y-4">
         <div className="grid gap-4 sm:grid-cols-2">

@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMyProfile } from "@/lib/hooks";
-import { startCheckout, confirmCheckoutSession } from "@/lib/actions";
+import { startCheckout, confirmCheckoutSession, pledgeWithCredit } from "@/lib/actions";
 import { marginalMatch, type PledgeLike } from "@/lib/qf";
 import { dollars } from "@/lib/format";
 import posthog from "posthog-js";
@@ -79,6 +79,26 @@ export function WpPledgeForm({
     }
   }
 
+  const creditCents = profile?.creditCents ?? 0;
+
+  async function payWithCredit() {
+    if (!profile || !valid) return;
+    setBusy(true);
+    setError(null);
+    posthog.capture("pledge_initiated", {
+      blogger_id: bloggerId,
+      blogger_name: bloggerName,
+      amount_cents: cents,
+      estimated_match_cents: addedMatchCents,
+      skin: "wordpress",
+      method: "credit",
+    });
+    const res = await pledgeWithCredit(bloggerId, cents);
+    setBusy(false);
+    if (res?.error) setError(res.error);
+    else setConfirmed(true);
+  }
+
   return (
     <div className="rounded border border-wpborder bg-[#f4f8fc] p-5">
       <h3 className="wp-widget-title">Fund this bounty</h3>
@@ -107,15 +127,40 @@ export function WpPledgeForm({
         )}
       </div>
       {profile ? (
-        <button type="button" onClick={pledge} disabled={busy || !valid} className="mt-3">
-          {busy ? "Opening checkout…" : `Pledge ${valid ? dollars(cents, { round: true }) : ""} →`}
-        </button>
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          {creditCents > 0 && (
+            <button
+              type="button"
+              onClick={payWithCredit}
+              disabled={busy || !valid || cents > creditCents}
+            >
+              {busy
+                ? "Pledging…"
+                : `Pledge ${valid ? dollars(cents, { round: true }) : ""} with credit`}
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={pledge}
+            disabled={busy || !valid}
+            className={creditCents > 0 ? "!bg-none !font-normal !text-wplink underline" : ""}
+          >
+            {busy && creditCents === 0
+              ? "Opening checkout…"
+              : creditCents > 0
+                ? "or pay by card"
+                : `Pledge ${valid ? dollars(cents, { round: true }) : ""} →`}
+          </button>
+        </div>
       ) : (
         <p className="mt-3 text-[12.5px]">
           <Link href={user ? `/account?next=/b/${bloggerSlug}` : `/signin?next=/b/${bloggerSlug}`}>
             {user ? "Finish your patron profile to pledge" : "Sign in to pledge"}
           </Link>
         </p>
+      )}
+      {creditCents > 0 && (
+        <p className="wp-meta mt-1.5">{dollars(creditCents, { round: true })} credit available.</p>
       )}
       {error && <p className="mt-2 text-[12.5px] text-red-700">{error}</p>}
       <p className="wp-meta mt-2">tax-deductible · Manifund 501(c)(3) · card payments via Stripe</p>
