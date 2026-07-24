@@ -23,7 +23,7 @@ const newsreader = Newsreader({
 });
 
 export const metadata: Metadata = {
-  title: "revive.blog — The Blog Revival Project",
+  title: "revive.blog — Blog Revival Project",
   description:
     "Bounties for beloved dormant bloggers to write one more post. Quadratic funding by Manifund.",
 };

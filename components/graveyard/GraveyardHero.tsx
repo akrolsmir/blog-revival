@@ -222,7 +222,7 @@ export function GraveyardHero({
           a manifund project &nbsp;·&nbsp; quadratic funding
         </div> */}
         <h1 className="mb-5 text-[40px] leading-[1.06] text-[#f0f2f7] text-balance md:text-[50px]">
-          The Blog Revival Project
+          Blog Revival Project
         </h1>
         <p className="mx-auto mb-4 max-w-[520px] text-[19px] leading-[1.55] text-[#a9b3c8] text-pretty">
           Many of our favorite blogs have gone silent. <br />
