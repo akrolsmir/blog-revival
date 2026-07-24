@@ -114,9 +114,17 @@ const TREE_PATH =
 const GRASS_PATH =
   "M4 24 C6 14 4 8 0 2 C8 6 10 14 10 20 C13 10 12 6 16 0 C18 8 16 16 15 24 Z M30 24 C32 15 30 9 26 4 C33 8 35 14 34 24 Z M50 24 C52 14 50 8 46 2 C54 7 56 15 55 24 Z";
 
-// Unlit until its headstone is hovered; wax height, glow radius and glow
-// strength all scale with funding.
-function Candle({ pct, className = "" }: { pct: number; className?: string }) {
+// Burns steadily once the bounty is live; otherwise unlit until its headstone
+// is hovered. Wax height, glow radius and glow strength all scale with funding.
+function Candle({
+  pct,
+  lit = false,
+  className = "",
+}: {
+  pct: number;
+  lit?: boolean;
+  className?: string;
+}) {
   const capped = Math.min(pct, 130);
   const waxH = Math.round(12 + capped * 0.2);
   const glowSize = Math.round(70 + capped * 1.1);
@@ -124,7 +132,9 @@ function Candle({ pct, className = "" }: { pct: number; className?: string }) {
   return (
     <div className={`flex flex-col items-center ${className}`}>
       <div
-        className="pointer-events-none absolute bottom-0 rounded-full opacity-0 transition-opacity duration-500 group-hover:[opacity:var(--glow)]"
+        className={`pointer-events-none absolute bottom-0 rounded-full transition-opacity duration-500 ${
+          lit ? "[opacity:var(--glow)]" : "opacity-0 group-hover:[opacity:var(--glow)]"
+        }`}
         style={{
           width: glowSize,
           height: glowSize,
@@ -132,7 +142,11 @@ function Candle({ pct, className = "" }: { pct: number; className?: string }) {
           ["--glow" as string]: glowOp,
         }}
       />
-      <div className="gy-scene-flame opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+      <div
+        className={`gy-scene-flame transition-opacity duration-500 ${
+          lit ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+        }`}
+      />
       <div
         style={{
           width: 12,
@@ -318,7 +332,11 @@ export function GraveyardHero({
             </Link>
             {/* grave mound */}
             <div className="absolute -bottom-3 left-[-12%] right-[-12%] h-[22px] rounded-[50%] bg-abyss" />
-            <Candle pct={pct} className="absolute -bottom-2 left-1/2 z-[6] -translate-x-1/2" />
+            <Candle
+              pct={pct}
+              lit={lit}
+              className="absolute -bottom-2 left-1/2 z-[6] -translate-x-1/2"
+            />
           </div>
         );
       })}
@@ -368,7 +386,11 @@ export function GraveyardHero({
                 )}
               </Link>
               <div className="absolute -bottom-3 left-[-8%] right-[-8%] h-[18px] rounded-[50%] bg-abyss" />
-              <Candle pct={pct} className="absolute -bottom-2 left-1/2 z-[6] -translate-x-1/2" />
+              <Candle
+                pct={pct}
+                lit={b.math.isLive}
+                className="absolute -bottom-2 left-1/2 z-[6] -translate-x-1/2"
+              />
             </div>
           );
         })}
