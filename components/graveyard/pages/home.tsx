@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { useBounties } from "@/lib/hooks";
+import Link from "next/link";
+import { useBounties, usePendingNominations } from "@/lib/hooks";
+import { daysSilent } from "@/lib/qf";
 import { GraveyardHero } from "@/components/graveyard/GraveyardHero";
 import { Headstone } from "@/components/graveyard/Headstone";
 import { MatchSlider } from "@/components/graveyard/MatchSlider";
@@ -13,6 +15,7 @@ import { dollars } from "@/lib/format";
 export default function GraveyardHome() {
   const { isLoading, bloggers, pledgesByBlogger, poolCents, poolUsedCents, liveThresholdCents } =
     useBounties();
+  const { nominations: pending } = usePendingNominations();
 
   // Default to the highest-funded blogger (top of the sorted list); the
   // dropdown lets you switch.
@@ -105,11 +108,67 @@ export default function GraveyardHome() {
         {isLoading ? (
           <p className="gy-caps text-center tracking-[0.2em] text-mist">raising the dead…</p>
         ) : (
-          <div className="mx-auto grid max-w-[1160px] gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {bloggers.map((b, i) => (
-              <Headstone key={b.id} blogger={b} index={i} />
-            ))}
-          </div>
+          <>
+            <div className="mx-auto grid max-w-[1160px] gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {bloggers.map((b, i) => (
+                <Headstone key={b.id} blogger={b} index={i} />
+              ))}
+            </div>
+
+            {/* Reader nominations still awaiting review. Deliberately plainer
+                than a headstone — an unreviewed suggestion hasn't earned a
+                grave or a bounty yet, and shouldn't read as though it has. */}
+            {pending.length > 0 && (
+              <div className="mx-auto mt-16 max-w-[1160px] border-t border-moon/10 pt-8">
+                <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+                  <h3 className="gy-label text-mist">awaiting a headstone</h3>
+                  <Link href="/nominate" className="gy-label text-mist hover:text-moon">
+                    nominate a blog
+                  </Link>
+                </div>
+                <p className="mt-2 max-w-[62ch] text-[15px] text-[#8b96ad]">
+                  Suggested by readers, not yet reviewed. Approved nominations get a grave and a
+                  bounty of their own.
+                </p>
+                <ul className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                  {pending.map((n) => {
+                    const silent = n.lastPostAt != null ? daysSilent(n.lastPostAt) : null;
+                    return (
+                      <li
+                        key={n.id}
+                        className="rounded-[3px] border border-dashed border-moon/15 bg-[#0e1626]/60 px-4 py-3"
+                      >
+                        <a
+                          href={n.blogUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-[16px] text-moon/90 underline decoration-moon/20 underline-offset-4 hover:decoration-candle"
+                        >
+                          {n.blogName || n.authorName}
+                        </a>
+                        <p className="gy-label mt-1 text-mist/80">
+                          {n.blogName && n.blogName !== n.authorName && <>{n.authorName}</>}
+                          {n.blogName && n.blogName !== n.authorName && silent != null && " · "}
+                          {silent != null && <>silent {silent.toLocaleString()} days</>}
+                        </p>
+                        {n.submitter && (
+                          <p className="mt-1 text-[13px] text-mist">
+                            nominated by{" "}
+                            <Link
+                              href={`/p/${n.submitter.handle}`}
+                              className="underline decoration-moon/20 underline-offset-4 hover:decoration-candle"
+                            >
+                              {n.submitter.displayName}
+                            </Link>
+                          </p>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            )}
+          </>
         )}
       </section>
 

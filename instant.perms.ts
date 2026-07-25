@@ -65,10 +65,14 @@ const rules = {
     },
   },
   nominations: {
-    // Entirely server-mediated: submitted via /api/nominations (signed-in) and
-    // read/approved by admins via /api/nominations/*. No client access.
+    // Writes stay server-mediated: submitted via /api/nominations (signed-in)
+    // and approved by admins via /api/nominations/review. Reads are public
+    // EXCEPT rejected ones — a decline leaves no public record of the blog or
+    // of who suggested it, so the rule filters on status rather than allowing
+    // a blanket view. Pending nominations show on the home blogroll; approved
+    // ones already exist as bloggers rows.
     allow: {
-      view: "false",
+      view: "data.status != 'rejected'",
       create: "false",
       update: "false",
       delete: "false",

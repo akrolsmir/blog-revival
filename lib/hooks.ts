@@ -173,6 +173,37 @@ export function useMyProfile() {
   };
 }
 
+export type NominationRow = {
+  id: string;
+  blogName?: string;
+  authorName: string;
+  blogUrl: string;
+  lastPostAt?: number;
+  topPosts?: { title: string; url: string }[];
+  createdAt: number;
+  submitter?: { id: string; handle: string; displayName: string } | null;
+};
+
+/**
+ * Reader nominations still waiting on review, newest first — the "not yet a
+ * bounty" tier of the blogroll. Only `pending` is queried: an approved
+ * nomination already exists as a bloggers row a few rows up, and rejected
+ * ones aren't readable at all (instant.perms.ts filters them out).
+ */
+export function usePendingNominations() {
+  const { data, isLoading, error } = db.useQuery({
+    nominations: {
+      $: { where: { status: "pending" }, order: { createdAt: "desc" } },
+      submitter: {},
+    },
+  });
+  return {
+    isLoading,
+    error,
+    nominations: (data?.nominations ?? []) as unknown as NominationRow[],
+  };
+}
+
 export type TopPatron = {
   id: string;
   handle: string;

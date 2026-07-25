@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useBounties, topPatrons } from "@/lib/hooks";
+import { useBounties, topPatrons, usePendingNominations } from "@/lib/hooks";
 import { daysSilent } from "@/lib/qf";
 import { dollars, bloggerIcon } from "@/lib/format";
 import { WpMatchMath } from "@/components/wordpress/MatchMath";
@@ -19,6 +19,7 @@ function fmtDate(d: Date): string {
 
 export default function WordpressHome() {
   const { isLoading, bloggers } = useBounties();
+  const { nominations: pending } = usePendingNominations();
 
   return (
     <div className="space-y-10">
@@ -161,6 +162,53 @@ export default function WordpressHome() {
           );
         })}
       </div>
+
+      {/* Reader nominations still awaiting review — the old "posts pending
+          moderation" list, kept plainer than the bounty cards above. */}
+      {pending.length > 0 && (
+        <>
+          <hr className="border-t border-dotted border-wpborder" />
+          <article>
+            <h2 className="text-[20px] font-bold">Nominated blogs</h2>
+            <p className="wp-meta mt-0.5">
+              Suggested by readers, awaiting review. Approved nominations become bounties.
+            </p>
+            <ul className="mt-3 divide-y divide-dotted divide-wpborder border-t border-dotted border-wpborder">
+              {pending.map((n) => {
+                const silent = n.lastPostAt != null ? daysSilent(n.lastPostAt) : null;
+                return (
+                  <li key={n.id} className="flex flex-wrap items-baseline gap-x-2 py-1.5">
+                    <a
+                      href={n.blogUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-bold"
+                    >
+                      {n.blogName || n.authorName}
+                    </a>
+                    <span className="wp-meta">
+                      {n.blogName && n.blogName !== n.authorName && n.authorName}
+                      {n.blogName && n.blogName !== n.authorName && silent != null && " · "}
+                      {silent != null && <>last post {silent.toLocaleString()} days ago</>}
+                    </span>
+                    {n.submitter && (
+                      <span className="wp-meta ml-auto">
+                        nominated by{" "}
+                        <Link href={`/p/${n.submitter.handle}`}>{n.submitter.displayName}</Link>
+                      </span>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+            <p className="mt-3">
+              <Link href="/nominate" className="font-bold">
+                Nominate a blog →
+              </Link>
+            </p>
+          </article>
+        </>
+      )}
 
       <hr className="border-t border-dotted border-wpborder" />
 
