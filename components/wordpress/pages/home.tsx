@@ -95,6 +95,11 @@ export default function WordpressHome() {
           const silent = b.lastPostAt != null ? daysSilent(b.lastPostAt) : null;
           const revived = b.status === "revived" || b.status === "paid";
           const top = topPatrons(b);
+          const others = Math.max(0, b.supporterCount - top.length);
+          const blogLabel =
+            b.blogName && b.blogName !== b.name
+              ? b.blogName
+              : b.blogUrl.replace(/^https?:\/\/(www\.)?/, "").replace(/\/.*$/, "");
           return (
             <article
               key={b.id}
@@ -115,44 +120,36 @@ export default function WordpressHome() {
                   {b.name}
                 </Link>
               </h2>
-              {b.blogName && b.blogName !== b.name && (
-                <p className="wp-meta mt-0.5 italic">{b.blogName}</p>
-              )}
-              <p className="mt-1 text-[12.5px]">
-                {dollars(b.math.directCents, { round: true })} direct +{" "}
-                <span className="font-bold">
-                  {dollars(b.math.matchCents, { round: true })} match
-                </span>{" "}
-                = <strong>{dollars(b.math.totalCents, { round: true })}</strong> / $1,000 ·{" "}
-                {revived ? (
-                  <span className="font-bold text-wpgreen">REVIVED</span>
-                ) : b.math.isLive ? (
-                  <span className="font-bold text-wpgreen">LIVE</span>
-                ) : (
-                  <span className="font-bold text-wpmeta">FUNDING</span>
-                )}
+              <p className="wp-meta mt-0.5 italic">
+                <a href={b.blogUrl} target="_blank" rel="noopener noreferrer">
+                  {blogLabel}
+                </a>
+                {silent != null && <> · last post {silent.toLocaleString()} days ago</>}
               </p>
-              <p className="wp-meta mt-0.5">
-                <a href={b.blogUrl} target="_blank" rel="noopener noreferrer" className="italic">
-                  {b.blogUrl.replace(/^https?:\/\/(www\.)?/, "")}
-                </a>{" "}
-                {silent != null && (
+              <p className="mt-1.5 text-[12.5px]">
+                {dollars(b.math.directCents, { round: true })} +{" "}
+                {dollars(b.math.matchCents, { round: true })} match ={" "}
+                <strong className={b.math.isLive ? "text-wpgreen" : undefined}>
+                  {dollars(b.math.totalCents, { round: true })}
+                </strong>
+                {!b.math.isLive && " / $1,000"}
+                {revived && (
                   <>
-                    · last post <em>{silent.toLocaleString()}</em> days ago{" "}
+                    {" · "}
+                    <span className="font-bold text-wpgreen">REVIVED</span>
                   </>
                 )}
-                · {b.supporterCount} patron
-                {b.supporterCount === 1 ? "" : "s"}
               </p>
               {top.length > 0 && (
                 <p className="wp-meta mt-0.5">
                   Funded by{" "}
                   {top.map((t, i) => (
                     <span key={t.id}>
-                      {i > 0 && ", "}
+                      {i > 0 && (i === top.length - 1 && others === 0 ? " and " : ", ")}
                       <Link href={`/p/${t.handle}`}>{t.displayName}</Link>
                     </span>
                   ))}
+                  {others > 0 && ` and ${others} other${others === 1 ? "" : "s"}`}
                 </p>
               )}
               <p className="mt-auto pt-3">
