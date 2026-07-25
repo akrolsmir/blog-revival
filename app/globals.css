@@ -23,9 +23,11 @@
   --color-wpink: #333333;
   --color-wpmeta: #777777;
 
-  --font-display: var(--font-marcellus-sc), "Marcellus SC", Georgia, serif;
-  --font-caps: var(--font-marcellus-sc), "Marcellus SC", Georgia, serif;
+  --font-display: var(--font-crimson), "Crimson Pro", Georgia, serif;
+  --font-caps: var(--font-crimson), "Crimson Pro", Georgia, serif;
   --font-body: var(--font-crimson), "Crimson Pro", Georgia, serif;
+  /* headstone engraving only — see .gy-grave */
+  --font-grave: var(--font-marcellus-sc), "Marcellus SC", Georgia, serif;
 }
 
 /* Theme classes set on <html> by next-themes before first paint, so the
@@ -51,26 +53,46 @@ html.skin-wp {
 .gy h2,
 .gy h3 {
   font-family: var(--font-display);
-  font-weight: 400;
+  font-weight: 500;
 }
 
-/* Marcellus SC is a true small-caps face; lowercase renders as small caps.
-   It only ships weight 400, so these classes lean on tracking rather than
-   weight for presence at the tiny UI sizes they're used at — asking for 500+
-   would just get faux-bold synthesis. */
-.gy-caps {
+/* Small-caps UI voice: nav, buttons, section labels. Crimson Pro has no
+   small-cap glyphs, so the lowercase source text goes through
+   font-variant-caps and the browser scales the capitals.
+   Scoped as `.gy .gy-caps` (0,2,0) on purpose — a bare `.gy-caps` loses to
+   `.gy h1,h2,h3` (0,1,1), which silently dropped the font-family on every
+   heading carrying this class. Note these rules are unlayered while Tailwind
+   utilities sit in @layer utilities, so a `font-semibold` or `tracking-[…]`
+   on the element loses regardless of specificity: weight and letter-spacing
+   are set here, and the call sites' tracking utilities are inert. */
+.gy .gy-caps {
   font-family: var(--font-caps);
-  letter-spacing: 0.14em;
+  font-variant-caps: small-caps;
+  letter-spacing: 0.06em;
   text-transform: lowercase;
-  font-weight: 400;
+  font-weight: 500;
 }
 
-.gy-label {
+.gy .gy-label {
   font-family: var(--font-caps);
-  letter-spacing: 0.2em;
+  font-variant-caps: small-caps;
+  letter-spacing: 0.1em;
   text-transform: lowercase;
   font-size: 0.875rem;
+  font-weight: 600;
+}
+
+/* Engraved inscriptions — the headstone eyebrow, name, and silent-days line,
+   and nothing else. Marcellus SC is a true small-caps face (its lowercase
+   glyphs *are* the small caps), so the variant has to be switched back off or
+   the browser scales down glyphs that are already small. 400 is its only
+   weight, so never pair this with a weight utility. Keeps the wider engraved
+   tracking the UI voice has since tightened away from. */
+.gy .gy-grave {
+  font-family: var(--font-grave);
+  font-variant-caps: normal;
   font-weight: 400;
+  letter-spacing: 0.14em;
 }
 
 /* Arched headstone card */

@@ -133,7 +133,7 @@ export default function GyNominatePage() {
           type="button"
           onClick={f.submit}
           disabled={f.busy}
-          className="gy-caps rounded-sm bg-candle px-6 py-3 text-night hover:bg-candle/90 disabled:opacity-50"
+          className="gy-caps rounded-sm bg-candle px-6 py-3 text-[19px] text-night hover:bg-candle/90 disabled:opacity-50"
         >
           {f.busy ? "sending…" : "submit nomination"}
         </button>

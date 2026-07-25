@@ -76,13 +76,15 @@ export default function GraveyardBloggerPage({ params }: { params: Promise<{ slu
               className="h-[72px] w-[72px]"
             />
           </div>
-          <p className="gy-label text-mist/80">{eyebrowFor(blogger.slug)}</p>
-          <h1 className="gy-caps mt-3 text-4xl text-moon md:text-5xl">{blogger.name}</h1>
+          <p className="gy-label gy-grave text-mist/80">{eyebrowFor(blogger.slug)}</p>
+          <h1 className="gy-caps gy-grave mt-3 text-4xl text-moon md:text-5xl">{blogger.name}</h1>
           {blogger.blogName && blogger.blogName !== blogger.name && (
             <p className="mt-2 italic text-moon/70">of {blogger.blogName}</p>
           )}
           {silent != null && (
-            <p className="gy-label mt-3 text-mist/70">silent {silent.toLocaleString()} days</p>
+            <p className="gy-label gy-grave mt-3 text-mist/70">
+              silent {silent.toLocaleString()} days
+            </p>
           )}
           <div className="mt-6 flex items-center justify-center gap-6">
             <a
@@ -223,14 +225,14 @@ export default function GraveyardBloggerPage({ params }: { params: Promise<{ slu
                   type="button"
                   onClick={addComment}
                   disabled={!commentText.trim()}
-                  className="gy-caps mt-3 rounded-sm border border-candle/60 px-5 py-2 text-sm text-candle hover:bg-candle/10 disabled:opacity-40"
+                  className="gy-caps mt-3 rounded-sm border border-candle/60 px-5 py-2 text-[17px] text-candle hover:bg-candle/10 disabled:opacity-40"
                 >
                   sign the register
                 </button>
               ) : (
                 <Link
                   href={`/signin?next=/b/${blogger.slug}`}
-                  className="gy-caps mt-3 inline-block rounded-sm border border-candle/60 px-5 py-2 text-sm text-candle hover:bg-candle/10"
+                  className="gy-caps mt-3 inline-block rounded-sm border border-candle/60 px-5 py-2 text-[17px] text-candle hover:bg-candle/10"
                 >
                   sign in to sign the register
                 </Link>

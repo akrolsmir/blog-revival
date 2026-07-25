@@ -23,9 +23,16 @@ system preference by default, explicit choice persisted; it sets
 `skin-gy`/`skin-wp` on `<html>` pre-paint and exposes `useSkin()`
 (undefined until mounted — skinned trees must not render during hydration).
 
-- `components/graveyard/**` — dark cemetery skin (Marcellus SC headings and
-  small-caps — 400 only, so never ask for a heavier weight; Crimson Pro body;
-  UI gold `#e6b85c`, flame `#ffc45e`, on navy `#0b1120`)
+- `components/graveyard/**` — dark cemetery skin (Crimson Pro throughout;
+  Marcellus SC via `.gy-grave` on headstone inscriptions only — it's 400-only,
+  so never pair it with a weight; UI gold `#e6b85c`, flame `#ffc45e`, on navy
+  `#0b1120`). `.gy-caps`/`.gy-label` are the small-caps UI voice: Crimson Pro
+  has no small-cap glyphs, so they set `font-variant-caps` and let the browser
+  synthesize. Both are scoped `.gy .gy-caps` so they outrank `.gy h1,h2,h3`;
+  and because they're unlayered while Tailwind sits in `@layer utilities`, a
+  `font-semibold` or `tracking-[…]` on the element is a no-op no matter the
+  specificity. Set weight and letter-spacing in the CSS rule — the many
+  `tracking-*` classes on these elements are decorative and inert.
 - `components/wordpress/**` — 2005 WordPress pastiche (Georgia headings,
   Lucida body, Kubrick blue header, sidebar widgets)
 - Routes in `app/(site)/`: `/` home, `b/[slug]` blogger, `p/[handle]`

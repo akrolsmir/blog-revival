@@ -257,13 +257,13 @@ export function GraveyardHero({
         <div className="flex justify-center gap-4">
           <Link
             href="/signin?next=/account"
-            className="gy-caps rounded-[3px] bg-gold px-7 py-3 text-[15px] text-[#171208] shadow-[0_0_30px_rgba(230,184,92,.3)] transition hover:bg-gold/90"
+            className="gy-caps rounded-[3px] bg-gold px-7 py-3 text-[18px] text-[#171208] shadow-[0_0_30px_rgba(230,184,92,.3)] transition hover:bg-gold/90"
           >
             become a patron
           </Link>
           <Link
             href="#match"
-            className="gy-caps rounded-[3px] border border-[#3c485f] px-7 py-3 text-[15px] text-[#cfd6e4] transition hover:border-[#5b6981]"
+            className="gy-caps rounded-[3px] border border-[#3c485f] px-7 py-3 text-[18px] text-[#cfd6e4] transition hover:border-[#5b6981]"
           >
             how it works
           </Link>
@@ -310,20 +310,20 @@ export function GraveyardHero({
                   }}
                 />
                 <div
-                  className="gy-caps relative tracking-[0.3em] text-[#8e9ab2]"
+                  className="gy-caps gy-grave relative tracking-[0.3em] text-[#8e9ab2]"
                   style={{ fontSize: s.epi, ...carve }}
                 >
                   {eyebrowFor(b.slug)}
                 </div>
                 <div
-                  className="gy-caps relative leading-[1.12] tracking-[0.1em] text-[#d3dae8]"
+                  className="gy-caps gy-grave relative leading-[1.12] tracking-[0.1em] text-[#d3dae8]"
                   style={{ fontSize: nameSize(s.name, s.w, b.name), ...carve }}
                 >
                   {b.name}
                 </div>
                 {b.lastPostAt != null && (
                   <div
-                    className="gy-caps relative tracking-[0.24em] text-[#7e8aa3]"
+                    className="gy-caps gy-grave relative tracking-[0.24em] text-[#7e8aa3]"
                     style={{ fontSize: s.epi, ...carve }}
                   >
                     silent {daysSilent(b.lastPostAt).toLocaleString()} days
@@ -366,20 +366,20 @@ export function GraveyardHero({
                   }}
                 />
                 <div
-                  className="gy-caps relative text-[9px] tracking-[0.3em] text-[#8e9ab2]"
+                  className="gy-caps gy-grave relative text-[9px] tracking-[0.3em] text-[#8e9ab2]"
                   style={carve}
                 >
                   {eyebrowFor(b.slug)}
                 </div>
                 <div
-                  className="gy-caps relative leading-[1.12] tracking-[0.08em] text-[#d3dae8]"
+                  className="gy-caps gy-grave relative leading-[1.12] tracking-[0.08em] text-[#d3dae8]"
                   style={{ fontSize: nameSize(15, 180, b.name), ...carve }}
                 >
                   {b.name}
                 </div>
                 {b.lastPostAt != null && (
                   <div
-                    className="gy-caps relative text-[9px] tracking-[0.24em] text-[#7e8aa3]"
+                    className="gy-caps gy-grave relative text-[9px] tracking-[0.24em] text-[#7e8aa3]"
                     style={carve}
                   >
                     silent {daysSilent(b.lastPostAt).toLocaleString()} days

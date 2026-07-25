@@ -8,10 +8,10 @@ export function GyNav() {
   const isAdmin = useIsAdmin();
   return (
     <header className="relative z-20 flex items-center justify-between gap-4 px-6 py-6 md:px-12">
-      <Link href="/" className="gy-caps text-[20px] tracking-[0.14em] text-moon hover:text-moon">
+      <Link href="/" className="gy-caps text-[25px] tracking-[0.14em] text-moon hover:text-moon">
         revive.blog
       </Link>
-      <nav className="gy-caps flex items-center gap-5 text-sm tracking-[0.18em] md:gap-8">
+      <nav className="gy-caps flex items-center gap-5 text-[17px] tracking-[0.18em] md:gap-8">
         <Link href="/#about" className="hidden text-[#b9c2d4] hover:text-moon sm:inline">
           about
         </Link>

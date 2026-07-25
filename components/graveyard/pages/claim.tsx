@@ -147,7 +147,7 @@ export default function GraveyardClaimPage() {
                             return {};
                           }, "Post linked. One step closer to daylight.")
                         }
-                        className="gy-caps rounded-sm border border-candle/60 px-4 py-2 text-sm text-candle hover:bg-candle/10 disabled:opacity-40"
+                        className="gy-caps rounded-sm border border-candle/60 px-4 py-2 text-[17px] text-candle hover:bg-candle/10 disabled:opacity-40"
                       >
                         link it
                       </button>
@@ -193,7 +193,7 @@ export default function GraveyardClaimPage() {
                   return claimBlogger(selected);
                 }, "Claimed. We'll verify and email you shortly.")
               }
-              className="gy-caps rounded-sm bg-candle px-6 py-2.5 text-night hover:bg-candle/90 disabled:opacity-40"
+              className="gy-caps rounded-sm bg-candle px-6 py-2.5 text-[19px] text-night hover:bg-candle/90 disabled:opacity-40"
             >
               claim it
             </button>
