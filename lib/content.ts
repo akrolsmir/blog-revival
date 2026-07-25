@@ -14,11 +14,11 @@ export const LAUNCH_PARAGRAPHS: string[] = [
 export const LAUNCH_SIGNATURE = "— Carol and Austin, from Manifund";
 
 export type FaqItem = { q: string; a: string[] };
-export type FaqSection = { title: string; items: FaqItem[] };
+// A section with no title runs straight into the page's own "FAQ" heading.
+export type FaqSection = { title?: string; items: FaqItem[] };
 
 export const FAQ_SECTIONS: FaqSection[] = [
   {
-    title: "FAQ",
     items: [
       {
         q: "Will $1,000 really get Sam Altman or Holden Karnofsky to blog again?",
@@ -54,7 +54,7 @@ export const FAQ_SECTIONS: FaqSection[] = [
     ],
   },
   {
-    title: "FAQ for bloggers",
+    title: "For Bloggers",
     items: [
       {
         q: "How do I claim my money?",

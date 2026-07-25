@@ -4,10 +4,10 @@ import { linkify } from "@/components/Linkify";
 export function WpFaq() {
   return (
     <div className="space-y-8">
-      {FAQ_SECTIONS.map((sec) => (
-        <div key={sec.title}>
-          <h3 className="text-[18px] font-bold">{sec.title}</h3>
-          <div className="mt-3 space-y-4 text-[13.5px] leading-relaxed">
+      {FAQ_SECTIONS.map((sec, si) => (
+        <div key={si}>
+          {sec.title && <h3 className="text-[18px] font-bold">{sec.title}</h3>}
+          <div className={`space-y-4 text-[13.5px] leading-relaxed ${sec.title ? "mt-3" : ""}`}>
             {sec.items.map((it) => (
               <div key={it.q}>
                 <p className="font-bold">{it.q}</p>
