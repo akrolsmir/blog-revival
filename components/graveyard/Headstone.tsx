@@ -57,7 +57,7 @@ export function Headstone({ blogger, index = 0 }: { blogger: BloggerRow; index?:
       <div className="gy-caps text-[11px] tracking-[0.3em] text-[#8e9ab2]">
         {eyebrowFor(blogger.slug)}
       </div>
-      <h3 className="gy-caps mt-2 text-[22px] font-semibold leading-[1.15] tracking-[0.08em] text-[#d3dae8] [text-shadow:0_-1px_1px_rgba(4,8,16,.9),0_1px_0_rgba(255,255,255,.07)]">
+      <h3 className="gy-caps mt-2 text-[22px] leading-[1.15] tracking-[0.08em] text-[#d3dae8] [text-shadow:0_-1px_1px_rgba(4,8,16,.9),0_1px_0_rgba(255,255,255,.07)]">
         {blogger.name}
       </h3>
       {silent != null && (

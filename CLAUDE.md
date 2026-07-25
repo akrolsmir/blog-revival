@@ -23,9 +23,9 @@ system preference by default, explicit choice persisted; it sets
 `skin-gy`/`skin-wp` on `<html>` pre-paint and exposes `useSkin()`
 (undefined until mounted — skinned trees must not render during hydration).
 
-- `components/graveyard/**` — dark cemetery skin (Cormorant Garamond
-  headings, Cormorant SC small-caps, Newsreader body; UI gold `#e6b85c`,
-  flame `#ffc45e`, on navy `#0b1120`)
+- `components/graveyard/**` — dark cemetery skin (Marcellus SC headings and
+  small-caps — 400 only, so never ask for a heavier weight; Crimson Pro body;
+  UI gold `#e6b85c`, flame `#ffc45e`, on navy `#0b1120`)
 - `components/wordpress/**` — 2005 WordPress pastiche (Georgia headings,
   Lucida body, Kubrick blue header, sidebar widgets)
 - Routes in `app/(site)/`: `/` home, `b/[slug]` blogger, `p/[handle]`
@@ -93,7 +93,7 @@ explains standing architecture.
   Never run `instant-cli push --yes` without reading the plan first.
 - Components using useSearchParams (PledgeBox, WpPledgeForm, signin,
   account pages) must stay wrapped in <Suspense> or the build fails.
-- A page must render a real DOM element on its *first* render after a
+- A page must render a real DOM element on its _first_ render after a
   navigation. Next's layout-router picks the scroll target in that render;
   if it finds nothing it silently skips the segment and you stay at the old
   page's scroll offset. So no `return null` at a page root, and give every

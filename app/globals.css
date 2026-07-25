@@ -23,9 +23,9 @@
   --color-wpink: #333333;
   --color-wpmeta: #777777;
 
-  --font-display: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
-  --font-caps: var(--font-cormorant-sc), "Cormorant SC", Georgia, serif;
-  --font-body: var(--font-newsreader), "Newsreader", Georgia, serif;
+  --font-display: var(--font-marcellus-sc), "Marcellus SC", Georgia, serif;
+  --font-caps: var(--font-marcellus-sc), "Marcellus SC", Georgia, serif;
+  --font-body: var(--font-crimson), "Crimson Pro", Georgia, serif;
 }
 
 /* Theme classes set on <html> by next-themes before first paint, so the
@@ -51,17 +51,18 @@ html.skin-wp {
 .gy h2,
 .gy h3 {
   font-family: var(--font-display);
-  font-weight: 500;
+  font-weight: 400;
 }
 
-/* Cormorant SC is a true small-caps face; lowercase renders as small caps.
-   It's a light display face, so nudge the weight up for legibility at the
-   tiny UI sizes these classes are used at. */
+/* Marcellus SC is a true small-caps face; lowercase renders as small caps.
+   It only ships weight 400, so these classes lean on tracking rather than
+   weight for presence at the tiny UI sizes they're used at — asking for 500+
+   would just get faux-bold synthesis. */
 .gy-caps {
   font-family: var(--font-caps);
   letter-spacing: 0.14em;
   text-transform: lowercase;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .gy-label {
@@ -69,7 +70,7 @@ html.skin-wp {
   letter-spacing: 0.2em;
   text-transform: lowercase;
   font-size: 0.875rem;
-  font-weight: 600;
+  font-weight: 400;
 }
 
 /* Arched headstone card */

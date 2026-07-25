@@ -199,7 +199,7 @@ function AccountInner() {
           <button
             type="button"
             onClick={save}
-            className="gy-caps rounded-sm bg-candle px-8 py-3 font-medium text-night hover:bg-candle/90"
+            className="gy-caps rounded-sm bg-candle px-8 py-3 text-night hover:bg-candle/90"
           >
             save profile
           </button>

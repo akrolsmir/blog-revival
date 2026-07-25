@@ -75,7 +75,7 @@ function SignInInner() {
           <a
             href={googleUrl || undefined}
             aria-disabled={!googleUrl}
-            className="gy-caps mt-8 block w-full rounded-sm border border-candle/60 px-6 py-3 font-medium text-candle hover:bg-candle/10 aria-disabled:pointer-events-none aria-disabled:opacity-50"
+            className="gy-caps mt-8 block w-full rounded-sm border border-candle/60 px-6 py-3 text-candle hover:bg-candle/10 aria-disabled:pointer-events-none aria-disabled:opacity-50"
           >
             continue with google
           </a>
@@ -118,7 +118,7 @@ function SignInInner() {
         <button
           type="submit"
           disabled={busy}
-          className="gy-caps w-full rounded-sm bg-candle px-6 py-3 font-medium text-night hover:bg-candle/90 disabled:opacity-50"
+          className="gy-caps w-full rounded-sm bg-candle px-6 py-3 text-night hover:bg-candle/90 disabled:opacity-50"
         >
           {busy ? "…" : stage === "email" ? "send the code" : "cross over"}
         </button>

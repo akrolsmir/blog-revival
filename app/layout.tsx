@@ -1,24 +1,19 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Cormorant_SC, Newsreader } from "next/font/google";
+import { Crimson_Pro, Marcellus_SC } from "next/font/google";
 import { FaviconSwitcher } from "@/components/FaviconSwitcher";
 import { ThemeProvider } from "@/lib/theme";
 import "./globals.css";
 
-const cormorant = Cormorant_Garamond({
-  variable: "--font-cormorant",
+// Marcellus SC ships a single 400 weight and no italic — the graveyard's
+// display/caps rules must not ask for anything else or browsers synthesize it.
+const marcellusSC = Marcellus_SC({
+  variable: "--font-marcellus-sc",
   subsets: ["latin"],
-  style: ["normal", "italic"],
-  weight: ["400", "500", "600"],
+  weight: "400",
 });
 
-const cormorantSC = Cormorant_SC({
-  variable: "--font-cormorant-sc",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
-const newsreader = Newsreader({
-  variable: "--font-newsreader",
+const crimsonPro = Crimson_Pro({
+  variable: "--font-crimson",
   subsets: ["latin"],
   style: ["normal", "italic"],
 });
@@ -40,7 +35,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${cormorant.variable} ${cormorantSC.variable} ${newsreader.variable} h-full antialiased`}
+      className={`${marcellusSC.variable} ${crimsonPro.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
