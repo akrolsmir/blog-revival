@@ -29,6 +29,9 @@ export function GyNav() {
         <Link href="/patrons" className="hidden text-[#b9c2d4] hover:text-moon sm:inline">
           patrons
         </Link>
+        <Link href="/feed" className="hidden text-[#b9c2d4] hover:text-moon sm:inline">
+          activity
+        </Link>
         <Link href="/nominate" className="hidden text-[#b9c2d4] hover:text-moon sm:inline">
           nominate
         </Link>
@@ -83,6 +86,9 @@ export function GyFooter() {
         </Link>
         <Link href="/patrons" className="hover:text-moon">
           patrons
+        </Link>
+        <Link href="/feed" className="hover:text-moon">
+          activity
         </Link>
         <Link href="/nominate" className="hover:text-moon">
           nominate

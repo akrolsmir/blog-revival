@@ -29,6 +29,9 @@ export function WpMeta() {
             <Link href="/patrons">Browse patrons</Link>
           </li>
           <li>
+            <Link href="/feed">Recent activity</Link>
+          </li>
+          <li>
             <Link href="/claim">Claim your blogger profile</Link>
           </li>
           <li>
