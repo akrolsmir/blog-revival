@@ -20,8 +20,7 @@ const crimsonPro = Crimson_Pro({
 
 export const metadata: Metadata = {
   title: "revive.blog — Blog Revival Project",
-  description:
-    "Bounties for beloved dormant bloggers to write one more post. Quadratic funding by Manifund.",
+  description: "Bounties for beloved dormant bloggers to write one more post.",
   // rel="icon" is owned by <FaviconSwitcher/>, which follows the chosen skin —
   // see the note there for why it isn't declared here.
   icons: { apple: "/apple-touch-icon.png" },
