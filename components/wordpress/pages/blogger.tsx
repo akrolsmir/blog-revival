@@ -202,12 +202,16 @@ export default function WpBloggerPage({ params }: { params: Promise<{ slug: stri
         </ol>
         <div className="mt-5">
           <h4 className="text-[13px] font-bold">Leave a Reply</h4>
+          <label className="mt-2 block text-[12px] font-bold" htmlFor="wp-comment">
+            Comment
+          </label>
           <textarea
+            id="wp-comment"
             value={commentText}
             onChange={(e) => setCommentText(e.target.value)}
             disabled={!profile}
             rows={3}
-            className="mt-2 w-full disabled:cursor-not-allowed disabled:opacity-60"
+            className="mt-1 w-full disabled:cursor-not-allowed disabled:opacity-60"
           />
           {profile ? (
             <button

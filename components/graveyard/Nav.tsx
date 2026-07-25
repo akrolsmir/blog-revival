@@ -3,15 +3,20 @@
 import Link from "next/link";
 import { useMyProfile, useIsAdmin } from "@/lib/hooks";
 
+// The header wraps rather than shrinks: below ~360px the wordmark and the
+// "become a patron" button can't share a line, and without flex-wrap the
+// button ran past the right edge of the viewport instead of dropping under
+// the wordmark. whitespace-nowrap keeps each label whole so wrapping moves
+// entire links, never breaking one across two lines.
 export function GyNav() {
   const { user, profile } = useMyProfile();
   const isAdmin = useIsAdmin();
   return (
-    <header className="relative z-20 flex items-center justify-between gap-4 px-6 py-6 md:px-12">
+    <header className="relative z-20 flex flex-wrap items-center justify-between gap-x-4 gap-y-3 px-6 py-6 md:px-12">
       <Link href="/" className="gy-caps text-[25px] tracking-[0.14em] text-moon hover:text-moon">
         revive.blog
       </Link>
-      <nav className="gy-caps flex items-center gap-5 text-[17px] tracking-[0.18em] md:gap-8">
+      <nav className="gy-caps flex flex-wrap items-center justify-end gap-x-5 gap-y-2.5 whitespace-nowrap text-[17px] tracking-[0.18em] md:gap-x-8">
         <Link href="/#about" className="hidden text-[#b9c2d4] hover:text-moon sm:inline">
           about
         </Link>

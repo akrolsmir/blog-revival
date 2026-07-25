@@ -17,7 +17,11 @@
   --color-wpblue: #2e5d8c;
   --color-wpblue-deep: #1f4468;
   --color-wplink: #0f5fa8;
-  --color-wpgreen: #16a34a;
+  /* Darker than it looks like it wants to be: this is the money-and-status
+     color (match amounts, LIVE/REVIVED, pledge confirmations), and #16a34a
+     only reached 3.3:1 on white — under AA. #15803d measures 5.02:1 on white
+     and 4.79:1 on the green-50 confirmation backgrounds. */
+  --color-wpgreen: #15803d;
   --color-wpbg: #f5f5f3;
   --color-wpborder: #d8d8d4;
   --color-wpink: #333333;

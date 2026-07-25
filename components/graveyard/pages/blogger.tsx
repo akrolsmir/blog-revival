@@ -213,13 +213,16 @@ export default function GraveyardBloggerPage({ params }: { params: Promise<{ slu
               )}
             </ul>
             <div className="mt-6">
-              <textarea
-                value={commentText}
-                onChange={(e) => setCommentText(e.target.value)}
-                disabled={!profile}
-                rows={2}
-                className="w-full rounded-sm border border-moon/25 bg-transparent px-3 py-2 text-[15px] text-moon placeholder:text-mist/60 disabled:cursor-not-allowed disabled:opacity-50"
-              />
+              <label className="block">
+                <span className="gy-label text-mist">leave a message</span>
+                <textarea
+                  value={commentText}
+                  onChange={(e) => setCommentText(e.target.value)}
+                  disabled={!profile}
+                  rows={2}
+                  className="mt-2 w-full rounded-sm border border-moon/25 bg-transparent px-3 py-2 text-[15px] text-moon placeholder:text-mist/60 disabled:cursor-not-allowed disabled:opacity-50"
+                />
+              </label>
               {profile ? (
                 <button
                   type="button"
