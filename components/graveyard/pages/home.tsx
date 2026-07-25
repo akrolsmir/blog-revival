@@ -26,7 +26,7 @@ export default function GraveyardHome() {
       {/* Launch post */}
       <section id="about" className="bg-parchment px-6 py-24 text-[#2a3040] md:px-12">
         <div className="mx-auto max-w-[680px]">
-          <h2 className="text-4xl text-[#232838] md:text-[42px]">What is this?</h2>
+          <h2 className="text-4xl text-[#232838] md:text-[42px]">Why revive blogs?</h2>
           <div className="mt-8 space-y-5 text-[17px] leading-[1.7] text-[#3a4152]">
             {LAUNCH_PARAGRAPHS.map((p, i) => (
               <p key={i} className="[text-wrap:pretty]">
