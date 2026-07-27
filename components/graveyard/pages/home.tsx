@@ -95,6 +95,7 @@ export default function GraveyardHome() {
                   liveThresholdCents={liveThresholdCents}
                   bloggerId={sliderTarget.id}
                   bloggerName={sliderTarget.name}
+                  bloggerSlug={sliderTarget.slug}
                   patronCount={sliderTarget.supporterCount}
                 />
               </div>

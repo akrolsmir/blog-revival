@@ -34,6 +34,7 @@ export function WpMatchMath() {
           liveThresholdCents={liveThresholdCents}
           bloggerId={sliderTarget.id}
           bloggerName={sliderTarget.name}
+          bloggerSlug={sliderTarget.slug}
           patronCount={sliderTarget.supporterCount}
           dark={false}
         />

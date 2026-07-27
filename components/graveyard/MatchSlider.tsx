@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { marginalMatch, type PledgeLike } from "@/lib/qf";
 import { dollars } from "@/lib/format";
 
@@ -12,6 +13,7 @@ export function MatchSlider({
   liveThresholdCents,
   bloggerId,
   bloggerName,
+  bloggerSlug,
   patronCount,
   dark = true,
 }: {
@@ -20,6 +22,7 @@ export function MatchSlider({
   liveThresholdCents: number;
   bloggerId: string;
   bloggerName: string;
+  bloggerSlug: string;
   patronCount: number;
   dark?: boolean;
 }) {
@@ -73,6 +76,16 @@ export function MatchSlider({
           </dd>
         </div>
       </dl>
+      <Link
+        href={`/b/${bloggerSlug}`}
+        className={
+          dark
+            ? "mt-5 block rounded-[3px] bg-gold px-5 py-2.5 text-center text-[15px] text-[#171208] transition hover:bg-gold/90"
+            : "wp-btn mt-4 block text-center"
+        }
+      >
+        Pledge to {bloggerName} →
+      </Link>
     </div>
   );
 }
