@@ -145,6 +145,18 @@ export async function submitNomination(data: {
   return res.json();
 }
 
+/** Credit my earlier nominations to the profile I just created. No-op if none. */
+export async function attributeMyNominations() {
+  const token = await refreshToken();
+  if (!token) return { error: "Sign in first" };
+  const res = await fetch("/api/nominations/attribute", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ refreshToken: token }),
+  });
+  return res.json();
+}
+
 export async function listPendingNominations() {
   const token = await refreshToken();
   if (!token) return { error: "Sign in first" };

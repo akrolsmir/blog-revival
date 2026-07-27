@@ -16,6 +16,19 @@ export function daysAgoWords(days: number): string {
 }
 
 /**
+ * A starting username for a new patron: the local part of their email, reduced
+ * to the characters a handle allows ("bob.smith@gmail.com" → "bobsmith"). Only
+ * a suggestion — the account form prefills both handle and display name with
+ * it and lets them change either before saving.
+ */
+export function handleFromEmail(email?: string | null): string {
+  return (email ?? "")
+    .split("@")[0]
+    .toLowerCase()
+    .replace(/[^a-z0-9-_]/g, "");
+}
+
+/**
  * A small icon for a blogger: their own photo if set, otherwise the favicon of
  * their old blog via Google's faviconV2 service (the one Chrome uses). Blogs
  * without a favicon 404 — pair this with an onError that hides the <img>.

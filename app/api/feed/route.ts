@@ -29,7 +29,12 @@ export async function GET(req: NextRequest) {
     bloggers: { claimedBy: {} },
     pledges: { patron: {}, blogger: {} },
     comments: { author: {}, blogger: {} },
-    nominations: { submitter: {} },
+    // submitterUser is the fallback path to a name: a nomination made before
+    // its author had a profile carries only the account, and the profile they
+    // make later hangs off that. /api/nominations/attribute normally fills in
+    // `submitter` at that point; reading through both means the feed is right
+    // even if it hasn't run.
+    nominations: { submitter: {}, submitterUser: { profile: {} } },
   });
 
   const events: FeedEvent[] = [];
@@ -116,7 +121,7 @@ export async function GET(req: NextRequest) {
       id: `nomination:${n.id}`,
       kind: "nomination",
       at: n.createdAt,
-      subject: patronRef((n as any).submitter),
+      subject: patronRef((n as any).submitter ?? (n as any).submitterUser?.profile),
       object: {
         kind: "external",
         name: n.blogName || n.authorName,

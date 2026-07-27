@@ -6,8 +6,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { db } from "@/lib/db";
 import { id } from "@instantdb/react";
 import { useMyProfile } from "@/lib/hooks";
-import { claimSignupCredit } from "@/lib/actions";
-import { dollars } from "@/lib/format";
+import { attributeMyNominations, claimSignupCredit } from "@/lib/actions";
+import { dollars, handleFromEmail } from "@/lib/format";
 import posthog from "posthog-js";
 
 type FavBlog = { name: string; url: string };
@@ -44,10 +44,11 @@ function AccountInner() {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    if (user && !loaded) {
+    if (loaded) return;
+    if (user) {
       posthog.identify(user.id, {});
     }
-    if (profile && !loaded) {
+    if (profile) {
       setHandle(profile.handle);
       setDisplayName(profile.displayName);
       setBio(profile.bio ?? "");
@@ -55,8 +56,16 @@ function AccountInner() {
       setAlive(favsToText(profile.favoriteAliveBlogs as FavBlog[]));
       setDead(favsToText(profile.favoriteDeadBlogs as FavBlog[]));
       setLoaded(true);
+    } else if (user && !isLoading) {
+      // No profile yet: seed both required fields from their email so signing
+      // up isn't two blank boxes. Wait for isLoading so a profile that's still
+      // in flight isn't mistaken for a new patron.
+      const suggested = handleFromEmail(user.email);
+      setHandle(suggested);
+      setDisplayName(suggested);
+      setLoaded(true);
     }
-  }, [profile, loaded, user]);
+  }, [profile, loaded, user, isLoading]);
 
   if (isLoading) {
     return <p className="gy-label py-32 text-center text-mist">summoning…</p>;
@@ -106,6 +115,8 @@ function AccountInner() {
         skin: "graveyard",
       });
       await claimSignupCredit();
+      // Nominations they made before this profile existed now get their name.
+      await attributeMyNominations();
       setSaved(true);
       if (next) router.push(next);
     } catch (e: any) {

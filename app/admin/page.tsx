@@ -20,6 +20,7 @@ type Nom = {
   topPosts?: { title: string; url: string }[];
   createdAt: number;
   submitter?: { handle: string; displayName: string } | null;
+  submitterEmail?: string | null; // shown when the submitter has no profile yet
 };
 
 type Claim = {
@@ -177,7 +178,11 @@ export default function AdminPage() {
                 )}
                 <p className="mt-2 text-xs text-neutral-400">
                   submitted {fmtDate(n.createdAt)}
-                  {n.submitter ? ` by @${n.submitter.handle}` : ""}
+                  {n.submitter
+                    ? ` by @${n.submitter.handle}`
+                    : n.submitterEmail
+                      ? ` by ${n.submitterEmail} (no profile yet)`
+                      : ""}
                 </p>
                 <div className="mt-3 flex gap-2">
                   <button

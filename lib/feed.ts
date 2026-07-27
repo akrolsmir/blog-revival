@@ -63,6 +63,11 @@ export function feedLine(e: FeedEvent): FeedLine {
     case "signup":
       return { subject: e.subject, verb: "joined" };
     case "nomination":
+      // A nomination from before accounts were recorded has no nominator to
+      // name. Lead with the blog rather than an anonymous "Someone nominated".
+      if (e.subject.kind === "plain" && e.object) {
+        return { subject: e.object, verb: "was nominated" };
+      }
       return { subject: e.subject, verb: "nominated", object: e.object };
     case "bounty":
       return { subject: e.subject, verb: "was approved" };

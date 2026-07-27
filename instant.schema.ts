@@ -122,9 +122,19 @@ const _schema = i.schema({
       forward: { on: "bloggers", has: "one", label: "redirectTo" },
       reverse: { on: "bloggers", has: "many", label: "redirectsReceived" },
     },
+    // Who suggested it. Two links on purpose: `submitterUser` is the account,
+    // recorded on every nomination; `submitter` is their profile, which is
+    // what the site displays and which many nominators don't have yet at
+    // submit time (profiles are created on /account, not at sign-in). The
+    // account link is what lets /api/nominations/attribute fill in `submitter`
+    // later, when they finally make a profile.
     nominationSubmitter: {
       forward: { on: "nominations", has: "one", label: "submitter" },
       reverse: { on: "profiles", has: "many", label: "nominations" },
+    },
+    nominationSubmitterUser: {
+      forward: { on: "nominations", has: "one", label: "submitterUser" },
+      reverse: { on: "$users", has: "many", label: "nominations" },
     },
   },
 });

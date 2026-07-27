@@ -75,22 +75,27 @@ export async function POST(req: NextRequest) {
         .slice(0, 5)
     : [];
 
-  // Link the submitter's profile if they have one (nomination still works without).
+  // Always record the account. The profile — the thing the site actually
+  // displays — only exists if they've been to /account, so link it when it's
+  // there and let /api/nominations/attribute catch up if they make one later.
+  // Without the account link that attribution would be lost for good.
   const { profiles } = await db.query({
     profiles: { $: { where: { "user.id": user.id } } },
   });
   const profile = profiles[0];
 
   const nominationId = id();
-  const tx = db.tx.nominations[nominationId].update({
-    authorName: an,
-    blogUrl: url,
-    topPosts: posts,
-    status: "pending",
-    createdAt: Date.now(),
-    ...(bn ? { blogName: bn } : {}),
-    ...(lastPost !== null ? { lastPostAt: lastPost } : {}),
-  });
+  const tx = db.tx.nominations[nominationId]
+    .update({
+      authorName: an,
+      blogUrl: url,
+      topPosts: posts,
+      status: "pending",
+      createdAt: Date.now(),
+      ...(bn ? { blogName: bn } : {}),
+      ...(lastPost !== null ? { lastPostAt: lastPost } : {}),
+    })
+    .link({ submitterUser: user.id });
   await db.transact([profile ? tx.link({ submitter: profile.id }) : tx]);
 
   return NextResponse.json({ ok: true });
