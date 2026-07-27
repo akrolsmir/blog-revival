@@ -406,3 +406,21 @@ html.skin-wp {
 .wp input[type="range"] {
   accent-color: var(--color-wpblue);
 }
+
+/* ---------- Phone-only ---------- */
+
+/* iOS Safari zooms the viewport whenever a focused field is under 16px, and
+   never zooms back out. The WordPress skin is a 13px design top to bottom and
+   a couple of graveyard fields are smaller still, so pin just the fields, just
+   on phones. Unlayered, so it outranks the Tailwind text-* utility on the
+   element. */
+@media (max-width: 640px) {
+  .wp input,
+  .wp textarea,
+  .wp select,
+  .gy input,
+  .gy textarea,
+  .gy select {
+    font-size: 16px;
+  }
+}

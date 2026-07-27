@@ -27,10 +27,10 @@ export default function GraveyardHome() {
       <GraveyardHero bloggers={bloggers} liveThresholdCents={liveThresholdCents} />
 
       {/* Launch post */}
-      <section id="about" className="bg-parchment px-6 py-24 text-[#2a3040] md:px-12">
+      <section id="about" className="bg-parchment px-6 py-16 text-[#2a3040] md:px-12 md:py-24">
         <div className="mx-auto max-w-[680px]">
-          <h2 className="text-4xl text-[#232838] md:text-[42px]">Why revive blogs?</h2>
-          <div className="mt-8 space-y-5 text-[17px] leading-[1.7] text-[#3a4152]">
+          <h2 className="text-[32px] text-[#232838] md:text-[42px]">Why revive blogs?</h2>
+          <div className="mt-6 space-y-5 text-[17px] leading-[1.7] text-[#3a4152] md:mt-8">
             {LAUNCH_PARAGRAPHS.map((p, i) => (
               <p key={i} className="[text-wrap:pretty]">
                 {linkify(
@@ -47,10 +47,10 @@ export default function GraveyardHome() {
       </section>
 
       {/* Match math demo */}
-      <section id="match" className="px-6 py-20 md:px-12">
-        <div className="mx-auto grid max-w-5xl items-center gap-10 md:grid-cols-2">
+      <section id="match" className="px-6 py-14 md:px-12 md:py-20">
+        <div className="mx-auto grid max-w-5xl items-center gap-8 md:grid-cols-2 md:gap-10">
           <div>
-            <h2 className="text-4xl">Try the match math</h2>
+            <h2 className="text-[32px] md:text-4xl">Try the match math</h2>
             <div className="mt-4 space-y-4 leading-relaxed text-[#a9b3c8]">
               <p>
                 The actual funding allocated to a bounty is the sum of the square roots of each
@@ -105,12 +105,18 @@ export default function GraveyardHome() {
       </section>
 
       {/* Blogroll */}
-      <section id="blogroll" className="px-6 pb-28 pt-16 md:px-12">
+      <section id="blogroll" className="px-6 pb-20 pt-10 md:px-12 md:pb-28 md:pt-16">
         {isLoading ? (
           <p className="gy-caps text-center tracking-[0.2em] text-mist">raising the dead…</p>
         ) : (
           <>
-            <div className="mx-auto grid max-w-[1160px] gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {/* the stone grid announces itself; the mobile list doesn't */}
+            <h2 className="gy-label mx-auto mb-3 max-w-[1160px] text-mist sm:hidden">
+              the blogroll
+            </h2>
+            {/* a divided list on phones (Headstone renders plaque rows there),
+                the cemetery grid from sm up */}
+            <div className="mx-auto max-w-[1160px] border-b border-moon/10 sm:grid sm:gap-6 sm:border-0 sm:grid-cols-2 lg:grid-cols-4">
               {bloggers.map((b, i) => (
                 <Headstone key={b.id} blogger={b} index={i} />
               ))}

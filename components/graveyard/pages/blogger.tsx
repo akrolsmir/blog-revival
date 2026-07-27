@@ -63,7 +63,7 @@ export default function GraveyardBloggerPage({ params }: { params: Promise<{ slu
     <main className="px-6 pb-24 md:px-12">
       {/* Headstone header */}
       <section className="mx-auto max-w-3xl pt-8 text-center">
-        <div className="gy-stone mx-auto max-w-xl px-8 pb-8 pt-12">
+        <div className="gy-stone mx-auto max-w-xl px-5 pb-7 pt-10 sm:px-8 sm:pb-8 sm:pt-12">
           <div className="gy-cameo mx-auto mb-4 inline-block">
             <img
               src={bloggerIcon(blogger.blogUrl, blogger.photoUrl, 128)}
@@ -77,7 +77,9 @@ export default function GraveyardBloggerPage({ params }: { params: Promise<{ slu
             />
           </div>
           <p className="gy-label gy-grave text-mist/80">{eyebrowFor(blogger.slug)}</p>
-          <h1 className="gy-caps gy-grave mt-3 text-4xl text-moon md:text-5xl">{blogger.name}</h1>
+          <h1 className="gy-caps gy-grave mt-3 text-[30px] text-moon text-balance sm:text-4xl md:text-5xl">
+            {blogger.name}
+          </h1>
           {blogger.blogName && blogger.blogName !== blogger.name && (
             <p className="mt-2 italic text-moon/70">of {blogger.blogName}</p>
           )}
@@ -86,7 +88,7 @@ export default function GraveyardBloggerPage({ params }: { params: Promise<{ slu
               silent {silent.toLocaleString()} days
             </p>
           )}
-          <div className="mt-6 flex items-center justify-center gap-6">
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
             <a
               href={blogger.blogUrl}
               target="_blank"
@@ -131,10 +133,15 @@ export default function GraveyardBloggerPage({ params }: { params: Promise<{ slu
         )}
       </section>
 
-      <section className="mx-auto mt-14 grid max-w-5xl gap-10 md:grid-cols-[1fr_380px]">
-        <div>
+      {/* Three blocks, explicitly placed: on desktop the left column stacks
+          the bounty state over the reading matter with the pledge column
+          beside them, but on a phone that column order would bury the pledge
+          box under the register. Placing them puts the pledge box second, so
+          the page reads state → act → detail. */}
+      <section className="mx-auto mt-10 grid max-w-5xl gap-8 md:mt-14 md:grid-cols-[1fr_380px] md:gap-10">
+        <div className="md:col-start-1 md:row-start-1">
           {/* Funding state */}
-          <div className="rounded-md border border-moon/15 p-6">
+          <div className="rounded-md border border-moon/15 p-5 sm:p-6">
             <div className="flex items-baseline justify-between">
               <h2 className="gy-caps text-xl text-moon">the bounty</h2>
               <span className="gy-label text-mist">{pct}% funded</span>
@@ -166,10 +173,12 @@ export default function GraveyardBloggerPage({ params }: { params: Promise<{ slu
               the match can drift with the pool until the bounty is claimed.
             </p>
           </div>
+        </div>
 
+        <div className="space-y-8 md:col-start-1 md:row-start-2">
           {/* Last words */}
           {blogger.recentPosts && blogger.recentPosts.length > 0 && (
-            <div className="mt-8 rounded-md border border-moon/15 p-6">
+            <div className="rounded-md border border-moon/15 p-5 sm:p-6">
               <h2 className="gy-caps text-xl text-moon">last words</h2>
               <ul className="mt-4 space-y-3">
                 {blogger.recentPosts.map((post) => (
@@ -189,7 +198,7 @@ export default function GraveyardBloggerPage({ params }: { params: Promise<{ slu
           )}
 
           {/* Mourners' register */}
-          <div className="mt-8 rounded-md border border-moon/15 p-6">
+          <div className="rounded-md border border-moon/15 p-5 sm:p-6">
             <h2 className="gy-caps text-xl text-moon">mourners&rsquo; register</h2>
             <ul className="mt-5 space-y-5">
               {comments.map((c: any) => (
@@ -244,7 +253,7 @@ export default function GraveyardBloggerPage({ params }: { params: Promise<{ slu
           </div>
         </div>
 
-        <aside>
+        <aside className="md:col-start-2 md:row-span-2 md:row-start-1">
           <Suspense>
             <PledgeBox
               bloggerId={blogger.id}
@@ -262,7 +271,7 @@ export default function GraveyardBloggerPage({ params }: { params: Promise<{ slu
             </Link>
           </p>
           {/* Recent pledges */}
-          <div className="mt-8 rounded-md border border-moon/15 p-6">
+          <div className="mt-8 rounded-md border border-moon/15 p-5 sm:p-6">
             <h3 className="gy-caps text-lg text-moon">pledges</h3>
             <ul className="mt-3 space-y-3">
               {(blogger.pledges ?? [])

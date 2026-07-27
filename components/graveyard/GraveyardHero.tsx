@@ -154,6 +154,28 @@ function nameSize(base: number, stoneWidth: number, name: string): number {
   return Math.min(base, Math.floor((stoneWidth - 36) / (longest * 0.8)));
 }
 
+// Sized in cqw (% of the stone's own width) rather than px, since the stones
+// themselves are sized as a share of the viewport. Same ~0.8em per glyph as
+// nameSize() above, plus tracking and the carved frame's inset, so a word of n
+// glyphs needs about 95/n percent of the stone. Long names engrave small
+// rather than breaking: a hyphenated name on a headstone reads as a mistake.
+function nameCqw(name: string, base = 15): number {
+  const longest = Math.max(...name.split(/\s+/).map((w) => w.length), 1);
+  return Math.min(base, 95 / longest);
+}
+
+// The mobile plot: three stones overlapping in depth rather than a grid of
+// six. Overlap is what buys the size — at 375px a row of three flat-packed
+// stones is ~110px each and the names go illegible, whereas letting them
+// crowd each other lets the front stone run wider than a third of the screen.
+// Order is [second, first, third] so the best-funded bounty stands center and
+// tallest, with the flanking pair set back (higher baseline, darker, behind).
+const MOBILE_SLOTS = [
+  { i: 1, w: "33%", ar: 0.66, z: 2, lift: 12, c1: "#313d55", c2: "#222c43", name: 13.5 },
+  { i: 0, w: "37%", ar: 0.58, z: 4, lift: 0, c1: "#3d4a66", c2: "#2a3550", name: 15 },
+  { i: 2, w: "32%", ar: 0.7, z: 3, lift: 18, c1: "#2e3a51", c2: "#20293e", name: 13 },
+];
+
 export function GraveyardHero({
   bloggers,
   liveThresholdCents,
@@ -169,7 +191,7 @@ export function GraveyardHero({
   return (
     <section
       id="top"
-      className="gy-sky relative md:h-[calc(100vh-73px)] md:min-h-[720px] md:max-h-[960px]"
+      className="gy-sky relative flex min-h-[100svh] flex-col md:block md:h-[calc(100vh-73px)] md:min-h-[720px] md:max-h-[960px]"
     >
       {/* moon + craters — outside the clipped backdrop and above the clouds
           (z-1) so nothing cuts a straight edge across the glow */}
@@ -222,33 +244,49 @@ export function GraveyardHero({
         >
           <path d={TREE_PATH} fill="#060b15" />
         </svg>
+        {/* one tree on phones, pushed to the edge so it frames the plot
+            without stealing width from the stones */}
+        <svg
+          viewBox="0 0 200 420"
+          className="absolute bottom-[86px] left-[-46px] z-[1] h-[280px] w-[134px] md:hidden"
+          aria-hidden="true"
+        >
+          <path d={TREE_PATH} fill="#060b15" />
+        </svg>
       </div>
 
       {/* hero copy */}
-      <div className="relative z-10 mx-auto max-w-[700px] px-6 pt-14 text-center md:pt-20">
+      {/* hero copy — on phones this is the top of the page (the header hides
+          on the home route), so it carries the wordmark's job itself */}
+      <div className="relative z-10 mx-auto max-w-[700px] px-6 pt-10 text-center md:pt-20">
         {/* <div className="gy-caps mb-4 text-[13px] tracking-[0.34em] text-[#93a0ba]">
           a manifund project &nbsp;·&nbsp; quadratic funding
         </div> */}
-        <h1 className="mb-5 text-[40px] leading-[1.06] text-[#f0f2f7] text-balance md:text-[50px]">
+        <h1 className="mb-4 text-[36px] leading-[1.06] text-[#f0f2f7] text-balance md:mb-5 md:text-[50px]">
           Blog Revival Project
         </h1>
-        <p className="mx-auto mb-4 max-w-[520px] text-[19px] leading-[1.55] text-[#a9b3c8] text-pretty">
-          Many of our favorite blogs have gone silent. <br />
+        <p className="mx-auto mb-3.5 max-w-[520px] text-[17px] leading-[1.5] text-[#a9b3c8] text-pretty md:mb-4 md:text-[19px] md:leading-[1.55]">
+          Many of our favorite blogs have gone silent.{" "}
+          {/* the break is a desktop line-length choice; on a phone it just
+              leaves a short widow line */}
+          <br className="hidden md:inline" />
           We're offering each $1000+ as a bounty to post again.
         </p>
-        <p className="mx-auto mb-8 max-w-[520px] text-[16px] text-candle">
+        <p className="mx-auto mb-6 max-w-[520px] text-[15px] text-candle text-pretty md:mb-8 md:text-[16px]">
           The first 100 users to sign up get $25 of credit to pledge to bloggers.
         </p>
-        <div className="flex justify-center gap-4">
+        {/* one button on phones; "how it works" drops to a text link so the
+            fold isn't split between two equal-looking calls to action */}
+        <div className="flex flex-col items-center gap-3 md:flex-row md:justify-center md:gap-4">
           <Link
             href="/signin?next=/account"
-            className="gy-caps rounded-[3px] bg-gold px-7 py-3 text-[18px] text-[#171208] shadow-[0_0_30px_rgba(230,184,92,.3)] transition hover:bg-gold/90"
+            className="gy-caps w-full max-w-[300px] rounded-[3px] bg-gold px-7 py-3 text-[18px] text-[#171208] shadow-[0_0_30px_rgba(230,184,92,.3)] transition hover:bg-gold/90 md:w-auto"
           >
             become a patron
           </Link>
           <Link
             href="#match"
-            className="gy-caps rounded-[3px] border border-[#3c485f] px-7 py-3 text-[18px] text-[#cfd6e4] transition hover:border-[#5b6981]"
+            className="gy-caps px-7 py-1 text-[16px] text-[#cfd6e4] underline decoration-[#3c485f] underline-offset-[6px] transition hover:decoration-[#8b97ad] md:rounded-[3px] md:border md:border-[#3c485f] md:py-3 md:text-[18px] md:no-underline md:hover:border-[#5b6981]"
           >
             how it works
           </Link>
@@ -327,55 +365,63 @@ export function GraveyardHero({
         );
       })}
 
-      {/* mobile: compact plot, same stones */}
-      <div className="relative z-[5] mx-auto mt-12 grid max-w-md grid-cols-2 items-end gap-x-4 gap-y-10 px-6 pb-16 md:hidden">
-        {stones.map((b) => {
+      {/* mobile: three stones standing on the ground line at the foot of the
+          scene. mt-auto pins them to the bottom of the min-h-screen section,
+          so the plot sits on the hills no matter how tall the copy runs. */}
+      <div className="relative z-[5] mt-auto flex items-end justify-center px-4 pb-[76px] md:hidden">
+        {MOBILE_SLOTS.map((s, n) => {
+          const b = stones[s.i];
+          if (!b) return null;
           const pct = Math.round((b.math.totalCents / liveThresholdCents) * 100);
           return (
-            <div key={b.id} className="group relative">
+            <div
+              key={b.id}
+              className="group relative"
+              style={{
+                width: s.w,
+                zIndex: s.z,
+                marginBottom: s.lift,
+                marginLeft: n === 0 ? 0 : -8,
+              }}
+            >
               <Link
                 href={`/b/${b.slug}`}
-                className="relative flex min-h-36 flex-col items-center justify-center gap-1.5 rounded-[70px_70px_4px_4px] px-3 py-6 text-center"
+                aria-label={`${b.name} bounty`}
+                className="relative flex w-full flex-col items-center justify-center px-[9%] text-center"
                 style={{
-                  background: "linear-gradient(175deg,#33405a 0%,#242f47 100%)",
+                  // its own container so the engraving can be sized in cqw
+                  containerType: "inline-size",
+                  aspectRatio: s.ar,
+                  background: `linear-gradient(175deg, ${s.c1} 0%, ${s.c2} 100%)`,
+                  borderRadius: "50% 50% 4px 4px / 40% 40% 3px 3px",
                   boxShadow:
-                    "inset 0 3px 0 rgba(255,255,255,.08), inset 0 -22px 34px rgba(5,9,18,.55), 0 6px 0 rgba(4,7,14,.6)",
+                    "inset 0 3px 0 rgba(255,255,255,.08), inset 0 -22px 34px rgba(5,9,18,.55), 0 5px 0 rgba(4,7,14,.6)",
                 }}
               >
                 <div
                   aria-hidden
-                  className="pointer-events-none absolute inset-[9px] rounded-[60px_60px_2px_2px]"
+                  className="pointer-events-none absolute inset-[7px]"
                   style={{
+                    borderRadius: "48% 48% 2px 2px / 38% 38% 2px 2px",
                     border: "1px solid rgba(8,12,22,.5)",
                     boxShadow: "0 1px 0 rgba(255,255,255,.05)",
                   }}
                 />
+                {/* name only: at this size the eyebrow and the days-silent
+                    line engrave down to noise, and both are repeated on the
+                    plaque rows further down the page */}
                 <div
-                  className="gy-caps gy-grave relative text-[9px] tracking-[0.3em] text-[#8e9ab2]"
-                  style={carve}
-                >
-                  {eyebrowFor(b.slug)}
-                </div>
-                <div
-                  className="gy-caps gy-grave relative leading-[1.12] tracking-[0.08em] text-[#d3dae8]"
-                  style={{ fontSize: nameSize(15, 180, b.name), ...carve }}
+                  className="gy-caps gy-grave relative leading-[1.14] tracking-[0.06em] text-[#d3dae8]"
+                  style={{ fontSize: `${nameCqw(b.name, s.name)}cqw`, ...carve }}
                 >
                   {b.name}
                 </div>
-                {b.lastPostAt != null && (
-                  <div
-                    className="gy-caps gy-grave relative text-[9px] tracking-[0.24em] text-[#7e8aa3]"
-                    style={carve}
-                  >
-                    silent {daysSilent(b.lastPostAt).toLocaleString()} days
-                  </div>
-                )}
               </Link>
-              <div className="absolute -bottom-3 left-[-8%] right-[-8%] h-[18px] rounded-[50%] bg-abyss" />
+              <div className="absolute -bottom-2.5 left-[-10%] right-[-10%] h-[16px] rounded-[50%] bg-abyss" />
               <Candle
                 pct={pct}
                 lit={b.math.isLive}
-                className="absolute -bottom-2 left-1/2 z-[6] -translate-x-1/2"
+                className="absolute -bottom-1.5 left-1/2 z-[6] -translate-x-1/2 scale-90"
               />
             </div>
           );
