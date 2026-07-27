@@ -60,9 +60,6 @@ export default function GraveyardFeedPage() {
   return (
     <main className="mx-auto max-w-3xl px-6 py-16">
       <h1 className="text-5xl">Activity</h1>
-      <p className="mt-3 text-[17px] text-mist">
-        Every stirring in the graveyard — signups, nominations, pledges, notes — newest first.
-      </p>
 
       {error && <p className="gy-label mt-10 text-mist">{error}</p>}
       {!error && events.length === 0 && (

@@ -49,9 +49,6 @@ export default function WpFeedPage() {
   return (
     <div>
       <h2 className="text-[22px] font-bold">Recent activity</h2>
-      <p className="wp-meta mt-1">
-        Signups, nominations, pledges, and notes from around the site — newest first.
-      </p>
 
       {isLoading && <p className="wp-meta mt-3 italic">Loading…</p>}
       {error && <p className="wp-meta mt-3 italic">{error}</p>}
