@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { eyebrowFor } from "@/components/graveyard/Headstone";
 import type { BloggerRow } from "@/lib/hooks";
 import { daysSilent } from "@/lib/qf";
 import { dollars } from "@/lib/format";
+import { eyebrowFor, starField, GRASS_PATH, TREE_PATH } from "@/lib/graveyard";
 
 // Fixed scene slots from prototypes/design-graveyard.html, ordered by visual
 // prominence so the top-sorted bounty lands on the biggest stone.
@@ -97,22 +97,7 @@ const SLOTS = [
   },
 ];
 
-// Deterministic star field (hash-based so SSR and client render identically).
-const STARS = Array.from({ length: 44 }, (_, i) => {
-  const h = (i * 2654435761) >>> 0;
-  return {
-    left: (h % 1000) / 10, // 0–100%
-    top: ((h >>> 10) % 520) / 10, // 0–52% — keep stars in the sky
-    size: 1 + ((h >>> 20) % 3) / 2, // 1–2px
-    delay: (h >>> 8) % 5000,
-    duration: 3000 + ((h >>> 16) % 4000),
-  };
-});
-
-const TREE_PATH =
-  "M96 420 L92 240 C60 210 20 190 10 120 L26 118 C40 168 70 190 92 205 L90 120 C70 96 58 60 60 18 L74 20 C76 60 86 92 98 112 L104 40 L116 42 L110 150 C130 130 152 120 186 122 L184 138 C150 140 128 156 112 180 L108 250 C130 235 158 230 178 236 L176 252 C150 248 126 258 110 278 L104 420 Z";
-const GRASS_PATH =
-  "M4 24 C6 14 4 8 0 2 C8 6 10 14 10 20 C13 10 12 6 16 0 C18 8 16 16 15 24 Z M30 24 C32 15 30 9 26 4 C33 8 35 14 34 24 Z M50 24 C52 14 50 8 46 2 C54 7 56 15 55 24 Z";
+const STARS = starField(44);
 
 // Burns steadily once the bounty is live; otherwise unlit until its headstone
 // is hovered. Wax height, glow radius and glow strength all scale with funding.

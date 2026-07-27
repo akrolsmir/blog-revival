@@ -4,21 +4,7 @@ import Link from "next/link";
 import { topPatrons, type BloggerRow } from "@/lib/hooks";
 import { daysSilent } from "@/lib/qf";
 import { bloggerIcon, dollars } from "@/lib/format";
-
-const EYEBROWS = [
-  "here lies",
-  "in memory of",
-  "gone too soon",
-  "rest in drafts",
-  "r.i.p.",
-  "sadly missed",
-];
-
-export function eyebrowFor(slug: string): string {
-  let h = 0;
-  for (const c of slug) h = (h * 31 + c.charCodeAt(0)) >>> 0;
-  return EYEBROWS[h % EYEBROWS.length];
-}
+import { eyebrowFor } from "@/lib/graveyard";
 
 export function Headstone({ blogger, index = 0 }: { blogger: BloggerRow; index?: number }) {
   const silent = blogger.lastPostAt != null ? daysSilent(blogger.lastPostAt) : null;

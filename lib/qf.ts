@@ -10,6 +10,10 @@
 // bounty's total but are excluded from the match calculation — they're a
 // single large give, which is exactly what QF is designed not to amplify.
 
+// Fallbacks for when the settings row hasn't loaded (or doesn't exist yet).
+export const DEFAULT_POOL_CENTS = 10_000_00;
+export const DEFAULT_LIVE_THRESHOLD_CENTS = 1_000_00;
+
 export type PledgeLike = {
   amountCents: number;
   source: string; // "patron" | "austin" | "carol"

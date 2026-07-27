@@ -18,12 +18,32 @@ const crimsonPro = Crimson_Pro({
   style: ["normal", "italic"],
 });
 
+const TITLE = "revive.blog — Blog Revival Project";
+const DESCRIPTION = "Bounties for beloved dormant bloggers to write one more post.";
+
 export const metadata: Metadata = {
-  title: "revive.blog — Blog Revival Project",
-  description: "Bounties for beloved dormant bloggers to write one more post.",
+  // Required for og:image to come out as an absolute URL; without it Next
+  // emits a relative path and every crawler drops the image.
+  metadataBase: new URL("https://revive.blog"),
+  title: TITLE,
+  description: DESCRIPTION,
   // rel="icon" is owned by <FaviconSwitcher/>, which follows the chosen skin —
   // see the note there for why it isn't declared here.
   icons: { apple: "/apple-touch-icon.png" },
+  // The images themselves are app/opengraph-image.tsx and app/twitter-image.tsx;
+  // Next appends the og:image / twitter:image tags automatically.
+  openGraph: {
+    type: "website",
+    siteName: "Blog Revival Project",
+    url: "https://revive.blog",
+    title: TITLE,
+    description: DESCRIPTION,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+  },
 };
 
 export default function RootLayout({

@@ -11,6 +11,7 @@ they're JS-bundled single files).
 - `bunx tsc --noEmit` — type check (no test suite exists)
 - `bun run format` — oxfmt autoformatter (`format:check` to verify; prototypes/ excluded)
 - `bunx instant-cli push` — push instant.schema.ts / instant.perms.ts changes
+- `bun run scripts/og-preview.ts [out.png]` — render the social card to disk
 - `bun run scripts/reset.ts && bun run scripts/seed.ts` — wipe + reseed demo data
 - Secrets live in `.env` (gitignored); template in `.env.example`
 
@@ -50,6 +51,13 @@ system preference by default, explicit choice persisted; it sets
   app/globals.css (Tailwind v4 `@theme` tokens + custom classes). The
   html-level `skin-*` classes set only the background — never put `.wp` on
   `<html>`: its 13px font-size would rescale every rem unit.
+
+The social card (`og:image`) is a server-rendered graveyard scene:
+`lib/og.tsx` drawn by next/og, served at `/opengraph-image` and
+`/twitter-image`. It is NOT the React hero — Satori can't run it — so the
+two drift by hand. Full constraints: docs/2026-07-27-og-image.md. Scenery
+shared by the skin and the card (epitaphs, star field, tree path) lives in
+`lib/graveyard.ts`, which must stay free of `"use client"`.
 
 Data: InstantDB (client SDK in `lib/db.ts`, admin SDK in `lib/admin.ts` —
 never import admin in client code). All pages are client components using

@@ -5,10 +5,10 @@ import Link from "next/link";
 import { db } from "@/lib/db";
 import { id } from "@instantdb/react";
 import { useBounties, useMyProfile } from "@/lib/hooks";
-import { eyebrowFor } from "@/components/graveyard/Headstone";
 import { PledgeBox } from "@/components/graveyard/PledgeBox";
 import { daysSilent } from "@/lib/qf";
 import { bloggerIcon, dollars } from "@/lib/format";
+import { eyebrowFor } from "@/lib/graveyard";
 
 export default function GraveyardBloggerPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);

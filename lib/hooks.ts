@@ -2,12 +2,16 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { db } from "@/lib/db";
-import { computeQf, emptyMath, type BountyMath, type PledgeLike } from "@/lib/qf";
+import {
+  computeQf,
+  DEFAULT_LIVE_THRESHOLD_CENTS,
+  DEFAULT_POOL_CENTS,
+  emptyMath,
+  type BountyMath,
+  type PledgeLike,
+} from "@/lib/qf";
 import { isAdminEmail } from "@/lib/admins";
 import { submitNomination } from "@/lib/actions";
-
-export const DEFAULT_POOL_CENTS = 10_000_00;
-export const DEFAULT_LIVE_THRESHOLD_CENTS = 1_000_00;
 
 export type BloggerRow = {
   id: string;
